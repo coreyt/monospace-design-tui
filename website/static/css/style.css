@@ -485,7 +485,7 @@ body {
 
 .page-body code {
   font-family: var(--font-mono);
-  font-size: 0.875em;
+  font-size: 1em;
   background: var(--color-bg-code);
   padding: 0.15em 0.35em;
   border-radius: 3px;
@@ -497,7 +497,7 @@ body {
   padding: var(--space-md);
   overflow-x: auto;
   margin-bottom: var(--space-md);
-  font-size: 0.8125rem;
+  font-size: 1rem;
   line-height: 1.0;
   max-width: var(--width-wide);
 }
@@ -522,13 +522,13 @@ body {
 .page-body thead th {
   text-align: left;
   font-weight: 600;
-  padding: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
   border-bottom: 2px solid var(--color-border);
   white-space: nowrap;
 }
 
 .page-body tbody td {
-  padding: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
   border-bottom: 1px solid var(--color-border-light);
   vertical-align: top;
 }
@@ -539,48 +539,49 @@ body {
 
 /* --- Palette Examples --- */
 
-.palette-example {
+.page-body pre.palette-example {
   border: 1px solid var(--color-border-light);
   padding: var(--space-md);
   overflow-x: auto;
   margin-bottom: var(--space-md);
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  font-size: 1.0625rem;
   line-height: 1.0;
-  max-width: var(--width-wide);
+  width: fit-content;
+  max-width: 100%;
 }
 
-.palette-default {
+.page-body pre.palette-default {
   background: #1c1c1c;
   color: #d0d0d0;
 }
 
-.palette-mono {
+.page-body pre.palette-mono {
   background: #000;
   color: #ccc;
 }
 
-.palette-commander {
+.page-body pre.palette-commander {
   background: #0000af;
   color: #fff;
 }
 
-.palette-os2 {
-  background: #00005f;
-  color: #d0d0d0;
+.page-body pre.palette-os2 {
+  background: #0000AA;
+  color: #FFFF55;
 }
 
-.palette-turbo {
-  background: #0000af;
-  color: #ffff00;
+.page-body pre.palette-turbo {
+  background: #0000AA;
+  color: #FFFFFF;
 }
 
-.palette-amber {
+.page-body pre.palette-amber {
   background: #000;
   color: #d78700;
 }
 
-.palette-green {
+.page-body pre.palette-green {
   background: #000;
   color: #00af00;
 }
@@ -704,7 +705,7 @@ body {
   }
 
   .page-body pre {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     padding: var(--space-sm);
   }
 

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rendering Reference — Monospace Design TUI</title>
 <meta name="description" content="Unicode codepoints, SGR escape sequences, component measurements, and color palettes">
@@ -1140,19 +1140,19 @@ Background: ESC[48;2;{r};{g};{b}m    (r, g, b = 0–255)
 │</span> <span style="color:#87afaf">File  View  Help</span>                                                              <span style="color:#585858">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
 <span style="color:#585858">│</span>                                                                               <span style="color:#585858">│</span>
-<span style="color:#585858">│</span>  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       <span style="color:#585858">│</span>
 <span style="color:#585858">│</span>                                                                               <span style="color:#585858">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
-<span style="color:#585858">│</span> Service              │ Status   │ Uptime       │ CPU     │ Memory            <span style="color:#585858">│</span>
-<span style="color:#585858">│</span>──────────────────────│──────────│──────────────│─────────│───────────────────<span style="color:#585858">│</span>
-<span style="background:#00005f;color:#5fafff">│ ▸ api-gateway        │ </span><span style="background:#00005f;color:#00d700">◉ OK</span><span style="background:#00005f;color:#5fafff">     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
-<span style="color:#585858">│</span>   auth-service       │ <span style="color:#00d700">◉ OK</span>     │ 14d  3h 22m  │   0.8%  │  128MB            <span style="color:#585858">│</span>
-<span style="color:#585858">│</span>   worker-pool        │ <span style="color:#ffd700">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            <span style="color:#585858">│</span>
-<span style="color:#585858">│</span>   notification-svc   │ <span style="color:#ff0000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            <span style="color:#585858">│</span>
-<span style="color:#585858">│</span>   metrics-collector  │ <span style="color:#00d700">◉ OK</span>     │ 14d  3h 22m  │   1.4%  │  256MB            <span style="color:#585858">│</span>
+<span style="color:#585858">│</span> Service              │ Status   │ Uptime       │ CPU     │ Memory             <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>──────────────────────│──────────│──────────────│─────────│────────────────────<span style="color:#585858">│</span>
+<span style="color:#585858">│</span> <span style="background:#00005f;color:#5fafff">> api-gateway        │ </span><span style="background:#00005f;color:#00d700"> OK</span><span style="background:#00005f;color:#5fafff">      │ 14d  3h 22m  │   2.1%  │  340MB            </span> <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>   auth-service       │ <span style="color:#00d700"> OK</span>      │ 14d  3h 22m  │   0.8%  │  128MB             <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>   worker-pool        │ <span style="color:#ffd700"> WARN</span>    │  0d  1h 45m  │  78.3%  │  1.2GB             <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>   notification-svc   │ <span style="color:#ff0000"> DOWN</span>    │  0d  0h 00m  │   0.0%  │    0MB             <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>   metrics-collector  │ <span style="color:#00d700"> OK</span>      │ 14d  3h 22m  │   1.4%  │  256MB             <span style="color:#585858">│</span>
 <span style="color:#585858">│</span>                                                                               <span style="color:#585858">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
-<span style="color:#87afaf">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │</span>
+<span style="color:#585858">│</span><span style="color:#87afaf"> ? Help  r Refresh  / Filter  q Quit                             5 services    </span><span style="color:#585858">│</span>
 <span style="color:#585858">└───────────────────────────────────────────────────────────────────────────────┘</span></pre>
 <h4 id="monochrome">Monochrome</h4>
 <p>Source: CUA <code>cpAppMonochrome</code> system palette, Turbo Vision <code>cpAppBlackWhite</code> palette, and the capability-detection degradation path (§5.6).</p>
@@ -1266,19 +1266,19 @@ Background: ESC[48;2;{r};{g};{b}m    (r, g, b = 0–255)
 │</span> <span style="font-weight:bold;color:#fff">File  View  Help</span>                                                              <span style="font-weight:bold;color:#fff">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
 │                                                                               │
-│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      │
+│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       │
 │                                                                               │
 ├───────────────────────────────────────────────────────────────────────────────┤
-│ Service              │ Status   │ Uptime       │ CPU     │ Memory            │
-│──────────────────────│──────────│──────────────│─────────│───────────────────│
-<span style="background:#ccc;color:#000">│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
-│   auth-service       │ ◉ OK     │ 14d  3h 22m  │   0.8%  │  128MB            │
-│   worker-pool        │ <span style="font-weight:bold;color:#fff">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            │
-│   notification-svc   │ <span style="font-weight:bold;background:#fff;color:#000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            │
-│   metrics-collector  │ ◉ OK     │ 14d  3h 22m  │   1.4%  │  256MB            │
+│ Service              │ Status   │ Uptime       │ CPU     │ Memory             │
+│──────────────────────│──────────│──────────────│─────────│────────────────────│
+│ <span style="background:#ccc;color:#000">> api-gateway        │  OK      │ 14d  3h 22m  │   2.1%  │  340MB            </span> │
+│   auth-service       │  OK      │ 14d  3h 22m  │   0.8%  │  128MB             │
+│   worker-pool        │ <span style="font-weight:bold;color:#fff"> WARN</span>    │  0d  1h 45m  │  78.3%  │  1.2GB             │
+│   notification-svc   │ <span style="font-weight:bold;background:#fff;color:#000">DOWN</span>     │  0d  0h 00m  │   0.0%  │    0MB             │
+│   metrics-collector  │  OK      │ 14d  3h 22m  │   1.4%  │  256MB             │
 │                                                                               │
 ├───────────────────────────────────────────────────────────────────────────────┤
-<span style="color:#666">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │</span>
+│ <span style="color:#666">? Help  r Refresh  / Filter  q Quit                           5 services     </span> │
 └───────────────────────────────────────────────────────────────────────────────┘</pre>
 <h4 id="commander">Commander</h4>
 <p>Source: OS/2 Presentation Manager text-mode conventions (attribute byte 0x1F = white on blue), Norton Commander&rsquo;s blue-panel aesthetic (0x1_ attribute range), and Turbo Vision&rsquo;s window frame palette entry (0x17 = white on blue). This is the canonical look of IBM PC and OS/2 text-mode applications from 1987–1995.</p>
@@ -1377,25 +1377,25 @@ Background: ESC[48;2;{r};{g};{b}m    (r, g, b = 0–255)
 </table>
 <p>Example — Dashboard rendered in Commander:</p>
 <pre class="palette-example palette-commander">┌── Service Monitor ────────────────────────────────────────────────────────────┐
-│ <span style="background:#00cdcd;color:#000"> File  View  Help </span>                                                             │
+│ <span style="background:#00cdcd;color:#000"> File  View  Help </span>                                                            │
 ├───────────────────────────────────────────────────────────────────────────────┤
 │                                                                               │
-│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      │
+│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       │
 │                                                                               │
 ├───────────────────────────────────────────────────────────────────────────────┤
-│ Service              │ Status   │ Uptime       │ CPU     │ Memory            │
-│──────────────────────│──────────│──────────────│─────────│───────────────────│
-<span style="color:#ffff00">│ ▸ api-gateway        │ </span><span style="color:#00ffff">◉ OK</span><span style="color:#ffff00">     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
-│   auth-service       │ <span style="color:#00ffff">◉ OK</span>     │ 14d  3h 22m  │   0.8%  │  128MB            │
-│   worker-pool        │ <span style="color:#ffff00">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            │
-│   notification-svc   │ <span style="color:#ff0000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            │
-│   metrics-collector  │ <span style="color:#00ffff">◉ OK</span>     │ 14d  3h 22m  │   1.4%  │  256MB            │
+│ Service              │ Status   │ Uptime       │ CPU     │ Memory             │
+│──────────────────────│──────────│──────────────│─────────│────────────────────│
+│ <span style="color:#ffff00">> api-gateway        │ </span><span style="color:#00ffff"> OK</span><span style="color:#ffff00">      │ 14d  3h 22m  │   2.1%  │  340MB            </span> │
+│   auth-service       │ <span style="color:#00ffff"> OK</span>      │ 14d  3h 22m  │   0.8%  │  128MB             │
+│   worker-pool        │ <span style="color:#ffff00"> WARN</span>    │  0d  1h 45m  │  78.3%  │  1.2GB             │
+│   notification-svc   │ <span style="color:#ff0000"> DOWN</span>    │  0d  0h 00m  │   0.0%  │    0MB             │
+│   metrics-collector  │ <span style="color:#00ffff"> OK</span>      │ 14d  3h 22m  │   1.4%  │  256MB             │
 │                                                                               │
 ├───────────────────────────────────────────────────────────────────────────────┤
-<span style="color:#00ffff">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │</span>
+│ <span style="color:#00ffff">? Help  r Refresh  / Filter  q Quit                           5 services     </span> │
 └───────────────────────────────────────────────────────────────────────────────┘</pre>
 <h4 id="os2">OS/2</h4>
-<p>Source: OS/2 Presentation Manager text-mode conventions. The corporate CUA look — white text on navy blue, with gray action bars and reverse-video selections. More restrained than Commander, reflecting IBM&rsquo;s enterprise design sensibility. Active windows use double-line borders with brighter attributes; inactive windows use single-line borders with dimmer attributes (§5.5).</p>
+<p>Source: OS/2 Presentation Manager text-mode conventions as seen in OS/2 terminal emulators like Softerm. Yellow-green text on CGA blue, with light gray action bars and status lines. The window title bar uses yellow on dark blue. Selections use reverse video. Active windows use double-line borders with brighter attributes; inactive windows use single-line borders with dimmer attributes (§5.5).</p>
 <table>
   <thead>
       <tr>
@@ -1408,76 +1408,77 @@ Background: ESC[48;2;{r};{g};{b}m    (r, g, b = 0–255)
   <tbody>
       <tr>
           <td>Primary</td>
-          <td>15 (bright white)</td>
-          <td>17 (navy)</td>
-          <td>fg #ffffff, bg #00005f</td>
+          <td>14 (yellow)</td>
+          <td>1 (blue)</td>
+          <td>fg #FFFF55, bg #0000AA</td>
       </tr>
       <tr>
           <td>Secondary</td>
-          <td>252 (light gray)</td>
-          <td>17 (navy)</td>
-          <td>fg #d0d0d0, bg #00005f</td>
+          <td>7 (light gray)</td>
+          <td>1 (blue)</td>
+          <td>fg #AAAAAA, bg #0000AA</td>
       </tr>
       <tr>
           <td>Tertiary</td>
-          <td>15 (bright white)</td>
-          <td>237 (dark gray)</td>
-          <td>fg #ffffff, bg #3a3a3a</td>
+          <td>0 (black)</td>
+          <td>7 (light gray)</td>
+          <td>fg #000000, bg #AAAAAA</td>
       </tr>
       <tr>
           <td>Error</td>
-          <td>196 (bright red)</td>
-          <td>17 (navy)</td>
-          <td>fg #ff0000, bg #00005f</td>
+          <td>12 (light red)</td>
+          <td>1 (blue)</td>
+          <td>fg #FF5555, bg #0000AA</td>
       </tr>
       <tr>
           <td>Neutral fg</td>
-          <td>232 (black)</td>
+          <td>0 (black)</td>
           <td>—</td>
-          <td>fg #080808</td>
+          <td>fg #000000</td>
       </tr>
       <tr>
           <td>Neutral bg</td>
           <td>—</td>
-          <td>252 (light gray)</td>
-          <td>bg #d0d0d0</td>
+          <td>7 (light gray)</td>
+          <td>bg #AAAAAA</td>
       </tr>
       <tr>
           <td>Surface</td>
-          <td>15</td>
-          <td>17 (navy)</td>
-          <td>bg #00005f</td>
+          <td>14 (yellow)</td>
+          <td>1 (blue)</td>
+          <td>bg #0000AA</td>
       </tr>
   </tbody>
 </table>
 <p>Key conventions:</p>
 <ul>
 <li><strong>Action bar</strong>: Black on light gray — the CUA standard. Distinguished from the blue panel area.</li>
-<li><strong>Selections</strong>: Reverse video — navy on white. No color change, just attribute inversion.</li>
-<li><strong>Panels</strong>: White or light gray text on navy. Subdued contrast compared to Commander&rsquo;s vivid blue.</li>
-<li><strong>Active/inactive windows</strong>: Bright white borders (active) vs. dim gray borders (inactive), with double-line vs. single-line distinction (§6.1).</li>
+<li><strong>Title bar</strong>: Yellow on dark blue. Window name displayed in the title frame.</li>
+<li><strong>Panels</strong>: Yellow or light gray text on blue. Terminal text area uses yellow on blue.</li>
+<li><strong>Status line</strong>: Black on light gray, with status indicators (Online, Half Duplex, etc.).</li>
+<li><strong>Active/inactive windows</strong>: Bright borders (active) vs. dim borders (inactive), with double-line vs. single-line distinction (§6.1).</li>
 </ul>
 <p>Example — Dashboard rendered in OS/2:</p>
-<pre class="palette-example palette-os2"><span style="color:#fff">┌──</span> <span style="font-weight:bold;color:#fff">Service Monitor</span> <span style="color:#fff">────────────────────────────────────────────────────────────┐</span>
-<span style="color:#fff">│</span> <span style="background:#d0d0d0;color:#080808"> File  View  Help </span>                                                             <span style="color:#fff">│</span>
-<span style="color:#fff">├───────────────────────────────────────────────────────────────────────────────┤</span>
+<pre class="palette-example palette-os2"><span style="color:#FFFF55">┌──</span> <span style="font-weight:bold;color:#FFFF55">Service Monitor</span> <span style="color:#FFFF55">────────────────────────────────────────────────────────────┐</span>
+<span style="color:#FFFF55">│</span> <span style="background:#AAAAAA;color:#000"> File  View  Help </span>                                                            <span style="color:#FFFF55">│</span>
+<span style="color:#FFFF55">├───────────────────────────────────────────────────────────────────────────────┤</span>
 │                                                                               │
-│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      │
+│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       │
 │                                                                               │
-<span style="color:#fff">├───────────────────────────────────────────────────────────────────────────────┤</span>
-│ Service              │ Status   │ Uptime       │ CPU     │ Memory            │
-│──────────────────────│──────────│──────────────│─────────│───────────────────│
-<span style="background:#d0d0d0;color:#00005f">│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
-│   auth-service       │ <span style="color:#00d700">◉ OK</span>     │ 14d  3h 22m  │   0.8%  │  128MB            │
-│   worker-pool        │ <span style="color:#ffd700">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            │
-│   notification-svc   │ <span style="color:#ff0000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            │
-│   metrics-collector  │ <span style="color:#00d700">◉ OK</span>     │ 14d  3h 22m  │   1.4%  │  256MB            │
+<span style="color:#FFFF55">├───────────────────────────────────────────────────────────────────────────────┤</span>
+│ Service              │ Status   │ Uptime       │ CPU     │ Memory             │
+│──────────────────────│──────────│──────────────│─────────│────────────────────│
+<span style="color:#FFFF55">│</span> <span style="background:#AAAAAA;color:#0000AA">> api-gateway        │  OK      │ 14d  3h 22m  │   2.1%  │  340MB            </span> <span style="color:#FFFF55">│</span>
+│   auth-service       │ <span style="color:#55FF55"> OK</span>      │ 14d  3h 22m  │   0.8%  │  128MB             │
+│   worker-pool        │ <span style="color:#fff"> WARN</span>    │  0d  1h 45m  │  78.3%  │  1.2GB             │
+│   notification-svc   │ <span style="color:#FF5555"> DOWN</span>    │  0d  0h 00m  │   0.0%  │    0MB             │
+│   metrics-collector  │ <span style="color:#55FF55"> OK</span>      │ 14d  3h 22m  │   1.4%  │  256MB             │
 │                                                                               │
-<span style="color:#fff">├───────────────────────────────────────────────────────────────────────────────┤</span>
-<span style="color:#888">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │</span>
-<span style="color:#fff">└───────────────────────────────────────────────────────────────────────────────┘</span></pre>
+<span style="color:#FFFF55">├───────────────────────────────────────────────────────────────────────────────┤</span>
+│<span style="background:#AAAAAA;color:#000"> ? Help  r Refresh  / Filter  q Quit                           5 services     </span> │
+<span style="color:#FFFF55">└───────────────────────────────────────────────────────────────────────────────┘</span></pre>
 <h4 id="turbo-pascal">Turbo Pascal</h4>
-<p>Source: Borland Turbo Vision palette system (1990) as seen in the Turbo Pascal and Turbo C++ IDEs. Yellow editor text on blue, cyan borders, light gray menus and status bars, green buttons. The most visually distinctive TUI aesthetic of the DOS era, instantly recognizable to a generation of developers.</p>
+<p>Source: Borland Turbo Vision palette system (1990) as seen in the Turbo Pascal 7.0 and Turbo C++ IDEs. The desktop uses a <code>░</code> dither pattern in light gray on blue. Editor windows show white text on blue. Menu bar and status line use black on light gray. Window frames are white on blue; active windows use double-line borders, inactive use single-line. Dialog boxes use black on light gray, visually distinct from the blue editor surface. Buttons use black on green.</p>
 <table>
   <thead>
       <tr>
@@ -1490,75 +1491,76 @@ Background: ESC[48;2;{r};{g};{b}m    (r, g, b = 0–255)
   <tbody>
       <tr>
           <td>Primary</td>
-          <td>11 (bright yellow)</td>
-          <td>19 (dark blue)</td>
-          <td>fg #ffff00, bg #0000af</td>
+          <td>15 (white)</td>
+          <td>1 (blue)</td>
+          <td>fg #FFFFFF, bg #0000AA</td>
       </tr>
       <tr>
           <td>Secondary</td>
-          <td>14 (bright cyan)</td>
-          <td>19 (dark blue)</td>
-          <td>fg #00ffff, bg #0000af</td>
+          <td>7 (light gray)</td>
+          <td>1 (blue)</td>
+          <td>fg #AAAAAA, bg #0000AA</td>
       </tr>
       <tr>
           <td>Tertiary</td>
-          <td>232 (black)</td>
-          <td>78 (green)</td>
-          <td>fg #080808, bg #5fd787</td>
+          <td>0 (black)</td>
+          <td>2 (green)</td>
+          <td>fg #000000, bg #00AA00</td>
       </tr>
       <tr>
           <td>Error</td>
-          <td>196 (bright red)</td>
-          <td>19 (dark blue)</td>
-          <td>fg #ff0000, bg #0000af</td>
+          <td>12 (light red)</td>
+          <td>1 (blue)</td>
+          <td>fg #FF5555, bg #0000AA</td>
       </tr>
       <tr>
           <td>Neutral fg</td>
-          <td>232 (black)</td>
+          <td>0 (black)</td>
           <td>—</td>
-          <td>fg #080808</td>
+          <td>fg #000000</td>
       </tr>
       <tr>
           <td>Neutral bg</td>
           <td>—</td>
-          <td>250 (light gray)</td>
-          <td>bg #bcbcbc</td>
+          <td>7 (light gray)</td>
+          <td>bg #AAAAAA</td>
       </tr>
       <tr>
           <td>Surface</td>
-          <td>11</td>
-          <td>19 (dark blue)</td>
-          <td>bg #0000af</td>
+          <td>15 (white)</td>
+          <td>1 (blue)</td>
+          <td>bg #0000AA</td>
       </tr>
   </tbody>
 </table>
 <p>Key conventions from the Borland IDE:</p>
 <ul>
-<li><strong>Editor area</strong>: Yellow text on blue — the signature Borland look. Syntax-highlighted keywords in white or cyan.</li>
-<li><strong>Window borders</strong>: Cyan on blue. Double-line for active, single-line for inactive.</li>
-<li><strong>Menu bar and status line</strong>: Black on light gray. Hotkey letters highlighted.</li>
+<li><strong>Desktop</strong>: <code>░</code> dither pattern — light gray (7) on blue (1). Visible behind all windows.</li>
+<li><strong>Editor area</strong>: White (15) on blue (1). Comments and secondary text in light gray (7).</li>
+<li><strong>Window frames</strong>: White (15) on blue (1). Double-line for active, single-line for inactive.</li>
+<li><strong>Menu bar and status line</strong>: Black (0) on light gray (7). Hotkey letters highlighted in red or yellow.</li>
 <li><strong>Dialog boxes</strong>: Black on light gray. A visually distinct surface from the blue editor area.</li>
-<li><strong>Buttons</strong>: Black on green (<code>&lt; OK &gt;</code>). Default button uses distinct delimiters (<code>» OK «</code>).</li>
+<li><strong>Buttons</strong>: Black on green (<code>[ OK ]</code>). Default button uses highlighted delimiters.</li>
 </ul>
 <p>Example — Dashboard rendered in Turbo Pascal:</p>
-<pre class="palette-example palette-turbo"><span style="color:#00ffff">┌──</span> <span style="font-weight:bold;color:#fff">Service Monitor</span> <span style="color:#00ffff">────────────────────────────────────────────────────────────┐</span>
-<span style="color:#00ffff">│</span> <span style="background:#bcbcbc;color:#080808"> File  View  Help </span>                                                             <span style="color:#00ffff">│</span>
-<span style="color:#00ffff">├───────────────────────────────────────────────────────────────────────────────┤</span>
+<pre class="palette-example palette-turbo"><span style="color:#fff">┌──</span> <span style="font-weight:bold;color:#fff">Service Monitor</span> <span style="color:#fff">────────────────────────────────────────────────────────────┐</span>
+<span style="color:#fff">│</span> <span style="background:#AAAAAA;color:#000"> File  View  Help </span>                                                            <span style="color:#fff">│</span>
+<span style="color:#fff">├───────────────────────────────────────────────────────────────────────────────┤</span>
 │                                                                               │
-│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      │
+│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       │
 │                                                                               │
-<span style="color:#00ffff">├───────────────────────────────────────────────────────────────────────────────┤</span>
-│ Service              │ Status   │ Uptime       │ CPU     │ Memory            │
-│──────────────────────│──────────│──────────────│─────────│───────────────────│
-<span style="background:#ffff00;color:#0000af">│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
-│   auth-service       │ <span style="color:#00ff00">◉ OK</span>     │ 14d  3h 22m  │   0.8%  │  128MB            │
-│   worker-pool        │ <span style="font-weight:bold;color:#fff">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            │
-│   notification-svc   │ <span style="color:#ff0000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            │
-│   metrics-collector  │ <span style="color:#00ff00">◉ OK</span>     │ 14d  3h 22m  │   1.4%  │  256MB            │
+<span style="color:#fff">├───────────────────────────────────────────────────────────────────────────────┤</span>
+│ Service              │ Status   │ Uptime       │ CPU     │ Memory             │
+│──────────────────────│──────────│──────────────│─────────│────────────────────│
+<span style="color:#fff">│</span> <span style="background:#00AAAA;color:#fff">> api-gateway        │  OK      │ 14d  3h 22m  │   2.1%  │  340MB            </span> <span style="color:#fff">│</span>
+│   auth-service       │ <span style="color:#55FF55"> OK</span>      │ 14d  3h 22m  │   0.8%  │  128MB             │
+│   worker-pool        │ <span style="color:#FFFF55"> WARN</span>    │  0d  1h 45m  │  78.3%  │  1.2GB             │
+│   notification-svc   │ <span style="color:#FF5555"> DOWN</span>    │  0d  0h 00m  │   0.0%  │    0MB             │
+│   metrics-collector  │ <span style="color:#55FF55"> OK</span>      │ 14d  3h 22m  │   1.4%  │  256MB             │
 │                                                                               │
-<span style="color:#00ffff">├───────────────────────────────────────────────────────────────────────────────┤</span>
-<span style="background:#bcbcbc;color:#080808">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │</span>
-<span style="color:#00ffff">└───────────────────────────────────────────────────────────────────────────────┘</span></pre>
+<span style="color:#fff">├───────────────────────────────────────────────────────────────────────────────┤</span>
+│<span style="background:#AAAAAA;color:#000"> ? Help  r Refresh  / Filter  q Quit                           5 services     </span> │
+<span style="color:#fff">└───────────────────────────────────────────────────────────────────────────────┘</span></pre>
 <h4 id="amber-phosphor">Amber Phosphor</h4>
 <p>Source: DEC VT220 and VT320 amber phosphor (P3) displays, widely deployed in business and institutional computing through the 1980s. Control Data Corporation PLATO terminals also used amber-orange plasma displays. The single-hue-on-black aesthetic predates color terminals entirely.</p>
 <p>All UI elements are rendered in shades of amber (<code>#FFB000</code> at full brightness) on a black background. Semantic roles are distinguished by brightness level within the single hue.</p>
@@ -1668,19 +1670,19 @@ Background: ESC[48;2;{r};{g};{b}m    (r, g, b = 0–255)
 │</span> <span style="font-weight:bold;color:#ffaf00">File  View  Help</span>                                                              <span style="color:#af8700">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
 <span style="color:#af8700">│</span>                                                                               <span style="color:#af8700">│</span>
-<span style="color:#af8700">│</span>  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       <span style="color:#af8700">│</span>
 <span style="color:#af8700">│</span>                                                                               <span style="color:#af8700">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
-<span style="color:#af8700">│</span> Service              │ Status   │ Uptime       │ CPU     │ Memory            <span style="color:#af8700">│</span>
-<span style="color:#af8700">│</span>──────────────────────│──────────│──────────────│─────────│───────────────────<span style="color:#af8700">│</span>
-<span style="background:#ffaf00;color:#000">│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
-<span style="color:#af8700">│</span>   auth-service       │ ◉ OK     │ 14d  3h 22m  │   0.8%  │  128MB            <span style="color:#af8700">│</span>
-<span style="color:#af8700">│</span>   worker-pool        │ <span style="font-weight:bold;color:#ffaf00">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            <span style="color:#af8700">│</span>
-<span style="color:#af8700">│</span>   notification-svc   │ <span style="font-weight:bold;background:#ffaf00;color:#000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            <span style="color:#af8700">│</span>
-<span style="color:#af8700">│</span>   metrics-collector  │ ◉ OK     │ 14d  3h 22m  │   1.4%  │  256MB            <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span> Service              │ Status   │ Uptime       │ CPU     │ Memory             <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>──────────────────────│──────────│──────────────│─────────│────────────────────<span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span> <span style="background:#ffaf00;color:#000">> api-gateway        │  OK      │ 14d  3h 22m  │   2.1%  │  340MB            </span> <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>   auth-service       │  OK      │ 14d  3h 22m  │   0.8%  │  128MB             <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>   worker-pool        │ <span style="font-weight:bold;color:#ffaf00"> WARN</span>    │  0d  1h 45m  │  78.3%  │  1.2GB             <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>   notification-svc   │ <span style="font-weight:bold;background:#ffaf00;color:#000"> DOWN</span>    │  0d  0h 00m  │   0.0%  │    0MB             <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>   metrics-collector  │  OK      │ 14d  3h 22m  │   1.4%  │  256MB             <span style="color:#af8700">│</span>
 <span style="color:#af8700">│</span>                                                                               <span style="color:#af8700">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
-<span style="color:#af8700">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │
+<span style="color:#af8700">│ ? Help  r Refresh  / Filter  q Quit                           5 services      │
 └───────────────────────────────────────────────────────────────────────────────┘</span></pre>
 <h4 id="green-phosphor">Green Phosphor</h4>
 <p>Source: DEC VT100 and VT101 green phosphor (P1) displays — the original &ldquo;green screen&rdquo; terminal that defined the early Unix and VAX/VMS experience. Also used in IBM 3278 display terminals and countless institutional systems through the 1970s–1980s.</p>
@@ -1791,19 +1793,19 @@ Background: ESC[48;2;{r};{g};{b}m    (r, g, b = 0–255)
 │</span> <span style="font-weight:bold;color:#5fff00">File  View  Help</span>                                                              <span style="color:#008700">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
 <span style="color:#008700">│</span>                                                                               <span style="color:#008700">│</span>
-<span style="color:#008700">│</span>  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       <span style="color:#008700">│</span>
 <span style="color:#008700">│</span>                                                                               <span style="color:#008700">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
-<span style="color:#008700">│</span> Service              │ Status   │ Uptime       │ CPU     │ Memory            <span style="color:#008700">│</span>
-<span style="color:#008700">│</span>──────────────────────│──────────│──────────────│─────────│───────────────────<span style="color:#008700">│</span>
-<span style="background:#5fff00;color:#000">│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
-<span style="color:#008700">│</span>   auth-service       │ ◉ OK     │ 14d  3h 22m  │   0.8%  │  128MB            <span style="color:#008700">│</span>
-<span style="color:#008700">│</span>   worker-pool        │ <span style="font-weight:bold;color:#5fff00">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            <span style="color:#008700">│</span>
-<span style="color:#008700">│</span>   notification-svc   │ <span style="font-weight:bold;background:#5fff00;color:#000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            <span style="color:#008700">│</span>
-<span style="color:#008700">│</span>   metrics-collector  │ ◉ OK     │ 14d  3h 22m  │   1.4%  │  256MB            <span style="color:#008700">│</span>
+<span style="color:#008700">│</span> Service              │ Status   │ Uptime       │ CPU     │ Memory             <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>──────────────────────│──────────│──────────────│─────────│────────────────────<span style="color:#008700">│</span>
+<span style="color:#008700">│</span> <span style="background:#5fff00;color:#000">> api-gateway        │  OK      │ 14d  3h 22m  │   2.1%  │  340MB            </span> <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>   auth-service       │  OK      │ 14d  3h 22m  │   0.8%  │  128MB             <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>   worker-pool        │ <span style="font-weight:bold;color:#5fff00"> WARN</span>    │  0d  1h 45m  │  78.3%  │  1.2GB             <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>   notification-svc   │ <span style="font-weight:bold;background:#5fff00;color:#000"> DOWN</span>    │  0d  0h 00m  │   0.0%  │    0MB             <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>   metrics-collector  │  OK      │ 14d  3h 22m  │   1.4%  │  256MB             <span style="color:#008700">│</span>
 <span style="color:#008700">│</span>                                                                               <span style="color:#008700">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
-<span style="color:#008700">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │
+<span style="color:#008700">│ ? Help  r Refresh  / Filter  q Quit                           5 services      │
 └───────────────────────────────────────────────────────────────────────────────┘</span></pre>
 <hr>
 <h2 id="r4-component-measurements">§R4 Component Measurements</h2>

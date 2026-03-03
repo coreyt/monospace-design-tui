@@ -2,22 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/categories/</loc>
+    <loc>https://monospace-tui.dev/categories/</loc>
   </url><url>
-    <loc>http://localhost:1313/examples/</loc>
+    <loc>https://monospace-tui.dev/examples/</loc>
   </url><url>
-    <loc>http://localhost:1313/research/</loc>
+    <loc>https://monospace-tui.dev/research/</loc>
   </url><url>
-    <loc>http://localhost:1313/</loc>
+    <loc>https://monospace-tui.dev/</loc>
   </url><url>
-    <loc>http://localhost:1313/standard/</loc>
+    <loc>https://monospace-tui.dev/standard/</loc>
   </url><url>
-    <loc>http://localhost:1313/reference/</loc>
+    <loc>https://monospace-tui.dev/reference/</loc>
   </url><url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>https://monospace-tui.dev/tags/</loc>
   </url><url>
-    <loc>http://localhost:1313/textual/</loc>
+    <loc>https://monospace-tui.dev/textual/</loc>
   </url><url>
-    <loc>http://localhost:1313/agents/</loc>
+    <loc>https://monospace-tui.dev/agents/</loc>
   </url>
 </urlset>

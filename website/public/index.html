@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.139.0"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+	<meta name="generator" content="Hugo 0.139.0"><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Monospace Design TUI</title>
 <meta name="description" content="Prescriptive design rules for terminal user interfaces">
@@ -17,9 +17,11 @@
       <div class="nav-more">
         <span class="nav-more-toggle">More...</span>
         <div class="nav-more-dropdown">
-          <a href="/examples/">Examples</a>
-          <a href="/textual/">Textual</a>
-          <a href="/agents/">AI Agents</a>
+          <div class="nav-more-dropdown-inner">
+            <a href="/examples/">Examples</a>
+            <a href="/textual/">Textual</a>
+            <a href="/agents/">AI Agents</a>
+          </div>
         </div>
       </div>
     </div>
@@ -40,7 +42,7 @@
   <div class="home-body">
     <p>As terminal user interfaces grew beyond simple scripts into full applications — dashboards, file managers, configuration wizards — a problem became clear. Every project invented its own conventions. Keyboard shortcuts varied from app to app. Layouts followed no shared logic. Color meant different things in different tools. The experience of using one TUI taught you nothing about using the next.</p>
 
-    <p>This seemed wrong. Graphical interfaces had solved this decades ago. Apple published the Human Interface Guidelines. Google developed Material Design. IBM wrote Common User Access. These standards meant that a user who learned one application could sit down in front of another and already know how it worked. But for terminal interfaces — nothing. No shared vocabulary, no common rules, no design system.</p>
+    <p>This seemed wrong. Graphical interfaces had solved this decades ago. Apple published the Human Interface Guidelines. Google developed Material Design. These standards meant that a user who learned one application could sit down in front of another and already know how it worked. But for terminal interfaces — nothing. No shared vocabulary, no common rules, no design system.</p>
 
     <p>We suspected the raw material already existed. The history of text-mode computing is rich with thoughtful design: IBM's CUA keyboard model from 1987, the window management conventions of OS/2, Norton Commander's dual-pane paradigm, Borland's Turbo Vision component framework. These weren't ad hoc — they were carefully engineered systems that millions of people used daily. The knowledge was there, scattered across manuals, technical references, and the muscle memory of experienced developers.</p>
 

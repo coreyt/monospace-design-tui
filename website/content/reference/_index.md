@@ -307,19 +307,19 @@ Example — Dashboard rendered in Default:
 │</span> <span style="color:#87afaf">File  View  Help</span>                                                              <span style="color:#585858">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
 <span style="color:#585858">│</span>                                                                               <span style="color:#585858">│</span>
-<span style="color:#585858">│</span>  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       <span style="color:#585858">│</span>
 <span style="color:#585858">│</span>                                                                               <span style="color:#585858">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
-<span style="color:#585858">│</span> Service              │ Status   │ Uptime       │ CPU     │ Memory            <span style="color:#585858">│</span>
-<span style="color:#585858">│</span>──────────────────────│──────────│──────────────│─────────│───────────────────<span style="color:#585858">│</span>
-<span style="background:#00005f;color:#5fafff">│ ▸ api-gateway        │ </span><span style="background:#00005f;color:#00d700">◉ OK</span><span style="background:#00005f;color:#5fafff">     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
-<span style="color:#585858">│</span>   auth-service       │ <span style="color:#00d700">◉ OK</span>     │ 14d  3h 22m  │   0.8%  │  128MB            <span style="color:#585858">│</span>
-<span style="color:#585858">│</span>   worker-pool        │ <span style="color:#ffd700">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            <span style="color:#585858">│</span>
-<span style="color:#585858">│</span>   notification-svc   │ <span style="color:#ff0000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            <span style="color:#585858">│</span>
-<span style="color:#585858">│</span>   metrics-collector  │ <span style="color:#00d700">◉ OK</span>     │ 14d  3h 22m  │   1.4%  │  256MB            <span style="color:#585858">│</span>
+<span style="color:#585858">│</span> Service              │ Status   │ Uptime       │ CPU     │ Memory             <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>──────────────────────│──────────│──────────────│─────────│────────────────────<span style="color:#585858">│</span>
+<span style="color:#585858">│</span> <span style="background:#00005f;color:#5fafff">> api-gateway        │ </span><span style="background:#00005f;color:#00d700"> OK</span><span style="background:#00005f;color:#5fafff">      │ 14d  3h 22m  │   2.1%  │  340MB            </span> <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>   auth-service       │ <span style="color:#00d700"> OK</span>      │ 14d  3h 22m  │   0.8%  │  128MB             <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>   worker-pool        │ <span style="color:#ffd700"> WARN</span>    │  0d  1h 45m  │  78.3%  │  1.2GB             <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>   notification-svc   │ <span style="color:#ff0000"> DOWN</span>    │  0d  0h 00m  │   0.0%  │    0MB             <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>   metrics-collector  │ <span style="color:#00d700"> OK</span>      │ 14d  3h 22m  │   1.4%  │  256MB             <span style="color:#585858">│</span>
 <span style="color:#585858">│</span>                                                                               <span style="color:#585858">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
-<span style="color:#87afaf">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │</span>
+<span style="color:#585858">│</span><span style="color:#87afaf"> ? Help  r Refresh  / Filter  q Quit                             5 services    </span><span style="color:#585858">│</span>
 <span style="color:#585858">└───────────────────────────────────────────────────────────────────────────────┘</span></pre>
 
 #### Monochrome
@@ -356,19 +356,19 @@ Example — Dashboard rendered in Monochrome:
 │</span> <span style="font-weight:bold;color:#fff">File  View  Help</span>                                                              <span style="font-weight:bold;color:#fff">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
 │                                                                               │
-│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      │
+│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       │
 │                                                                               │
 ├───────────────────────────────────────────────────────────────────────────────┤
-│ Service              │ Status   │ Uptime       │ CPU     │ Memory            │
-│──────────────────────│──────────│──────────────│─────────│───────────────────│
-<span style="background:#ccc;color:#000">│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
-│   auth-service       │ ◉ OK     │ 14d  3h 22m  │   0.8%  │  128MB            │
-│   worker-pool        │ <span style="font-weight:bold;color:#fff">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            │
-│   notification-svc   │ <span style="font-weight:bold;background:#fff;color:#000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            │
-│   metrics-collector  │ ◉ OK     │ 14d  3h 22m  │   1.4%  │  256MB            │
+│ Service              │ Status   │ Uptime       │ CPU     │ Memory             │
+│──────────────────────│──────────│──────────────│─────────│────────────────────│
+│ <span style="background:#ccc;color:#000">> api-gateway        │  OK      │ 14d  3h 22m  │   2.1%  │  340MB            </span> │
+│   auth-service       │  OK      │ 14d  3h 22m  │   0.8%  │  128MB             │
+│   worker-pool        │ <span style="font-weight:bold;color:#fff"> WARN</span>    │  0d  1h 45m  │  78.3%  │  1.2GB             │
+│   notification-svc   │ <span style="font-weight:bold;background:#fff;color:#000">DOWN</span>     │  0d  0h 00m  │   0.0%  │    0MB             │
+│   metrics-collector  │  OK      │ 14d  3h 22m  │   1.4%  │  256MB             │
 │                                                                               │
 ├───────────────────────────────────────────────────────────────────────────────┤
-<span style="color:#666">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │</span>
+│ <span style="color:#666">? Help  r Refresh  / Filter  q Quit                           5 services     </span> │
 └───────────────────────────────────────────────────────────────────────────────┘</pre>
 
 #### Commander
@@ -404,108 +404,110 @@ Dialog surface override for Commander palette:
 Example — Dashboard rendered in Commander:
 
 <pre class="palette-example palette-commander">┌── Service Monitor ────────────────────────────────────────────────────────────┐
-│ <span style="background:#00cdcd;color:#000"> File  View  Help </span>                                                             │
+│ <span style="background:#00cdcd;color:#000"> File  View  Help </span>                                                            │
 ├───────────────────────────────────────────────────────────────────────────────┤
 │                                                                               │
-│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      │
+│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       │
 │                                                                               │
 ├───────────────────────────────────────────────────────────────────────────────┤
-│ Service              │ Status   │ Uptime       │ CPU     │ Memory            │
-│──────────────────────│──────────│──────────────│─────────│───────────────────│
-<span style="color:#ffff00">│ ▸ api-gateway        │ </span><span style="color:#00ffff">◉ OK</span><span style="color:#ffff00">     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
-│   auth-service       │ <span style="color:#00ffff">◉ OK</span>     │ 14d  3h 22m  │   0.8%  │  128MB            │
-│   worker-pool        │ <span style="color:#ffff00">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            │
-│   notification-svc   │ <span style="color:#ff0000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            │
-│   metrics-collector  │ <span style="color:#00ffff">◉ OK</span>     │ 14d  3h 22m  │   1.4%  │  256MB            │
+│ Service              │ Status   │ Uptime       │ CPU     │ Memory             │
+│──────────────────────│──────────│──────────────│─────────│────────────────────│
+│ <span style="color:#ffff00">> api-gateway        │ </span><span style="color:#00ffff"> OK</span><span style="color:#ffff00">      │ 14d  3h 22m  │   2.1%  │  340MB            </span> │
+│   auth-service       │ <span style="color:#00ffff"> OK</span>      │ 14d  3h 22m  │   0.8%  │  128MB             │
+│   worker-pool        │ <span style="color:#ffff00"> WARN</span>    │  0d  1h 45m  │  78.3%  │  1.2GB             │
+│   notification-svc   │ <span style="color:#ff0000"> DOWN</span>    │  0d  0h 00m  │   0.0%  │    0MB             │
+│   metrics-collector  │ <span style="color:#00ffff"> OK</span>      │ 14d  3h 22m  │   1.4%  │  256MB             │
 │                                                                               │
 ├───────────────────────────────────────────────────────────────────────────────┤
-<span style="color:#00ffff">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │</span>
+│ <span style="color:#00ffff">? Help  r Refresh  / Filter  q Quit                           5 services     </span> │
 └───────────────────────────────────────────────────────────────────────────────┘</pre>
 
 #### OS/2
 
-Source: OS/2 Presentation Manager text-mode conventions. The corporate CUA look — white text on navy blue, with gray action bars and reverse-video selections. More restrained than Commander, reflecting IBM's enterprise design sensibility. Active windows use double-line borders with brighter attributes; inactive windows use single-line borders with dimmer attributes (§5.5).
+Source: OS/2 Presentation Manager text-mode conventions as seen in OS/2 terminal emulators like Softerm. Yellow-green text on CGA blue, with light gray action bars and status lines. The window title bar uses yellow on dark blue. Selections use reverse video. Active windows use double-line borders with brighter attributes; inactive windows use single-line borders with dimmer attributes (§5.5).
 
 | Semantic Role | Foreground (index) | Background (index) | Hex Approximation |
 |--------------|-------------------|-------------------|-------------------|
-| Primary | 15 (bright white) | 17 (navy) | fg #ffffff, bg #00005f |
-| Secondary | 252 (light gray) | 17 (navy) | fg #d0d0d0, bg #00005f |
-| Tertiary | 15 (bright white) | 237 (dark gray) | fg #ffffff, bg #3a3a3a |
-| Error | 196 (bright red) | 17 (navy) | fg #ff0000, bg #00005f |
-| Neutral fg | 232 (black) | — | fg #080808 |
-| Neutral bg | — | 252 (light gray) | bg #d0d0d0 |
-| Surface | 15 | 17 (navy) | bg #00005f |
+| Primary | 14 (yellow) | 1 (blue) | fg #FFFF55, bg #0000AA |
+| Secondary | 7 (light gray) | 1 (blue) | fg #AAAAAA, bg #0000AA |
+| Tertiary | 0 (black) | 7 (light gray) | fg #000000, bg #AAAAAA |
+| Error | 12 (light red) | 1 (blue) | fg #FF5555, bg #0000AA |
+| Neutral fg | 0 (black) | — | fg #000000 |
+| Neutral bg | — | 7 (light gray) | bg #AAAAAA |
+| Surface | 14 (yellow) | 1 (blue) | bg #0000AA |
 
 Key conventions:
 
 - **Action bar**: Black on light gray — the CUA standard. Distinguished from the blue panel area.
-- **Selections**: Reverse video — navy on white. No color change, just attribute inversion.
-- **Panels**: White or light gray text on navy. Subdued contrast compared to Commander's vivid blue.
-- **Active/inactive windows**: Bright white borders (active) vs. dim gray borders (inactive), with double-line vs. single-line distinction (§6.1).
+- **Title bar**: Yellow on dark blue. Window name displayed in the title frame.
+- **Panels**: Yellow or light gray text on blue. Terminal text area uses yellow on blue.
+- **Status line**: Black on light gray, with status indicators (Online, Half Duplex, etc.).
+- **Active/inactive windows**: Bright borders (active) vs. dim borders (inactive), with double-line vs. single-line distinction (§6.1).
 
 Example — Dashboard rendered in OS/2:
 
-<pre class="palette-example palette-os2"><span style="color:#fff">┌──</span> <span style="font-weight:bold;color:#fff">Service Monitor</span> <span style="color:#fff">────────────────────────────────────────────────────────────┐</span>
-<span style="color:#fff">│</span> <span style="background:#d0d0d0;color:#080808"> File  View  Help </span>                                                             <span style="color:#fff">│</span>
-<span style="color:#fff">├───────────────────────────────────────────────────────────────────────────────┤</span>
+<pre class="palette-example palette-os2"><span style="color:#FFFF55">┌──</span> <span style="font-weight:bold;color:#FFFF55">Service Monitor</span> <span style="color:#FFFF55">────────────────────────────────────────────────────────────┐</span>
+<span style="color:#FFFF55">│</span> <span style="background:#AAAAAA;color:#000"> File  View  Help </span>                                                            <span style="color:#FFFF55">│</span>
+<span style="color:#FFFF55">├───────────────────────────────────────────────────────────────────────────────┤</span>
 │                                                                               │
-│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      │
+│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       │
 │                                                                               │
-<span style="color:#fff">├───────────────────────────────────────────────────────────────────────────────┤</span>
-│ Service              │ Status   │ Uptime       │ CPU     │ Memory            │
-│──────────────────────│──────────│──────────────│─────────│───────────────────│
-<span style="background:#d0d0d0;color:#00005f">│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
-│   auth-service       │ <span style="color:#00d700">◉ OK</span>     │ 14d  3h 22m  │   0.8%  │  128MB            │
-│   worker-pool        │ <span style="color:#ffd700">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            │
-│   notification-svc   │ <span style="color:#ff0000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            │
-│   metrics-collector  │ <span style="color:#00d700">◉ OK</span>     │ 14d  3h 22m  │   1.4%  │  256MB            │
+<span style="color:#FFFF55">├───────────────────────────────────────────────────────────────────────────────┤</span>
+│ Service              │ Status   │ Uptime       │ CPU     │ Memory             │
+│──────────────────────│──────────│──────────────│─────────│────────────────────│
+<span style="color:#FFFF55">│</span> <span style="background:#AAAAAA;color:#0000AA">> api-gateway        │  OK      │ 14d  3h 22m  │   2.1%  │  340MB            </span> <span style="color:#FFFF55">│</span>
+│   auth-service       │ <span style="color:#55FF55"> OK</span>      │ 14d  3h 22m  │   0.8%  │  128MB             │
+│   worker-pool        │ <span style="color:#fff"> WARN</span>    │  0d  1h 45m  │  78.3%  │  1.2GB             │
+│   notification-svc   │ <span style="color:#FF5555"> DOWN</span>    │  0d  0h 00m  │   0.0%  │    0MB             │
+│   metrics-collector  │ <span style="color:#55FF55"> OK</span>      │ 14d  3h 22m  │   1.4%  │  256MB             │
 │                                                                               │
-<span style="color:#fff">├───────────────────────────────────────────────────────────────────────────────┤</span>
-<span style="color:#888">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │</span>
-<span style="color:#fff">└───────────────────────────────────────────────────────────────────────────────┘</span></pre>
+<span style="color:#FFFF55">├───────────────────────────────────────────────────────────────────────────────┤</span>
+│<span style="background:#AAAAAA;color:#000"> ? Help  r Refresh  / Filter  q Quit                           5 services     </span> │
+<span style="color:#FFFF55">└───────────────────────────────────────────────────────────────────────────────┘</span></pre>
 
 #### Turbo Pascal
 
-Source: Borland Turbo Vision palette system (1990) as seen in the Turbo Pascal and Turbo C++ IDEs. Yellow editor text on blue, cyan borders, light gray menus and status bars, green buttons. The most visually distinctive TUI aesthetic of the DOS era, instantly recognizable to a generation of developers.
+Source: Borland Turbo Vision palette system (1990) as seen in the Turbo Pascal 7.0 and Turbo C++ IDEs. The desktop uses a `░` dither pattern in light gray on blue. Editor windows show white text on blue. Menu bar and status line use black on light gray. Window frames are white on blue; active windows use double-line borders, inactive use single-line. Dialog boxes use black on light gray, visually distinct from the blue editor surface. Buttons use black on green.
 
 | Semantic Role | Foreground (index) | Background (index) | Hex Approximation |
 |--------------|-------------------|-------------------|-------------------|
-| Primary | 11 (bright yellow) | 19 (dark blue) | fg #ffff00, bg #0000af |
-| Secondary | 14 (bright cyan) | 19 (dark blue) | fg #00ffff, bg #0000af |
-| Tertiary | 232 (black) | 78 (green) | fg #080808, bg #5fd787 |
-| Error | 196 (bright red) | 19 (dark blue) | fg #ff0000, bg #0000af |
-| Neutral fg | 232 (black) | — | fg #080808 |
-| Neutral bg | — | 250 (light gray) | bg #bcbcbc |
-| Surface | 11 | 19 (dark blue) | bg #0000af |
+| Primary | 15 (white) | 1 (blue) | fg #FFFFFF, bg #0000AA |
+| Secondary | 7 (light gray) | 1 (blue) | fg #AAAAAA, bg #0000AA |
+| Tertiary | 0 (black) | 2 (green) | fg #000000, bg #00AA00 |
+| Error | 12 (light red) | 1 (blue) | fg #FF5555, bg #0000AA |
+| Neutral fg | 0 (black) | — | fg #000000 |
+| Neutral bg | — | 7 (light gray) | bg #AAAAAA |
+| Surface | 15 (white) | 1 (blue) | bg #0000AA |
 
 Key conventions from the Borland IDE:
 
-- **Editor area**: Yellow text on blue — the signature Borland look. Syntax-highlighted keywords in white or cyan.
-- **Window borders**: Cyan on blue. Double-line for active, single-line for inactive.
-- **Menu bar and status line**: Black on light gray. Hotkey letters highlighted.
+- **Desktop**: `░` dither pattern — light gray (7) on blue (1). Visible behind all windows.
+- **Editor area**: White (15) on blue (1). Comments and secondary text in light gray (7).
+- **Window frames**: White (15) on blue (1). Double-line for active, single-line for inactive.
+- **Menu bar and status line**: Black (0) on light gray (7). Hotkey letters highlighted in red or yellow.
 - **Dialog boxes**: Black on light gray. A visually distinct surface from the blue editor area.
-- **Buttons**: Black on green (`< OK >`). Default button uses distinct delimiters (`» OK «`).
+- **Buttons**: Black on green (`[ OK ]`). Default button uses highlighted delimiters.
 
 Example — Dashboard rendered in Turbo Pascal:
 
-<pre class="palette-example palette-turbo"><span style="color:#00ffff">┌──</span> <span style="font-weight:bold;color:#fff">Service Monitor</span> <span style="color:#00ffff">────────────────────────────────────────────────────────────┐</span>
-<span style="color:#00ffff">│</span> <span style="background:#bcbcbc;color:#080808"> File  View  Help </span>                                                             <span style="color:#00ffff">│</span>
-<span style="color:#00ffff">├───────────────────────────────────────────────────────────────────────────────┤</span>
+<pre class="palette-example palette-turbo"><span style="color:#fff">┌──</span> <span style="font-weight:bold;color:#fff">Service Monitor</span> <span style="color:#fff">────────────────────────────────────────────────────────────┐</span>
+<span style="color:#fff">│</span> <span style="background:#AAAAAA;color:#000"> File  View  Help </span>                                                            <span style="color:#fff">│</span>
+<span style="color:#fff">├───────────────────────────────────────────────────────────────────────────────┤</span>
 │                                                                               │
-│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      │
+│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       │
 │                                                                               │
-<span style="color:#00ffff">├───────────────────────────────────────────────────────────────────────────────┤</span>
-│ Service              │ Status   │ Uptime       │ CPU     │ Memory            │
-│──────────────────────│──────────│──────────────│─────────│───────────────────│
-<span style="background:#ffff00;color:#0000af">│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
-│   auth-service       │ <span style="color:#00ff00">◉ OK</span>     │ 14d  3h 22m  │   0.8%  │  128MB            │
-│   worker-pool        │ <span style="font-weight:bold;color:#fff">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            │
-│   notification-svc   │ <span style="color:#ff0000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            │
-│   metrics-collector  │ <span style="color:#00ff00">◉ OK</span>     │ 14d  3h 22m  │   1.4%  │  256MB            │
+<span style="color:#fff">├───────────────────────────────────────────────────────────────────────────────┤</span>
+│ Service              │ Status   │ Uptime       │ CPU     │ Memory             │
+│──────────────────────│──────────│──────────────│─────────│────────────────────│
+<span style="color:#fff">│</span> <span style="background:#00AAAA;color:#fff">> api-gateway        │  OK      │ 14d  3h 22m  │   2.1%  │  340MB            </span> <span style="color:#fff">│</span>
+│   auth-service       │ <span style="color:#55FF55"> OK</span>      │ 14d  3h 22m  │   0.8%  │  128MB             │
+│   worker-pool        │ <span style="color:#FFFF55"> WARN</span>    │  0d  1h 45m  │  78.3%  │  1.2GB             │
+│   notification-svc   │ <span style="color:#FF5555"> DOWN</span>    │  0d  0h 00m  │   0.0%  │    0MB             │
+│   metrics-collector  │ <span style="color:#55FF55"> OK</span>      │ 14d  3h 22m  │   1.4%  │  256MB             │
 │                                                                               │
-<span style="color:#00ffff">├───────────────────────────────────────────────────────────────────────────────┤</span>
-<span style="background:#bcbcbc;color:#080808">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │</span>
-<span style="color:#00ffff">└───────────────────────────────────────────────────────────────────────────────┘</span></pre>
+<span style="color:#fff">├───────────────────────────────────────────────────────────────────────────────┤</span>
+│<span style="background:#AAAAAA;color:#000"> ? Help  r Refresh  / Filter  q Quit                           5 services     </span> │
+<span style="color:#fff">└───────────────────────────────────────────────────────────────────────────────┘</span></pre>
 
 #### Amber Phosphor
 
@@ -541,19 +543,19 @@ Example — Dashboard rendered in Amber Phosphor:
 │</span> <span style="font-weight:bold;color:#ffaf00">File  View  Help</span>                                                              <span style="color:#af8700">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
 <span style="color:#af8700">│</span>                                                                               <span style="color:#af8700">│</span>
-<span style="color:#af8700">│</span>  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       <span style="color:#af8700">│</span>
 <span style="color:#af8700">│</span>                                                                               <span style="color:#af8700">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
-<span style="color:#af8700">│</span> Service              │ Status   │ Uptime       │ CPU     │ Memory            <span style="color:#af8700">│</span>
-<span style="color:#af8700">│</span>──────────────────────│──────────│──────────────│─────────│───────────────────<span style="color:#af8700">│</span>
-<span style="background:#ffaf00;color:#000">│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
-<span style="color:#af8700">│</span>   auth-service       │ ◉ OK     │ 14d  3h 22m  │   0.8%  │  128MB            <span style="color:#af8700">│</span>
-<span style="color:#af8700">│</span>   worker-pool        │ <span style="font-weight:bold;color:#ffaf00">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            <span style="color:#af8700">│</span>
-<span style="color:#af8700">│</span>   notification-svc   │ <span style="font-weight:bold;background:#ffaf00;color:#000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            <span style="color:#af8700">│</span>
-<span style="color:#af8700">│</span>   metrics-collector  │ ◉ OK     │ 14d  3h 22m  │   1.4%  │  256MB            <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span> Service              │ Status   │ Uptime       │ CPU     │ Memory             <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>──────────────────────│──────────│──────────────│─────────│────────────────────<span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span> <span style="background:#ffaf00;color:#000">> api-gateway        │  OK      │ 14d  3h 22m  │   2.1%  │  340MB            </span> <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>   auth-service       │  OK      │ 14d  3h 22m  │   0.8%  │  128MB             <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>   worker-pool        │ <span style="font-weight:bold;color:#ffaf00"> WARN</span>    │  0d  1h 45m  │  78.3%  │  1.2GB             <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>   notification-svc   │ <span style="font-weight:bold;background:#ffaf00;color:#000"> DOWN</span>    │  0d  0h 00m  │   0.0%  │    0MB             <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>   metrics-collector  │  OK      │ 14d  3h 22m  │   1.4%  │  256MB             <span style="color:#af8700">│</span>
 <span style="color:#af8700">│</span>                                                                               <span style="color:#af8700">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
-<span style="color:#af8700">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │
+<span style="color:#af8700">│ ? Help  r Refresh  / Filter  q Quit                           5 services      │
 └───────────────────────────────────────────────────────────────────────────────┘</span></pre>
 
 #### Green Phosphor
@@ -590,19 +592,19 @@ Example — Dashboard rendered in Green Phosphor:
 │</span> <span style="font-weight:bold;color:#5fff00">File  View  Help</span>                                                              <span style="color:#008700">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
 <span style="color:#008700">│</span>                                                                               <span style="color:#008700">│</span>
-<span style="color:#008700">│</span>  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       <span style="color:#008700">│</span>
 <span style="color:#008700">│</span>                                                                               <span style="color:#008700">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
-<span style="color:#008700">│</span> Service              │ Status   │ Uptime       │ CPU     │ Memory            <span style="color:#008700">│</span>
-<span style="color:#008700">│</span>──────────────────────│──────────│──────────────│─────────│───────────────────<span style="color:#008700">│</span>
-<span style="background:#5fff00;color:#000">│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
-<span style="color:#008700">│</span>   auth-service       │ ◉ OK     │ 14d  3h 22m  │   0.8%  │  128MB            <span style="color:#008700">│</span>
-<span style="color:#008700">│</span>   worker-pool        │ <span style="font-weight:bold;color:#5fff00">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            <span style="color:#008700">│</span>
-<span style="color:#008700">│</span>   notification-svc   │ <span style="font-weight:bold;background:#5fff00;color:#000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            <span style="color:#008700">│</span>
-<span style="color:#008700">│</span>   metrics-collector  │ ◉ OK     │ 14d  3h 22m  │   1.4%  │  256MB            <span style="color:#008700">│</span>
+<span style="color:#008700">│</span> Service              │ Status   │ Uptime       │ CPU     │ Memory             <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>──────────────────────│──────────│──────────────│─────────│────────────────────<span style="color:#008700">│</span>
+<span style="color:#008700">│</span> <span style="background:#5fff00;color:#000">> api-gateway        │  OK      │ 14d  3h 22m  │   2.1%  │  340MB            </span> <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>   auth-service       │  OK      │ 14d  3h 22m  │   0.8%  │  128MB             <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>   worker-pool        │ <span style="font-weight:bold;color:#5fff00"> WARN</span>    │  0d  1h 45m  │  78.3%  │  1.2GB             <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>   notification-svc   │ <span style="font-weight:bold;background:#5fff00;color:#000"> DOWN</span>    │  0d  0h 00m  │   0.0%  │    0MB             <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>   metrics-collector  │  OK      │ 14d  3h 22m  │   1.4%  │  256MB             <span style="color:#008700">│</span>
 <span style="color:#008700">│</span>                                                                               <span style="color:#008700">│
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
-<span style="color:#008700">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │
+<span style="color:#008700">│ ? Help  r Refresh  / Filter  q Quit                           5 services      │
 └───────────────────────────────────────────────────────────────────────────────┘</span></pre>
 
 ---
