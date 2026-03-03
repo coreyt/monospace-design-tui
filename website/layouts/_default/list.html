@@ -1,0 +1,17 @@
+{{ define "main" }}
+<article class="page">
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.subtitle }}<p class="page-subtitle">{{ . }}</p>{{ end }}
+  </header>
+  {{ if .Params.toc }}
+  <nav class="page-toc" aria-label="Table of Contents">
+    <h2 class="toc-heading">Contents</h2>
+    {{ .TableOfContents }}
+  </nav>
+  {{ end }}
+  <div class="page-body">
+    {{ .Content }}
+  </div>
+</article>
+{{ end }}

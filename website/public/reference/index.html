@@ -1,0 +1,2697 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rendering Reference — Monospace Design TUI</title>
+<meta name="description" content="Unicode codepoints, SGR escape sequences, component measurements, and color palettes">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body><nav class="site-nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-wordmark">Monospace TUI</a>
+    <div class="nav-links">
+      <a href="/standard/">Standard</a>
+      <a href="/reference/" class="active">Reference</a>
+      <a href="/research/">Research</a>
+      <div class="nav-more">
+        <span class="nav-more-toggle">More...</span>
+        <div class="nav-more-dropdown">
+          <div class="nav-more-dropdown-inner">
+            <a href="/examples/">Examples</a>
+            <a href="/textual/">Textual</a>
+            <a href="/agents/">AI Agents</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<main>
+<article class="page">
+  <header class="page-header">
+    <h1>Rendering Reference</h1>
+    <p class="page-subtitle">v0.1 — Exact characters, SGR codes, and measurements for implementers</p>
+  </header>
+  
+  <nav class="page-toc" aria-label="Table of Contents">
+    <h2 class="toc-heading">Contents</h2>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#r1-box-drawing-characters">§R1 Box-Drawing Characters</a>
+      <ul>
+        <li><a href="#r11-single-line-light">§R1.1 Single-Line (Light)</a></li>
+        <li><a href="#r12-heavy-thick">§R1.2 Heavy (Thick)</a></li>
+        <li><a href="#r13-double-line">§R1.3 Double-Line</a></li>
+        <li><a href="#r14-rounded-corners">§R1.4 Rounded Corners</a></li>
+        <li><a href="#r15-dashed-lines">§R1.5 Dashed Lines</a></li>
+        <li><a href="#r16-block-and-shade-characters">§R1.6 Block and Shade Characters</a></li>
+        <li><a href="#r17-status-and-indicator-symbols">§R1.7 Status and Indicator Symbols</a></li>
+        <li><a href="#r18-focus-bracket-markers">§R1.8 Focus Bracket Markers</a></li>
+        <li><a href="#r19-mnemonic-rendering">§R1.9 Mnemonic Rendering</a></li>
+      </ul>
+    </li>
+    <li><a href="#r2-sgr-select-graphic-rendition-codes">§R2 SGR (Select Graphic Rendition) Codes</a>
+      <ul>
+        <li><a href="#r21-attribute-codes">§R2.1 Attribute Codes</a></li>
+        <li><a href="#r22-typography-role--sgr-mapping">§R2.2 Typography Role → SGR Mapping</a></li>
+        <li><a href="#r23-state--sgr-mapping">§R2.3 State → SGR Mapping</a></li>
+        <li><a href="#r24-standard-foreground-colors">§R2.4 Standard Foreground Colors</a></li>
+        <li><a href="#r25-extended-color-sequences">§R2.5 Extended Color Sequences</a></li>
+      </ul>
+    </li>
+    <li><a href="#r3-256-color-palette">§R3 256-Color Palette</a>
+      <ul>
+        <li><a href="#r31-palette-structure">§R3.1 Palette Structure</a></li>
+        <li><a href="#r32-semantic-role--256-color-mapping">§R3.2 Semantic Role → 256-Color Mapping</a></li>
+        <li><a href="#r33-status-color-mapping">§R3.3 Status Color Mapping</a></li>
+        <li><a href="#r34-named-palettes">§R3.4 Named Palettes</a></li>
+      </ul>
+    </li>
+    <li><a href="#r4-component-measurements">§R4 Component Measurements</a>
+      <ul>
+        <li><a href="#r41-push-button">§R4.1 Push Button</a></li>
+        <li><a href="#r42-entry-field">§R4.2 Entry Field</a></li>
+        <li><a href="#r43-toggle--checkbox">§R4.3 Toggle / Checkbox</a></li>
+        <li><a href="#r44-radio-group">§R4.4 Radio Group</a></li>
+        <li><a href="#r45-list-box">§R4.5 List Box</a></li>
+        <li><a href="#r46-data-table">§R4.6 Data Table</a></li>
+        <li><a href="#r47-metric-card">§R4.7 Metric Card</a></li>
+        <li><a href="#r48-dialog">§R4.8 Dialog</a></li>
+        <li><a href="#r49-menu-pull-down">§R4.9 Menu (Pull-Down)</a></li>
+        <li><a href="#r410-spin-button">§R4.10 Spin Button</a></li>
+        <li><a href="#r411-footer-key-strip">§R4.11 Footer Key Strip</a></li>
+      </ul>
+    </li>
+    <li><a href="#r5-shadow-rendering">§R5 Shadow Rendering</a>
+      <ul>
+        <li><a href="#r51-algorithm">§R5.1 Algorithm</a></li>
+        <li><a href="#r52-shadow-cell-attribute">§R5.2 Shadow Cell Attribute</a></li>
+        <li><a href="#r53-scrim-rendering">§R5.3 Scrim Rendering</a></li>
+      </ul>
+    </li>
+    <li><a href="#r6-braille-sparkline-encoding">§R6 Braille Sparkline Encoding</a>
+      <ul>
+        <li><a href="#r61-braille-pattern-block">§R6.1 Braille Pattern Block</a></li>
+        <li><a href="#r62-dot-position--bit-mapping">§R6.2 Dot Position → Bit Mapping</a></li>
+        <li><a href="#r63-sparkline-construction-algorithm">§R6.3 Sparkline Construction Algorithm</a></li>
+        <li><a href="#r64-progress-bar-using-eighth-blocks">§R6.4 Progress Bar Using Eighth Blocks</a></li>
+      </ul>
+    </li>
+    <li><a href="#r7-color-capability-detection">§R7 Color Capability Detection</a>
+      <ul>
+        <li><a href="#r71-detection-algorithm">§R7.1 Detection Algorithm</a></li>
+        <li><a href="#r72-graceful-degradation">§R7.2 Graceful Degradation</a></li>
+      </ul>
+    </li>
+    <li><a href="#r8-escape-sequence-quick-reference">§R8 Escape Sequence Quick Reference</a>
+      <ul>
+        <li><a href="#r81-cursor-movement">§R8.1 Cursor Movement</a></li>
+        <li><a href="#r82-scrolling-regions">§R8.2 Scrolling Regions</a></li>
+        <li><a href="#r83-screen-operations">§R8.3 Screen Operations</a></li>
+        <li><a href="#r84-mouse-tracking-sgr-extended">§R8.4 Mouse Tracking (SGR Extended)</a></li>
+      </ul>
+    </li>
+    <li><a href="#r9-mixed-border-junctions">§R9 Mixed Border Junctions</a></li>
+  </ul>
+</nav>
+  </nav>
+  
+  <div class="page-body">
+    <h2 id="r1-box-drawing-characters">§R1 Box-Drawing Characters</h2>
+<h3 id="r11-single-line-light">§R1.1 Single-Line (Light)</h3>
+<p>Used for: Level 1 panels, Level 2 menus, inactive windows (Standard §6.1, §6.2).</p>
+<table>
+  <thead>
+      <tr>
+          <th>Glyph</th>
+          <th>Name</th>
+          <th>Unicode</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>─</code></td>
+          <td>BOX DRAWINGS LIGHT HORIZONTAL</td>
+          <td>U+2500</td>
+          <td>Horizontal line</td>
+      </tr>
+      <tr>
+          <td><code>│</code></td>
+          <td>BOX DRAWINGS LIGHT VERTICAL</td>
+          <td>U+2502</td>
+          <td>Vertical line</td>
+      </tr>
+      <tr>
+          <td><code>┌</code></td>
+          <td>BOX DRAWINGS LIGHT DOWN AND RIGHT</td>
+          <td>U+250C</td>
+          <td>Top-left corner</td>
+      </tr>
+      <tr>
+          <td><code>┐</code></td>
+          <td>BOX DRAWINGS LIGHT DOWN AND LEFT</td>
+          <td>U+2510</td>
+          <td>Top-right corner</td>
+      </tr>
+      <tr>
+          <td><code>└</code></td>
+          <td>BOX DRAWINGS LIGHT UP AND RIGHT</td>
+          <td>U+2514</td>
+          <td>Bottom-left corner</td>
+      </tr>
+      <tr>
+          <td><code>┘</code></td>
+          <td>BOX DRAWINGS LIGHT UP AND LEFT</td>
+          <td>U+2518</td>
+          <td>Bottom-right corner</td>
+      </tr>
+      <tr>
+          <td><code>├</code></td>
+          <td>BOX DRAWINGS LIGHT VERTICAL AND RIGHT</td>
+          <td>U+251C</td>
+          <td>Left T-junction</td>
+      </tr>
+      <tr>
+          <td><code>┤</code></td>
+          <td>BOX DRAWINGS LIGHT VERTICAL AND LEFT</td>
+          <td>U+2524</td>
+          <td>Right T-junction</td>
+      </tr>
+      <tr>
+          <td><code>┬</code></td>
+          <td>BOX DRAWINGS LIGHT DOWN AND HORIZONTAL</td>
+          <td>U+252C</td>
+          <td>Top T-junction</td>
+      </tr>
+      <tr>
+          <td><code>┴</code></td>
+          <td>BOX DRAWINGS LIGHT UP AND HORIZONTAL</td>
+          <td>U+2534</td>
+          <td>Bottom T-junction</td>
+      </tr>
+      <tr>
+          <td><code>┼</code></td>
+          <td>BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL</td>
+          <td>U+253C</td>
+          <td>Cross junction</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r12-heavy-thick">§R1.2 Heavy (Thick)</h3>
+<p>Used for: optional emphasis borders, header separators.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Glyph</th>
+          <th>Name</th>
+          <th>Unicode</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>━</code></td>
+          <td>BOX DRAWINGS HEAVY HORIZONTAL</td>
+          <td>U+2501</td>
+      </tr>
+      <tr>
+          <td><code>┃</code></td>
+          <td>BOX DRAWINGS HEAVY VERTICAL</td>
+          <td>U+2503</td>
+      </tr>
+      <tr>
+          <td><code>┏</code></td>
+          <td>BOX DRAWINGS HEAVY DOWN AND RIGHT</td>
+          <td>U+250F</td>
+      </tr>
+      <tr>
+          <td><code>┓</code></td>
+          <td>BOX DRAWINGS HEAVY DOWN AND LEFT</td>
+          <td>U+2513</td>
+      </tr>
+      <tr>
+          <td><code>┗</code></td>
+          <td>BOX DRAWINGS HEAVY UP AND RIGHT</td>
+          <td>U+2517</td>
+      </tr>
+      <tr>
+          <td><code>┛</code></td>
+          <td>BOX DRAWINGS HEAVY UP AND LEFT</td>
+          <td>U+251B</td>
+      </tr>
+      <tr>
+          <td><code>┣</code></td>
+          <td>BOX DRAWINGS HEAVY VERTICAL AND RIGHT</td>
+          <td>U+2523</td>
+      </tr>
+      <tr>
+          <td><code>┫</code></td>
+          <td>BOX DRAWINGS HEAVY VERTICAL AND LEFT</td>
+          <td>U+252B</td>
+      </tr>
+      <tr>
+          <td><code>┳</code></td>
+          <td>BOX DRAWINGS HEAVY DOWN AND HORIZONTAL</td>
+          <td>U+2533</td>
+      </tr>
+      <tr>
+          <td><code>┻</code></td>
+          <td>BOX DRAWINGS HEAVY UP AND HORIZONTAL</td>
+          <td>U+253B</td>
+      </tr>
+      <tr>
+          <td><code>╋</code></td>
+          <td>BOX DRAWINGS HEAVY VERTICAL AND HORIZONTAL</td>
+          <td>U+254B</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r13-double-line">§R1.3 Double-Line</h3>
+<p>Used for: Level 3 dialogs, Level 4 modals, active windows (Standard §6.1, §6.2).</p>
+<table>
+  <thead>
+      <tr>
+          <th>Glyph</th>
+          <th>Name</th>
+          <th>Unicode</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>═</code></td>
+          <td>BOX DRAWINGS DOUBLE HORIZONTAL</td>
+          <td>U+2550</td>
+      </tr>
+      <tr>
+          <td><code>║</code></td>
+          <td>BOX DRAWINGS DOUBLE VERTICAL</td>
+          <td>U+2551</td>
+      </tr>
+      <tr>
+          <td><code>╔</code></td>
+          <td>BOX DRAWINGS DOUBLE DOWN AND RIGHT</td>
+          <td>U+2554</td>
+      </tr>
+      <tr>
+          <td><code>╗</code></td>
+          <td>BOX DRAWINGS DOUBLE DOWN AND LEFT</td>
+          <td>U+2557</td>
+      </tr>
+      <tr>
+          <td><code>╚</code></td>
+          <td>BOX DRAWINGS DOUBLE UP AND RIGHT</td>
+          <td>U+255A</td>
+      </tr>
+      <tr>
+          <td><code>╝</code></td>
+          <td>BOX DRAWINGS DOUBLE UP AND LEFT</td>
+          <td>U+255D</td>
+      </tr>
+      <tr>
+          <td><code>╠</code></td>
+          <td>BOX DRAWINGS DOUBLE VERTICAL AND RIGHT</td>
+          <td>U+2560</td>
+      </tr>
+      <tr>
+          <td><code>╣</code></td>
+          <td>BOX DRAWINGS DOUBLE VERTICAL AND LEFT</td>
+          <td>U+2563</td>
+      </tr>
+      <tr>
+          <td><code>╦</code></td>
+          <td>BOX DRAWINGS DOUBLE DOWN AND HORIZONTAL</td>
+          <td>U+2566</td>
+      </tr>
+      <tr>
+          <td><code>╩</code></td>
+          <td>BOX DRAWINGS DOUBLE UP AND HORIZONTAL</td>
+          <td>U+2569</td>
+      </tr>
+      <tr>
+          <td><code>╬</code></td>
+          <td>BOX DRAWINGS DOUBLE VERTICAL AND HORIZONTAL</td>
+          <td>U+256C</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r14-rounded-corners">§R1.4 Rounded Corners</h3>
+<p>Used for: cosmetic non-interactive containers only (Standard §6.6).</p>
+<table>
+  <thead>
+      <tr>
+          <th>Glyph</th>
+          <th>Name</th>
+          <th>Unicode</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>╭</code></td>
+          <td>BOX DRAWINGS LIGHT ARC DOWN AND RIGHT</td>
+          <td>U+256D</td>
+      </tr>
+      <tr>
+          <td><code>╮</code></td>
+          <td>BOX DRAWINGS LIGHT ARC DOWN AND LEFT</td>
+          <td>U+256E</td>
+      </tr>
+      <tr>
+          <td><code>╰</code></td>
+          <td>BOX DRAWINGS LIGHT ARC UP AND RIGHT</td>
+          <td>U+256F</td>
+      </tr>
+      <tr>
+          <td><code>╯</code></td>
+          <td>BOX DRAWINGS LIGHT ARC UP AND LEFT</td>
+          <td>U+2570</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r15-dashed-lines">§R1.5 Dashed Lines</h3>
+<p>Used for: optional separators, visual grouping within panels.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Glyph</th>
+          <th>Name</th>
+          <th>Unicode</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>┄</code></td>
+          <td>BOX DRAWINGS LIGHT TRIPLE DASH HORIZONTAL</td>
+          <td>U+2504</td>
+      </tr>
+      <tr>
+          <td><code>┆</code></td>
+          <td>BOX DRAWINGS LIGHT TRIPLE DASH VERTICAL</td>
+          <td>U+2506</td>
+      </tr>
+      <tr>
+          <td><code>┈</code></td>
+          <td>BOX DRAWINGS LIGHT QUADRUPLE DASH HORIZONTAL</td>
+          <td>U+2508</td>
+      </tr>
+      <tr>
+          <td><code>┊</code></td>
+          <td>BOX DRAWINGS LIGHT QUADRUPLE DASH VERTICAL</td>
+          <td>U+250A</td>
+      </tr>
+      <tr>
+          <td><code>╌</code></td>
+          <td>BOX DRAWINGS HEAVY TRIPLE DASH HORIZONTAL</td>
+          <td>U+254C</td>
+      </tr>
+      <tr>
+          <td><code>╎</code></td>
+          <td>BOX DRAWINGS HEAVY TRIPLE DASH VERTICAL</td>
+          <td>U+254E</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r16-block-and-shade-characters">§R1.6 Block and Shade Characters</h3>
+<p>Used for: progress bars, sparklines, scroll indicators, shadows.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Glyph</th>
+          <th>Name</th>
+          <th>Unicode</th>
+          <th>Coverage</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>░</code></td>
+          <td>LIGHT SHADE</td>
+          <td>U+2591</td>
+          <td>25% fill</td>
+      </tr>
+      <tr>
+          <td><code>▒</code></td>
+          <td>MEDIUM SHADE</td>
+          <td>U+2592</td>
+          <td>50% fill</td>
+      </tr>
+      <tr>
+          <td><code>▓</code></td>
+          <td>DARK SHADE</td>
+          <td>U+2593</td>
+          <td>75% fill</td>
+      </tr>
+      <tr>
+          <td><code>█</code></td>
+          <td>FULL BLOCK</td>
+          <td>U+2588</td>
+          <td>100% fill</td>
+      </tr>
+      <tr>
+          <td><code>▄</code></td>
+          <td>LOWER HALF BLOCK</td>
+          <td>U+2584</td>
+          <td>Bottom half</td>
+      </tr>
+      <tr>
+          <td><code>▀</code></td>
+          <td>UPPER HALF BLOCK</td>
+          <td>U+2580</td>
+          <td>Top half</td>
+      </tr>
+      <tr>
+          <td><code>▌</code></td>
+          <td>LEFT HALF BLOCK</td>
+          <td>U+258C</td>
+          <td>Left half</td>
+      </tr>
+      <tr>
+          <td><code>▐</code></td>
+          <td>RIGHT HALF BLOCK</td>
+          <td>U+2590</td>
+          <td>Right half</td>
+      </tr>
+      <tr>
+          <td><code>▏</code></td>
+          <td>LEFT ONE EIGHTH BLOCK</td>
+          <td>U+258F</td>
+          <td>1/8 left</td>
+      </tr>
+      <tr>
+          <td><code>▎</code></td>
+          <td>LEFT ONE QUARTER BLOCK</td>
+          <td>U+258E</td>
+          <td>1/4 left</td>
+      </tr>
+      <tr>
+          <td><code>▍</code></td>
+          <td>LEFT THREE EIGHTHS BLOCK</td>
+          <td>U+258D</td>
+          <td>3/8 left</td>
+      </tr>
+      <tr>
+          <td><code>▋</code></td>
+          <td>LEFT FIVE EIGHTHS BLOCK</td>
+          <td>U+258B</td>
+          <td>5/8 left</td>
+      </tr>
+      <tr>
+          <td><code>▊</code></td>
+          <td>LEFT THREE QUARTERS BLOCK</td>
+          <td>U+258A</td>
+          <td>3/4 left</td>
+      </tr>
+      <tr>
+          <td><code>▉</code></td>
+          <td>LEFT SEVEN EIGHTHS BLOCK</td>
+          <td>U+2589</td>
+          <td>7/8 left</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r17-status-and-indicator-symbols">§R1.7 Status and Indicator Symbols</h3>
+<p>Used for: status displays, selection marks, navigation indicators.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Glyph</th>
+          <th>Name</th>
+          <th>Unicode</th>
+          <th>Use</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>◉</code></td>
+          <td>FISHEYE</td>
+          <td>U+25C9</td>
+          <td>Active/healthy status</td>
+      </tr>
+      <tr>
+          <td><code>○</code></td>
+          <td>WHITE CIRCLE</td>
+          <td>U+25CB</td>
+          <td>Inactive status</td>
+      </tr>
+      <tr>
+          <td><code>●</code></td>
+          <td>BLACK CIRCLE</td>
+          <td>U+25CF</td>
+          <td>Filled indicator</td>
+      </tr>
+      <tr>
+          <td><code>▸</code></td>
+          <td>BLACK RIGHT-POINTING SMALL TRIANGLE</td>
+          <td>U+25B8</td>
+          <td>Focus/selection indicator</td>
+      </tr>
+      <tr>
+          <td><code>▴</code></td>
+          <td>BLACK UP-POINTING SMALL TRIANGLE</td>
+          <td>U+25B4</td>
+          <td>Sort ascending</td>
+      </tr>
+      <tr>
+          <td><code>▾</code></td>
+          <td>BLACK DOWN-POINTING SMALL TRIANGLE</td>
+          <td>U+25BE</td>
+          <td>Sort descending</td>
+      </tr>
+      <tr>
+          <td><code>⚠</code></td>
+          <td>WARNING SIGN</td>
+          <td>U+26A0</td>
+          <td>Warning status</td>
+      </tr>
+      <tr>
+          <td><code>✓</code></td>
+          <td>CHECK MARK</td>
+          <td>U+2713</td>
+          <td>Success/confirmed</td>
+      </tr>
+      <tr>
+          <td><code>✗</code></td>
+          <td>BALLOT X</td>
+          <td>U+2717</td>
+          <td>Error/failed</td>
+      </tr>
+      <tr>
+          <td><code>⋯</code></td>
+          <td>MIDLINE HORIZONTAL ELLIPSIS</td>
+          <td>U+22EF</td>
+          <td>Truncation indicator</td>
+      </tr>
+      <tr>
+          <td><code>↑</code></td>
+          <td>UPWARDS ARROW</td>
+          <td>U+2191</td>
+          <td>Scroll up indicator</td>
+      </tr>
+      <tr>
+          <td><code>↓</code></td>
+          <td>DOWNWARDS ARROW</td>
+          <td>U+2193</td>
+          <td>Scroll down indicator</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r18-focus-bracket-markers">§R1.8 Focus Bracket Markers</h3>
+<p>Used for: alternative focus indication when reverse video is insufficient (Standard §7.2, §8.1).</p>
+<pre tabindex="0"><code>[▸ focused item ◂]
+</code></pre><table>
+  <thead>
+      <tr>
+          <th>Glyph</th>
+          <th>Name</th>
+          <th>Unicode</th>
+          <th>Position</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>[</code></td>
+          <td>LEFT SQUARE BRACKET</td>
+          <td>U+005B</td>
+          <td>Before indicator</td>
+      </tr>
+      <tr>
+          <td><code>▸</code></td>
+          <td>BLACK RIGHT-POINTING SMALL TRIANGLE</td>
+          <td>U+25B8</td>
+          <td>After opening bracket + space</td>
+      </tr>
+      <tr>
+          <td><code>◂</code></td>
+          <td>BLACK LEFT-POINTING SMALL TRIANGLE</td>
+          <td>U+25C2</td>
+          <td>Before closing bracket + space</td>
+      </tr>
+      <tr>
+          <td><code>]</code></td>
+          <td>RIGHT SQUARE BRACKET</td>
+          <td>U+005D</td>
+          <td>After indicator</td>
+      </tr>
+  </tbody>
+</table>
+<p>Total width overhead: 6 characters (3 prefix <code>[▸ </code> + 3 suffix <code> ◂]</code>).</p>
+<h3 id="r19-mnemonic-rendering">§R1.9 Mnemonic Rendering</h3>
+<p>Mnemonics (Standard §2.4) are underlined letters enabling single-keystroke selection in menus. Source notation uses tilde (<code>~F~ile</code>) or ampersand (<code>&amp;File</code>).</p>
+<p><strong>Visual rendering:</strong> The mnemonic character MUST be rendered with underline (SGR 4). If the terminal does not support underline, use a contrasting foreground color (bright white when surrounding text is dimmer).</p>
+<pre tabindex="0"><code>Example — &#34;File&#34; with F as mnemonic:
+  Source:  ~F~ile
+  Render:  ESC[4mFESC[24mile
+           ─────         ────
+           underlined F   normal &#34;ile&#34;
+</code></pre><hr>
+<h2 id="r2-sgr-select-graphic-rendition-codes">§R2 SGR (Select Graphic Rendition) Codes</h2>
+<h3 id="r21-attribute-codes">§R2.1 Attribute Codes</h3>
+<p>All styling uses CSI sequences: <code>ESC[{params}m</code> (where ESC = <code>\x1b</code> or <code>\033</code>).</p>
+<table>
+  <thead>
+      <tr>
+          <th>Code</th>
+          <th>Attribute</th>
+          <th>Reset Code</th>
+          <th>Use in Monospace TUI</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>0</td>
+          <td>Reset all</td>
+          <td>—</td>
+          <td>Clear all attributes</td>
+      </tr>
+      <tr>
+          <td>1</td>
+          <td>Bold</td>
+          <td>22</td>
+          <td>Display and Title typography (Standard §7.1)</td>
+      </tr>
+      <tr>
+          <td>2</td>
+          <td>Dim (faint)</td>
+          <td>22</td>
+          <td>Label typography, Disabled state (Standard §7.1, §8.1)</td>
+      </tr>
+      <tr>
+          <td>3</td>
+          <td>Italic</td>
+          <td>23</td>
+          <td>Sparingly — not in standard typography roles</td>
+      </tr>
+      <tr>
+          <td>4</td>
+          <td>Underline</td>
+          <td>24</td>
+          <td>Hovered state, mnemonics (Standard §8.1)</td>
+      </tr>
+      <tr>
+          <td>7</td>
+          <td>Reverse video</td>
+          <td>27</td>
+          <td>Focused and Selected states (Standard §8.1)</td>
+      </tr>
+      <tr>
+          <td>9</td>
+          <td>Strikethrough</td>
+          <td>29</td>
+          <td>Deprecated items only</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r22-typography-role--sgr-mapping">§R2.2 Typography Role → SGR Mapping</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Typography Role</th>
+          <th>SGR Sequence</th>
+          <th>Example</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Display</td>
+          <td><code>ESC[1m</code> (+ uppercase in source)</td>
+          <td><code>ESC[1mDASHBOARDESC[22m</code></td>
+      </tr>
+      <tr>
+          <td>Title</td>
+          <td><code>ESC[1m</code></td>
+          <td><code>ESC[1mSection HeaderESC[22m</code></td>
+      </tr>
+      <tr>
+          <td>Body</td>
+          <td>(no attributes)</td>
+          <td><code>Normal content text</code></td>
+      </tr>
+      <tr>
+          <td>Label</td>
+          <td><code>ESC[2m</code></td>
+          <td><code>ESC[2mLast updated: 12:34ESC[22m</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r23-state--sgr-mapping">§R2.3 State → SGR Mapping</h3>
+<table>
+  <thead>
+      <tr>
+          <th>State</th>
+          <th>SGR Sequence</th>
+          <th>Notes</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Enabled</td>
+          <td>(no attributes)</td>
+          <td>Default rendering</td>
+      </tr>
+      <tr>
+          <td>Focused</td>
+          <td><code>ESC[7m</code></td>
+          <td>Reverse video</td>
+      </tr>
+      <tr>
+          <td>Hovered</td>
+          <td><code>ESC[4m</code></td>
+          <td>Underline (mouse contexts)</td>
+      </tr>
+      <tr>
+          <td>Pressed</td>
+          <td><code>ESC[7m</code> → <code>ESC[27m</code> (within ≤100ms)</td>
+          <td>Brief reverse flash</td>
+      </tr>
+      <tr>
+          <td>Selected</td>
+          <td><code>ESC[7m</code> + fill mark character</td>
+          <td>Reverse video with <code>[X]</code> or <code>(*)</code></td>
+      </tr>
+      <tr>
+          <td>Disabled</td>
+          <td><code>ESC[2m</code></td>
+          <td>Dim/faint</td>
+      </tr>
+      <tr>
+          <td>Error</td>
+          <td><code>ESC[31m</code> or <code>ESC[91m</code></td>
+          <td>Red foreground (standard or bright)</td>
+      </tr>
+      <tr>
+          <td>Error (severe)</td>
+          <td><code>ESC[41m</code></td>
+          <td>Red background</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r24-standard-foreground-colors">§R2.4 Standard Foreground Colors</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Color</th>
+          <th>Standard FG</th>
+          <th>Bright FG</th>
+          <th>Standard BG</th>
+          <th>Bright BG</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Black</td>
+          <td>30</td>
+          <td>90</td>
+          <td>40</td>
+          <td>100</td>
+      </tr>
+      <tr>
+          <td>Red</td>
+          <td>31</td>
+          <td>91</td>
+          <td>41</td>
+          <td>101</td>
+      </tr>
+      <tr>
+          <td>Green</td>
+          <td>32</td>
+          <td>92</td>
+          <td>42</td>
+          <td>102</td>
+      </tr>
+      <tr>
+          <td>Yellow</td>
+          <td>33</td>
+          <td>93</td>
+          <td>43</td>
+          <td>103</td>
+      </tr>
+      <tr>
+          <td>Blue</td>
+          <td>34</td>
+          <td>94</td>
+          <td>44</td>
+          <td>104</td>
+      </tr>
+      <tr>
+          <td>Magenta</td>
+          <td>35</td>
+          <td>95</td>
+          <td>45</td>
+          <td>105</td>
+      </tr>
+      <tr>
+          <td>Cyan</td>
+          <td>36</td>
+          <td>96</td>
+          <td>46</td>
+          <td>106</td>
+      </tr>
+      <tr>
+          <td>White</td>
+          <td>37</td>
+          <td>97</td>
+          <td>47</td>
+          <td>107</td>
+      </tr>
+      <tr>
+          <td>Default</td>
+          <td>39</td>
+          <td>—</td>
+          <td>49</td>
+          <td>—</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r25-extended-color-sequences">§R2.5 Extended Color Sequences</h3>
+<p><strong>256-color mode:</strong></p>
+<pre tabindex="0"><code>Foreground: ESC[38;5;{n}m    (n = 0–255)
+Background: ESC[48;5;{n}m    (n = 0–255)
+</code></pre><p><strong>Truecolor (24-bit):</strong></p>
+<pre tabindex="0"><code>Foreground: ESC[38;2;{r};{g};{b}m    (r, g, b = 0–255)
+Background: ESC[48;2;{r};{g};{b}m    (r, g, b = 0–255)
+</code></pre><hr>
+<h2 id="r3-256-color-palette">§R3 256-Color Palette</h2>
+<h3 id="r31-palette-structure">§R3.1 Palette Structure</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Index Range</th>
+          <th>Content</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>0–7</td>
+          <td>Standard ANSI colors (black, red, green, yellow, blue, magenta, cyan, white)</td>
+      </tr>
+      <tr>
+          <td>8–15</td>
+          <td>Bright ANSI colors</td>
+      </tr>
+      <tr>
+          <td>16–231</td>
+          <td>6×6×6 color cube: <code>index = 16 + 36r + 6g + b</code> (r, g, b = 0–5)</td>
+      </tr>
+      <tr>
+          <td>232–255</td>
+          <td>24-step grayscale ramp (232 = darkest, 255 = lightest)</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r32-semantic-role--256-color-mapping">§R3.2 Semantic Role → 256-Color Mapping</h3>
+<h4 id="dark-theme-default">Dark Theme (default)</h4>
+<table>
+  <thead>
+      <tr>
+          <th>Semantic Role</th>
+          <th>Foreground (index)</th>
+          <th>Background (index)</th>
+          <th>Hex Approximation</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Primary</td>
+          <td>75 (light blue)</td>
+          <td>17 (dark blue)</td>
+          <td>fg #5fafff, bg #00005f</td>
+      </tr>
+      <tr>
+          <td>Secondary</td>
+          <td>109 (muted blue)</td>
+          <td>236 (dark gray)</td>
+          <td>fg #87afaf, bg #303030</td>
+      </tr>
+      <tr>
+          <td>Tertiary</td>
+          <td>79 (teal)</td>
+          <td>236 (dark gray)</td>
+          <td>fg #5fd7af, bg #303030</td>
+      </tr>
+      <tr>
+          <td>Error</td>
+          <td>196 (bright red)</td>
+          <td>52 (dark red)</td>
+          <td>fg #ff0000, bg #5f0000</td>
+      </tr>
+      <tr>
+          <td>Neutral fg</td>
+          <td>252 (light gray)</td>
+          <td>—</td>
+          <td>fg #d0d0d0</td>
+      </tr>
+      <tr>
+          <td>Neutral bg</td>
+          <td>—</td>
+          <td>235 (near-black)</td>
+          <td>bg #262626</td>
+      </tr>
+      <tr>
+          <td>Surface</td>
+          <td>252</td>
+          <td>234 (charcoal)</td>
+          <td>bg #1c1c1c</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="light-theme">Light Theme</h4>
+<table>
+  <thead>
+      <tr>
+          <th>Semantic Role</th>
+          <th>Foreground (index)</th>
+          <th>Background (index)</th>
+          <th>Hex Approximation</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Primary</td>
+          <td>25 (dark blue)</td>
+          <td>189 (light blue)</td>
+          <td>fg #005faf, bg #d7d7ff</td>
+      </tr>
+      <tr>
+          <td>Secondary</td>
+          <td>66 (muted blue)</td>
+          <td>254 (near-white)</td>
+          <td>fg #5f8787, bg #e4e4e4</td>
+      </tr>
+      <tr>
+          <td>Tertiary</td>
+          <td>30 (dark teal)</td>
+          <td>254 (near-white)</td>
+          <td>fg #008787, bg #e4e4e4</td>
+      </tr>
+      <tr>
+          <td>Error</td>
+          <td>124 (dark red)</td>
+          <td>224 (light pink)</td>
+          <td>fg #af0000, bg #ffd7d7</td>
+      </tr>
+      <tr>
+          <td>Neutral fg</td>
+          <td>235 (dark gray)</td>
+          <td>—</td>
+          <td>fg #262626</td>
+      </tr>
+      <tr>
+          <td>Neutral bg</td>
+          <td>—</td>
+          <td>255 (white)</td>
+          <td>bg #eeeeee</td>
+      </tr>
+      <tr>
+          <td>Surface</td>
+          <td>235</td>
+          <td>231 (pure white)</td>
+          <td>bg #ffffff</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r33-status-color-mapping">§R3.3 Status Color Mapping</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Status</th>
+          <th>Dark Theme (FG index)</th>
+          <th>Light Theme (FG index)</th>
+          <th>Paired Symbol</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Healthy / Success</td>
+          <td>40 (green)</td>
+          <td>28 (dark green)</td>
+          <td><code>◉</code> or <code>✓</code></td>
+      </tr>
+      <tr>
+          <td>Error / Critical</td>
+          <td>196 (bright red)</td>
+          <td>124 (dark red)</td>
+          <td><code>✗</code> or <code>●</code></td>
+      </tr>
+      <tr>
+          <td>Warning / Caution</td>
+          <td>220 (yellow)</td>
+          <td>172 (orange)</td>
+          <td><code>⚠</code> or <code>▲</code></td>
+      </tr>
+      <tr>
+          <td>Inactive / Disabled</td>
+          <td>240 (gray)</td>
+          <td>247 (gray)</td>
+          <td><code>○</code> or <code>—</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r34-named-palettes">§R3.4 Named Palettes</h3>
+<p>The Dark Theme and Light Theme mappings above (§R3.2) define the default palettes. Applications MAY offer additional named palettes. Seven named palettes are defined here, drawn from the historical research that informs the standard. All palettes map to the same five semantic roles (§5.1); they differ only in color assignment.</p>
+<h4 id="default">Default</h4>
+<p>Source: Textual framework default dark theme. This is the standard modern dark palette — the recommended starting point for new applications. It uses the same 256-color mappings defined in §R3.2 Dark Theme.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Semantic Role</th>
+          <th>Foreground (index)</th>
+          <th>Background (index)</th>
+          <th>Hex Approximation</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Primary</td>
+          <td>75 (light blue)</td>
+          <td>17 (dark blue)</td>
+          <td>fg #5fafff, bg #00005f</td>
+      </tr>
+      <tr>
+          <td>Secondary</td>
+          <td>109 (muted blue)</td>
+          <td>236 (dark gray)</td>
+          <td>fg #87afaf, bg #303030</td>
+      </tr>
+      <tr>
+          <td>Tertiary</td>
+          <td>79 (teal)</td>
+          <td>236 (dark gray)</td>
+          <td>fg #5fd7af, bg #303030</td>
+      </tr>
+      <tr>
+          <td>Error</td>
+          <td>196 (bright red)</td>
+          <td>52 (dark red)</td>
+          <td>fg #ff0000, bg #5f0000</td>
+      </tr>
+      <tr>
+          <td>Neutral fg</td>
+          <td>252 (light gray)</td>
+          <td>—</td>
+          <td>fg #d0d0d0</td>
+      </tr>
+      <tr>
+          <td>Neutral bg</td>
+          <td>—</td>
+          <td>235 (near-black)</td>
+          <td>bg #262626</td>
+      </tr>
+      <tr>
+          <td>Surface</td>
+          <td>252</td>
+          <td>234 (charcoal)</td>
+          <td>bg #1c1c1c</td>
+      </tr>
+  </tbody>
+</table>
+<p>Status colors:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Status</th>
+          <th>Foreground (index)</th>
+          <th>Paired Symbol</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Healthy / Success</td>
+          <td>40 (green)</td>
+          <td><code>◉</code> or <code>✓</code></td>
+      </tr>
+      <tr>
+          <td>Error / Critical</td>
+          <td>196 (bright red)</td>
+          <td><code>✗</code> or <code>●</code></td>
+      </tr>
+      <tr>
+          <td>Warning / Caution</td>
+          <td>220 (yellow)</td>
+          <td><code>⚠</code> or <code>▲</code></td>
+      </tr>
+      <tr>
+          <td>Inactive / Disabled</td>
+          <td>240 (gray)</td>
+          <td><code>○</code> or <code>—</code></td>
+      </tr>
+  </tbody>
+</table>
+<p>Example — Dashboard rendered in Default:</p>
+<pre class="palette-example palette-default"><span style="color:#585858">┌──</span> <span style="font-weight:bold;color:#5fafff">Service Monitor</span> <span style="color:#585858">────────────────────────────────────────────────────────────┐
+│</span> <span style="color:#87afaf">File  View  Help</span>                                                              <span style="color:#585858">│
+├───────────────────────────────────────────────────────────────────────────────┤</span>
+<span style="color:#585858">│</span>                                                                               <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>                                                                               <span style="color:#585858">│
+├───────────────────────────────────────────────────────────────────────────────┤</span>
+<span style="color:#585858">│</span> Service              │ Status   │ Uptime       │ CPU     │ Memory            <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>──────────────────────│──────────│──────────────│─────────│───────────────────<span style="color:#585858">│</span>
+<span style="background:#00005f;color:#5fafff">│ ▸ api-gateway        │ </span><span style="background:#00005f;color:#00d700">◉ OK</span><span style="background:#00005f;color:#5fafff">     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
+<span style="color:#585858">│</span>   auth-service       │ <span style="color:#00d700">◉ OK</span>     │ 14d  3h 22m  │   0.8%  │  128MB            <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>   worker-pool        │ <span style="color:#ffd700">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>   notification-svc   │ <span style="color:#ff0000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>   metrics-collector  │ <span style="color:#00d700">◉ OK</span>     │ 14d  3h 22m  │   1.4%  │  256MB            <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>                                                                               <span style="color:#585858">│
+├───────────────────────────────────────────────────────────────────────────────┤</span>
+<span style="color:#87afaf">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │</span>
+<span style="color:#585858">└───────────────────────────────────────────────────────────────────────────────┘</span></pre>
+<h4 id="monochrome">Monochrome</h4>
+<p>Source: CUA <code>cpAppMonochrome</code> system palette, Turbo Vision <code>cpAppBlackWhite</code> palette, and the capability-detection degradation path (§5.6).</p>
+<p>No color indices are used. All semantic differentiation is achieved through SGR text attributes on a black background.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Semantic Role</th>
+          <th>Foreground</th>
+          <th>Background</th>
+          <th>SGR Attributes</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Primary</td>
+          <td>White</td>
+          <td>Black</td>
+          <td><strong>Bold</strong> (SGR 1)</td>
+      </tr>
+      <tr>
+          <td>Secondary</td>
+          <td>White</td>
+          <td>Black</td>
+          <td>Normal</td>
+      </tr>
+      <tr>
+          <td>Tertiary</td>
+          <td>White</td>
+          <td>Black</td>
+          <td>Underline (SGR 4)</td>
+      </tr>
+      <tr>
+          <td>Error</td>
+          <td>White</td>
+          <td>Black</td>
+          <td><strong>Bold</strong> + Reverse (SGR 1;7)</td>
+      </tr>
+      <tr>
+          <td>Neutral fg</td>
+          <td>White</td>
+          <td>Black</td>
+          <td>Dim (SGR 2)</td>
+      </tr>
+      <tr>
+          <td>Neutral bg</td>
+          <td>—</td>
+          <td>Black</td>
+          <td>—</td>
+      </tr>
+      <tr>
+          <td>Surface</td>
+          <td>White</td>
+          <td>Black</td>
+          <td>—</td>
+      </tr>
+      <tr>
+          <td>Focus indicator</td>
+          <td>Black</td>
+          <td>White</td>
+          <td>Reverse (SGR 7)</td>
+      </tr>
+      <tr>
+          <td>Selected item</td>
+          <td>Black</td>
+          <td>White</td>
+          <td>Reverse (SGR 7)</td>
+      </tr>
+      <tr>
+          <td>Disabled</td>
+          <td>White</td>
+          <td>Black</td>
+          <td>Dim (SGR 2)</td>
+      </tr>
+  </tbody>
+</table>
+<p>Status mapping under Monochrome:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Status</th>
+          <th>Rendering</th>
+          <th>Paired Symbol</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Healthy / Success</td>
+          <td>Normal</td>
+          <td><code>◉</code> or <code>✓</code></td>
+      </tr>
+      <tr>
+          <td>Error / Critical</td>
+          <td>Bold + Reverse</td>
+          <td><code>✗</code> or <code>●</code></td>
+      </tr>
+      <tr>
+          <td>Warning / Caution</td>
+          <td>Bold</td>
+          <td><code>⚠</code> or <code>▲</code></td>
+      </tr>
+      <tr>
+          <td>Inactive / Disabled</td>
+          <td>Dim</td>
+          <td><code>○</code> or <code>—</code></td>
+      </tr>
+  </tbody>
+</table>
+<p>Example — Dashboard rendered in Monochrome:</p>
+<pre class="palette-example palette-mono"><span style="font-weight:bold;color:#fff">┌── Service Monitor ────────────────────────────────────────────────────────────┐
+│</span> <span style="font-weight:bold;color:#fff">File  View  Help</span>                                                              <span style="font-weight:bold;color:#fff">│
+├───────────────────────────────────────────────────────────────────────────────┤</span>
+│                                                                               │
+│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      │
+│                                                                               │
+├───────────────────────────────────────────────────────────────────────────────┤
+│ Service              │ Status   │ Uptime       │ CPU     │ Memory            │
+│──────────────────────│──────────│──────────────│─────────│───────────────────│
+<span style="background:#ccc;color:#000">│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
+│   auth-service       │ ◉ OK     │ 14d  3h 22m  │   0.8%  │  128MB            │
+│   worker-pool        │ <span style="font-weight:bold;color:#fff">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            │
+│   notification-svc   │ <span style="font-weight:bold;background:#fff;color:#000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            │
+│   metrics-collector  │ ◉ OK     │ 14d  3h 22m  │   1.4%  │  256MB            │
+│                                                                               │
+├───────────────────────────────────────────────────────────────────────────────┤
+<span style="color:#666">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │</span>
+└───────────────────────────────────────────────────────────────────────────────┘</pre>
+<h4 id="commander">Commander</h4>
+<p>Source: OS/2 Presentation Manager text-mode conventions (attribute byte 0x1F = white on blue), Norton Commander&rsquo;s blue-panel aesthetic (0x1_ attribute range), and Turbo Vision&rsquo;s window frame palette entry (0x17 = white on blue). This is the canonical look of IBM PC and OS/2 text-mode applications from 1987–1995.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Semantic Role</th>
+          <th>Foreground (index)</th>
+          <th>Background (index)</th>
+          <th>Hex Approximation</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Primary</td>
+          <td>15 (bright white)</td>
+          <td>19 (dark blue)</td>
+          <td>fg #ffffff, bg #0000af</td>
+      </tr>
+      <tr>
+          <td>Secondary</td>
+          <td>14 (bright cyan)</td>
+          <td>237 (gray)</td>
+          <td>fg #00ffff, bg #3a3a3a</td>
+      </tr>
+      <tr>
+          <td>Tertiary</td>
+          <td>11 (bright yellow)</td>
+          <td>19 (dark blue)</td>
+          <td>fg #ffff00, bg #0000af</td>
+      </tr>
+      <tr>
+          <td>Error</td>
+          <td>196 (bright red)</td>
+          <td>52 (dark red)</td>
+          <td>fg #ff0000, bg #5f0000</td>
+      </tr>
+      <tr>
+          <td>Neutral fg</td>
+          <td>15 (bright white)</td>
+          <td>—</td>
+          <td>fg #ffffff</td>
+      </tr>
+      <tr>
+          <td>Neutral bg</td>
+          <td>—</td>
+          <td>19 (dark blue)</td>
+          <td>bg #0000af</td>
+      </tr>
+      <tr>
+          <td>Surface</td>
+          <td>15</td>
+          <td>17 (navy)</td>
+          <td>bg #00005f</td>
+      </tr>
+  </tbody>
+</table>
+<p>Key conventions from the source systems:</p>
+<ul>
+<li><strong>Panels and windows</strong>: White or cyan text on blue background — the definitive CUA/OS/2 look.</li>
+<li><strong>Active selection</strong>: Yellow (bright) on blue, or reverse video — Norton Commander convention for selected files.</li>
+<li><strong>Dialogs</strong>: Black on light gray (Turbo Vision 0x70) — dialogs use a visually distinct, lighter surface to establish elevation.</li>
+<li><strong>Action bar / menus</strong>: Black on cyan (CUA convention) or white on dark gray.</li>
+<li><strong>Input fields</strong>: White on blue (Turbo Vision 0x1F) — matching the standard window background.</li>
+</ul>
+<p>Dialog surface override for Commander palette:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Element</th>
+          <th>Foreground (index)</th>
+          <th>Background (index)</th>
+          <th>Hex Approximation</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Dialog surface</td>
+          <td>232 (black)</td>
+          <td>250 (light gray)</td>
+          <td>fg #080808, bg #bcbcbc</td>
+      </tr>
+      <tr>
+          <td>Dialog border</td>
+          <td>232 (black)</td>
+          <td>250 (light gray)</td>
+          <td>fg #080808, bg #bcbcbc</td>
+      </tr>
+      <tr>
+          <td>Dialog button</td>
+          <td>232 (black)</td>
+          <td>78 (green)</td>
+          <td>fg #080808, bg #5fd787</td>
+      </tr>
+  </tbody>
+</table>
+<p>Example — Dashboard rendered in Commander:</p>
+<pre class="palette-example palette-commander">┌── Service Monitor ────────────────────────────────────────────────────────────┐
+│ <span style="background:#00cdcd;color:#000"> File  View  Help </span>                                                             │
+├───────────────────────────────────────────────────────────────────────────────┤
+│                                                                               │
+│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      │
+│                                                                               │
+├───────────────────────────────────────────────────────────────────────────────┤
+│ Service              │ Status   │ Uptime       │ CPU     │ Memory            │
+│──────────────────────│──────────│──────────────│─────────│───────────────────│
+<span style="color:#ffff00">│ ▸ api-gateway        │ </span><span style="color:#00ffff">◉ OK</span><span style="color:#ffff00">     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
+│   auth-service       │ <span style="color:#00ffff">◉ OK</span>     │ 14d  3h 22m  │   0.8%  │  128MB            │
+│   worker-pool        │ <span style="color:#ffff00">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            │
+│   notification-svc   │ <span style="color:#ff0000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            │
+│   metrics-collector  │ <span style="color:#00ffff">◉ OK</span>     │ 14d  3h 22m  │   1.4%  │  256MB            │
+│                                                                               │
+├───────────────────────────────────────────────────────────────────────────────┤
+<span style="color:#00ffff">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │</span>
+└───────────────────────────────────────────────────────────────────────────────┘</pre>
+<h4 id="os2">OS/2</h4>
+<p>Source: OS/2 Presentation Manager text-mode conventions. The corporate CUA look — white text on navy blue, with gray action bars and reverse-video selections. More restrained than Commander, reflecting IBM&rsquo;s enterprise design sensibility. Active windows use double-line borders with brighter attributes; inactive windows use single-line borders with dimmer attributes (§5.5).</p>
+<table>
+  <thead>
+      <tr>
+          <th>Semantic Role</th>
+          <th>Foreground (index)</th>
+          <th>Background (index)</th>
+          <th>Hex Approximation</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Primary</td>
+          <td>15 (bright white)</td>
+          <td>17 (navy)</td>
+          <td>fg #ffffff, bg #00005f</td>
+      </tr>
+      <tr>
+          <td>Secondary</td>
+          <td>252 (light gray)</td>
+          <td>17 (navy)</td>
+          <td>fg #d0d0d0, bg #00005f</td>
+      </tr>
+      <tr>
+          <td>Tertiary</td>
+          <td>15 (bright white)</td>
+          <td>237 (dark gray)</td>
+          <td>fg #ffffff, bg #3a3a3a</td>
+      </tr>
+      <tr>
+          <td>Error</td>
+          <td>196 (bright red)</td>
+          <td>17 (navy)</td>
+          <td>fg #ff0000, bg #00005f</td>
+      </tr>
+      <tr>
+          <td>Neutral fg</td>
+          <td>232 (black)</td>
+          <td>—</td>
+          <td>fg #080808</td>
+      </tr>
+      <tr>
+          <td>Neutral bg</td>
+          <td>—</td>
+          <td>252 (light gray)</td>
+          <td>bg #d0d0d0</td>
+      </tr>
+      <tr>
+          <td>Surface</td>
+          <td>15</td>
+          <td>17 (navy)</td>
+          <td>bg #00005f</td>
+      </tr>
+  </tbody>
+</table>
+<p>Key conventions:</p>
+<ul>
+<li><strong>Action bar</strong>: Black on light gray — the CUA standard. Distinguished from the blue panel area.</li>
+<li><strong>Selections</strong>: Reverse video — navy on white. No color change, just attribute inversion.</li>
+<li><strong>Panels</strong>: White or light gray text on navy. Subdued contrast compared to Commander&rsquo;s vivid blue.</li>
+<li><strong>Active/inactive windows</strong>: Bright white borders (active) vs. dim gray borders (inactive), with double-line vs. single-line distinction (§6.1).</li>
+</ul>
+<p>Example — Dashboard rendered in OS/2:</p>
+<pre class="palette-example palette-os2"><span style="color:#fff">┌──</span> <span style="font-weight:bold;color:#fff">Service Monitor</span> <span style="color:#fff">────────────────────────────────────────────────────────────┐</span>
+<span style="color:#fff">│</span> <span style="background:#d0d0d0;color:#080808"> File  View  Help </span>                                                             <span style="color:#fff">│</span>
+<span style="color:#fff">├───────────────────────────────────────────────────────────────────────────────┤</span>
+│                                                                               │
+│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      │
+│                                                                               │
+<span style="color:#fff">├───────────────────────────────────────────────────────────────────────────────┤</span>
+│ Service              │ Status   │ Uptime       │ CPU     │ Memory            │
+│──────────────────────│──────────│──────────────│─────────│───────────────────│
+<span style="background:#d0d0d0;color:#00005f">│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
+│   auth-service       │ <span style="color:#00d700">◉ OK</span>     │ 14d  3h 22m  │   0.8%  │  128MB            │
+│   worker-pool        │ <span style="color:#ffd700">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            │
+│   notification-svc   │ <span style="color:#ff0000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            │
+│   metrics-collector  │ <span style="color:#00d700">◉ OK</span>     │ 14d  3h 22m  │   1.4%  │  256MB            │
+│                                                                               │
+<span style="color:#fff">├───────────────────────────────────────────────────────────────────────────────┤</span>
+<span style="color:#888">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │</span>
+<span style="color:#fff">└───────────────────────────────────────────────────────────────────────────────┘</span></pre>
+<h4 id="turbo-pascal">Turbo Pascal</h4>
+<p>Source: Borland Turbo Vision palette system (1990) as seen in the Turbo Pascal and Turbo C++ IDEs. Yellow editor text on blue, cyan borders, light gray menus and status bars, green buttons. The most visually distinctive TUI aesthetic of the DOS era, instantly recognizable to a generation of developers.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Semantic Role</th>
+          <th>Foreground (index)</th>
+          <th>Background (index)</th>
+          <th>Hex Approximation</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Primary</td>
+          <td>11 (bright yellow)</td>
+          <td>19 (dark blue)</td>
+          <td>fg #ffff00, bg #0000af</td>
+      </tr>
+      <tr>
+          <td>Secondary</td>
+          <td>14 (bright cyan)</td>
+          <td>19 (dark blue)</td>
+          <td>fg #00ffff, bg #0000af</td>
+      </tr>
+      <tr>
+          <td>Tertiary</td>
+          <td>232 (black)</td>
+          <td>78 (green)</td>
+          <td>fg #080808, bg #5fd787</td>
+      </tr>
+      <tr>
+          <td>Error</td>
+          <td>196 (bright red)</td>
+          <td>19 (dark blue)</td>
+          <td>fg #ff0000, bg #0000af</td>
+      </tr>
+      <tr>
+          <td>Neutral fg</td>
+          <td>232 (black)</td>
+          <td>—</td>
+          <td>fg #080808</td>
+      </tr>
+      <tr>
+          <td>Neutral bg</td>
+          <td>—</td>
+          <td>250 (light gray)</td>
+          <td>bg #bcbcbc</td>
+      </tr>
+      <tr>
+          <td>Surface</td>
+          <td>11</td>
+          <td>19 (dark blue)</td>
+          <td>bg #0000af</td>
+      </tr>
+  </tbody>
+</table>
+<p>Key conventions from the Borland IDE:</p>
+<ul>
+<li><strong>Editor area</strong>: Yellow text on blue — the signature Borland look. Syntax-highlighted keywords in white or cyan.</li>
+<li><strong>Window borders</strong>: Cyan on blue. Double-line for active, single-line for inactive.</li>
+<li><strong>Menu bar and status line</strong>: Black on light gray. Hotkey letters highlighted.</li>
+<li><strong>Dialog boxes</strong>: Black on light gray. A visually distinct surface from the blue editor area.</li>
+<li><strong>Buttons</strong>: Black on green (<code>&lt; OK &gt;</code>). Default button uses distinct delimiters (<code>» OK «</code>).</li>
+</ul>
+<p>Example — Dashboard rendered in Turbo Pascal:</p>
+<pre class="palette-example palette-turbo"><span style="color:#00ffff">┌──</span> <span style="font-weight:bold;color:#fff">Service Monitor</span> <span style="color:#00ffff">────────────────────────────────────────────────────────────┐</span>
+<span style="color:#00ffff">│</span> <span style="background:#bcbcbc;color:#080808"> File  View  Help </span>                                                             <span style="color:#00ffff">│</span>
+<span style="color:#00ffff">├───────────────────────────────────────────────────────────────────────────────┤</span>
+│                                                                               │
+│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      │
+│                                                                               │
+<span style="color:#00ffff">├───────────────────────────────────────────────────────────────────────────────┤</span>
+│ Service              │ Status   │ Uptime       │ CPU     │ Memory            │
+│──────────────────────│──────────│──────────────│─────────│───────────────────│
+<span style="background:#ffff00;color:#0000af">│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
+│   auth-service       │ <span style="color:#00ff00">◉ OK</span>     │ 14d  3h 22m  │   0.8%  │  128MB            │
+│   worker-pool        │ <span style="font-weight:bold;color:#fff">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            │
+│   notification-svc   │ <span style="color:#ff0000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            │
+│   metrics-collector  │ <span style="color:#00ff00">◉ OK</span>     │ 14d  3h 22m  │   1.4%  │  256MB            │
+│                                                                               │
+<span style="color:#00ffff">├───────────────────────────────────────────────────────────────────────────────┤</span>
+<span style="background:#bcbcbc;color:#080808">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │</span>
+<span style="color:#00ffff">└───────────────────────────────────────────────────────────────────────────────┘</span></pre>
+<h4 id="amber-phosphor">Amber Phosphor</h4>
+<p>Source: DEC VT220 and VT320 amber phosphor (P3) displays, widely deployed in business and institutional computing through the 1980s. Control Data Corporation PLATO terminals also used amber-orange plasma displays. The single-hue-on-black aesthetic predates color terminals entirely.</p>
+<p>All UI elements are rendered in shades of amber (<code>#FFB000</code> at full brightness) on a black background. Semantic roles are distinguished by brightness level within the single hue.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Semantic Role</th>
+          <th>Foreground (index)</th>
+          <th>Background (index)</th>
+          <th>Hex Approximation</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Primary</td>
+          <td>214 (bright amber)</td>
+          <td>0 (black)</td>
+          <td>fg #ffaf00, bg #000000</td>
+      </tr>
+      <tr>
+          <td>Secondary</td>
+          <td>172 (medium amber)</td>
+          <td>0 (black)</td>
+          <td>fg #d78700, bg #000000</td>
+      </tr>
+      <tr>
+          <td>Tertiary</td>
+          <td>214 (bright amber)</td>
+          <td>0 (black)</td>
+          <td>fg #ffaf00, bg #000000 (underline)</td>
+      </tr>
+      <tr>
+          <td>Error</td>
+          <td>214 (bright amber)</td>
+          <td>0 (black)</td>
+          <td>fg #ffaf00, bg #000000 (reverse)</td>
+      </tr>
+      <tr>
+          <td>Neutral fg</td>
+          <td>136 (dim amber)</td>
+          <td>—</td>
+          <td>fg #af8700</td>
+      </tr>
+      <tr>
+          <td>Neutral bg</td>
+          <td>—</td>
+          <td>0 (black)</td>
+          <td>bg #000000</td>
+      </tr>
+      <tr>
+          <td>Surface</td>
+          <td>136</td>
+          <td>0 (black)</td>
+          <td>bg #000000</td>
+      </tr>
+  </tbody>
+</table>
+<p>Because amber is a single-hue palette, SGR attributes provide essential differentiation:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Element</th>
+          <th>Color</th>
+          <th>Additional SGR</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Focused / active</td>
+          <td>Bright amber (214)</td>
+          <td>Bold (SGR 1)</td>
+      </tr>
+      <tr>
+          <td>Body text</td>
+          <td>Medium amber (172)</td>
+          <td>Normal</td>
+      </tr>
+      <tr>
+          <td>Secondary / labels</td>
+          <td>Dim amber (136)</td>
+          <td>Dim (SGR 2)</td>
+      </tr>
+      <tr>
+          <td>Selected item</td>
+          <td>Black on amber</td>
+          <td>Reverse (SGR 7)</td>
+      </tr>
+      <tr>
+          <td>Error state</td>
+          <td>Black on amber</td>
+          <td>Reverse + Bold</td>
+      </tr>
+      <tr>
+          <td>Disabled</td>
+          <td>Dim amber (136)</td>
+          <td>Dim (SGR 2)</td>
+      </tr>
+      <tr>
+          <td>Links / interactive</td>
+          <td>Bright amber (214)</td>
+          <td>Underline (SGR 4)</td>
+      </tr>
+  </tbody>
+</table>
+<p>Example — Dashboard rendered in Amber Phosphor:</p>
+<pre class="palette-example palette-amber"><span style="color:#af8700">┌──</span> <span style="font-weight:bold;color:#ffaf00">Service Monitor</span> <span style="color:#af8700">────────────────────────────────────────────────────────────┐
+│</span> <span style="font-weight:bold;color:#ffaf00">File  View  Help</span>                                                              <span style="color:#af8700">│
+├───────────────────────────────────────────────────────────────────────────────┤</span>
+<span style="color:#af8700">│</span>                                                                               <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>                                                                               <span style="color:#af8700">│
+├───────────────────────────────────────────────────────────────────────────────┤</span>
+<span style="color:#af8700">│</span> Service              │ Status   │ Uptime       │ CPU     │ Memory            <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>──────────────────────│──────────│──────────────│─────────│───────────────────<span style="color:#af8700">│</span>
+<span style="background:#ffaf00;color:#000">│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
+<span style="color:#af8700">│</span>   auth-service       │ ◉ OK     │ 14d  3h 22m  │   0.8%  │  128MB            <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>   worker-pool        │ <span style="font-weight:bold;color:#ffaf00">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>   notification-svc   │ <span style="font-weight:bold;background:#ffaf00;color:#000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>   metrics-collector  │ ◉ OK     │ 14d  3h 22m  │   1.4%  │  256MB            <span style="color:#af8700">│</span>
+<span style="color:#af8700">│</span>                                                                               <span style="color:#af8700">│
+├───────────────────────────────────────────────────────────────────────────────┤</span>
+<span style="color:#af8700">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │
+└───────────────────────────────────────────────────────────────────────────────┘</span></pre>
+<h4 id="green-phosphor">Green Phosphor</h4>
+<p>Source: DEC VT100 and VT101 green phosphor (P1) displays — the original &ldquo;green screen&rdquo; terminal that defined the early Unix and VAX/VMS experience. Also used in IBM 3278 display terminals and countless institutional systems through the 1970s–1980s.</p>
+<p>Structurally identical to Amber Phosphor but in green. All UI elements rendered in shades of green (<code>#33FF00</code> at full brightness) on black.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Semantic Role</th>
+          <th>Foreground (index)</th>
+          <th>Background (index)</th>
+          <th>Hex Approximation</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Primary</td>
+          <td>82 (bright green)</td>
+          <td>0 (black)</td>
+          <td>fg #5fff00, bg #000000</td>
+      </tr>
+      <tr>
+          <td>Secondary</td>
+          <td>34 (medium green)</td>
+          <td>0 (black)</td>
+          <td>fg #00af00, bg #000000</td>
+      </tr>
+      <tr>
+          <td>Tertiary</td>
+          <td>82 (bright green)</td>
+          <td>0 (black)</td>
+          <td>fg #5fff00, bg #000000 (underline)</td>
+      </tr>
+      <tr>
+          <td>Error</td>
+          <td>82 (bright green)</td>
+          <td>0 (black)</td>
+          <td>fg #5fff00, bg #000000 (reverse)</td>
+      </tr>
+      <tr>
+          <td>Neutral fg</td>
+          <td>28 (dim green)</td>
+          <td>—</td>
+          <td>fg #008700</td>
+      </tr>
+      <tr>
+          <td>Neutral bg</td>
+          <td>—</td>
+          <td>0 (black)</td>
+          <td>bg #000000</td>
+      </tr>
+      <tr>
+          <td>Surface</td>
+          <td>28</td>
+          <td>0 (black)</td>
+          <td>bg #000000</td>
+      </tr>
+  </tbody>
+</table>
+<p>SGR attribute usage follows the same pattern as Amber Phosphor:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Element</th>
+          <th>Color</th>
+          <th>Additional SGR</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Focused / active</td>
+          <td>Bright green (82)</td>
+          <td>Bold (SGR 1)</td>
+      </tr>
+      <tr>
+          <td>Body text</td>
+          <td>Medium green (34)</td>
+          <td>Normal</td>
+      </tr>
+      <tr>
+          <td>Secondary / labels</td>
+          <td>Dim green (28)</td>
+          <td>Dim (SGR 2)</td>
+      </tr>
+      <tr>
+          <td>Selected item</td>
+          <td>Black on green</td>
+          <td>Reverse (SGR 7)</td>
+      </tr>
+      <tr>
+          <td>Error state</td>
+          <td>Black on green</td>
+          <td>Reverse + Bold</td>
+      </tr>
+      <tr>
+          <td>Disabled</td>
+          <td>Dim green (28)</td>
+          <td>Dim (SGR 2)</td>
+      </tr>
+      <tr>
+          <td>Links / interactive</td>
+          <td>Bright green (82)</td>
+          <td>Underline (SGR 4)</td>
+      </tr>
+  </tbody>
+</table>
+<p>Example — Dashboard rendered in Green Phosphor:</p>
+<pre class="palette-example palette-green"><span style="color:#008700">┌──</span> <span style="font-weight:bold;color:#5fff00">Service Monitor</span> <span style="color:#008700">────────────────────────────────────────────────────────────┐
+│</span> <span style="font-weight:bold;color:#5fff00">File  View  Help</span>                                                              <span style="color:#008700">│
+├───────────────────────────────────────────────────────────────────────────────┤</span>
+<span style="color:#008700">│</span>                                                                               <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>                                                                               <span style="color:#008700">│
+├───────────────────────────────────────────────────────────────────────────────┤</span>
+<span style="color:#008700">│</span> Service              │ Status   │ Uptime       │ CPU     │ Memory            <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>──────────────────────│──────────│──────────────│─────────│───────────────────<span style="color:#008700">│</span>
+<span style="background:#5fff00;color:#000">│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB            │</span>
+<span style="color:#008700">│</span>   auth-service       │ ◉ OK     │ 14d  3h 22m  │   0.8%  │  128MB            <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>   worker-pool        │ <span style="font-weight:bold;color:#5fff00">⚠ WARN</span>   │  0d  1h 45m  │  78.3%  │  1.2GB            <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>   notification-svc   │ <span style="font-weight:bold;background:#5fff00;color:#000">✗ DOWN</span>   │  0d  0h 00m  │   0.0%  │    0MB            <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>   metrics-collector  │ ◉ OK     │ 14d  3h 22m  │   1.4%  │  256MB            <span style="color:#008700">│</span>
+<span style="color:#008700">│</span>                                                                               <span style="color:#008700">│
+├───────────────────────────────────────────────────────────────────────────────┤</span>
+<span style="color:#008700">│ ?Help  r Refresh  /Filter  q Quit                              5 services    │
+└───────────────────────────────────────────────────────────────────────────────┘</span></pre>
+<hr>
+<h2 id="r4-component-measurements">§R4 Component Measurements</h2>
+<p>All measurements are in character cells (cols × rows).</p>
+<h3 id="r41-push-button">§R4.1 Push Button</h3>
+<pre tabindex="0"><code>&lt; Label &gt;     (standard)
+» Label «     (default button)
+</code></pre><table>
+  <thead>
+      <tr>
+          <th>Property</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Height</td>
+          <td>1 row</td>
+      </tr>
+      <tr>
+          <td>Min width</td>
+          <td>Label length + 4 (2 padding chars each side)</td>
+      </tr>
+      <tr>
+          <td>Padding</td>
+          <td>1 space each side inside delimiters</td>
+      </tr>
+      <tr>
+          <td>Delimiter (standard)</td>
+          <td><code>&lt;</code> and <code>&gt;</code></td>
+      </tr>
+      <tr>
+          <td>Delimiter (default)</td>
+          <td><code>»</code> and <code>«</code></td>
+      </tr>
+      <tr>
+          <td>Gap between buttons</td>
+          <td>2 cols</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r42-entry-field">§R4.2 Entry Field</h3>
+<pre tabindex="0"><code>Label: [input text here____]
+</code></pre><table>
+  <thead>
+      <tr>
+          <th>Property</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Height</td>
+          <td>1 row</td>
+      </tr>
+      <tr>
+          <td>Min width</td>
+          <td>10 cols (including brackets)</td>
+      </tr>
+      <tr>
+          <td>Max width</td>
+          <td>60 cols</td>
+      </tr>
+      <tr>
+          <td>Fill character</td>
+          <td><code>_</code> (underscore) or <code>·</code> (middle dot)</td>
+      </tr>
+      <tr>
+          <td>Bracket delimiters</td>
+          <td><code>[</code> and <code>]</code></td>
+      </tr>
+      <tr>
+          <td>Label gap</td>
+          <td>1 space between label and field</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r43-toggle--checkbox">§R4.3 Toggle / Checkbox</h3>
+<pre tabindex="0"><code>[X] Enabled option
+[ ] Disabled option
+</code></pre><table>
+  <thead>
+      <tr>
+          <th>Property</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Height</td>
+          <td>1 row per option</td>
+      </tr>
+      <tr>
+          <td>Indicator width</td>
+          <td>3 cols (<code>[X]</code> or <code>[ ]</code>)</td>
+      </tr>
+      <tr>
+          <td>Gap to label</td>
+          <td>1 space</td>
+      </tr>
+      <tr>
+          <td>Vertical gap between options</td>
+          <td>0 rows (consecutive lines)</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r44-radio-group">§R4.4 Radio Group</h3>
+<pre tabindex="0"><code>(*) Selected option
+( ) Unselected option A
+( ) Unselected option B
+</code></pre><table>
+  <thead>
+      <tr>
+          <th>Property</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Height</td>
+          <td>1 row per option</td>
+      </tr>
+      <tr>
+          <td>Indicator width</td>
+          <td>3 cols (<code>(*)</code> or <code>( )</code>)</td>
+      </tr>
+      <tr>
+          <td>Gap to label</td>
+          <td>1 space</td>
+      </tr>
+      <tr>
+          <td>Vertical gap between options</td>
+          <td>0 rows</td>
+      </tr>
+      <tr>
+          <td>Group label</td>
+          <td>1 row above group, Title typography</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r45-list-box">§R4.5 List Box</h3>
+<pre tabindex="0"><code>┌── Select Model ──────────┐
+│ ▸ claude-3-opus           │
+│   claude-3-sonnet         │
+│   gpt-4-turbo             │
+│   gpt-4o                  │
+│   gemini-1.5-pro      ↓   │
+└──────────────────────────┘
+</code></pre><table>
+  <thead>
+      <tr>
+          <th>Property</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Min height</td>
+          <td>3 rows (content) + 2 (border) = 5 rows</td>
+      </tr>
+      <tr>
+          <td>Max height</td>
+          <td>15 rows (content) + 2 (border) = 17 rows</td>
+      </tr>
+      <tr>
+          <td>Min width</td>
+          <td>20 cols (including border)</td>
+      </tr>
+      <tr>
+          <td>Highlight bar</td>
+          <td>Reverse video on focused row</td>
+      </tr>
+      <tr>
+          <td>Selection indicator</td>
+          <td><code>▸</code> (1 col) before focused item</td>
+      </tr>
+      <tr>
+          <td>Scroll indicator</td>
+          <td><code>↑</code> / <code>↓</code> in right border when content overflows</td>
+      </tr>
+      <tr>
+          <td>Border</td>
+          <td>Level 1 (single-line)</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r46-data-table">§R4.6 Data Table</h3>
+<pre tabindex="0"><code>│ Name         │ Status │ Latency │ Errors │
+│──────────────│────────│─────────│────────│
+│ claude-3     │ ◉ OK   │  120ms  │ 0      │
+│ gpt-4        │ ⚠ SLOW │  890ms  │ 2      │
+</code></pre><table>
+  <thead>
+      <tr>
+          <th>Property</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Header row</td>
+          <td>1 row, Title typography (bold)</td>
+      </tr>
+      <tr>
+          <td>Separator</td>
+          <td>1 row of <code>─</code> characters below header</td>
+      </tr>
+      <tr>
+          <td>Data row height</td>
+          <td>1 row</td>
+      </tr>
+      <tr>
+          <td>Cell horizontal padding</td>
+          <td>1 space each side</td>
+      </tr>
+      <tr>
+          <td>Column separator</td>
+          <td><code>│</code> (single vertical line)</td>
+      </tr>
+      <tr>
+          <td>Min column width</td>
+          <td>Longest header or data value + 2 (padding)</td>
+      </tr>
+      <tr>
+          <td>Sort indicator</td>
+          <td><code>▴</code> (ascending) or <code>▾</code> (descending) after header text</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r47-metric-card">§R4.7 Metric Card</h3>
+<pre tabindex="0"><code>▲ Requests: 1,234
+</code></pre><table>
+  <thead>
+      <tr>
+          <th>Property</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Height</td>
+          <td>1 row (compact) or 2–3 rows (expanded)</td>
+      </tr>
+      <tr>
+          <td>Icon/symbol</td>
+          <td>1–2 cols</td>
+      </tr>
+      <tr>
+          <td>Gap icon → label</td>
+          <td>1 space</td>
+      </tr>
+      <tr>
+          <td>Gap label → value</td>
+          <td>1 space (or <code>: </code>)</td>
+      </tr>
+      <tr>
+          <td>Separator between cards</td>
+          <td><code>│</code> with 1 space padding each side</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r48-dialog">§R4.8 Dialog</h3>
+<pre tabindex="0"><code>╔══ Confirm Delete ══════════════════╗
+║                                    ║
+║  Are you sure you want to delete   ║
+║  &#34;report.pdf&#34;?                     ║
+║                                    ║
+║         &lt; Delete &gt;  &lt; Cancel &gt;     ║
+║                                    ║
+╚════════════════════════════════════╝
+</code></pre><table>
+  <thead>
+      <tr>
+          <th>Property</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Min width</td>
+          <td>30 cols</td>
+      </tr>
+      <tr>
+          <td>Max width</td>
+          <td>72 cols</td>
+      </tr>
+      <tr>
+          <td>Min height</td>
+          <td>5 rows (content) + 2 (border) = 7 rows</td>
+      </tr>
+      <tr>
+          <td>Padding</td>
+          <td>2 cols horizontal, 1 row vertical (inside border)</td>
+      </tr>
+      <tr>
+          <td>Border</td>
+          <td>Level 3 (double-line)</td>
+      </tr>
+      <tr>
+          <td>Shadow</td>
+          <td>2-col × 1-row offset</td>
+      </tr>
+      <tr>
+          <td>Title</td>
+          <td>Centered in top border</td>
+      </tr>
+      <tr>
+          <td>Button area</td>
+          <td>Bottom of content, right-aligned or centered</td>
+      </tr>
+      <tr>
+          <td>Button gap</td>
+          <td>2 cols between buttons</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r49-menu-pull-down">§R4.9 Menu (Pull-Down)</h3>
+<pre tabindex="0"><code>┌──────────────────┐
+│ New           ^N  │
+│ Open...       ^O  │
+│ Save          ^S  │
+│───────────────────│
+│ Close         ^W  │
+└──────────────────┘
+</code></pre><table>
+  <thead>
+      <tr>
+          <th>Property</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Item height</td>
+          <td>1 row</td>
+      </tr>
+      <tr>
+          <td>Max items</td>
+          <td>10</td>
+      </tr>
+      <tr>
+          <td>Min width</td>
+          <td>Longest item text + shortcut + 4 (padding)</td>
+      </tr>
+      <tr>
+          <td>Max width</td>
+          <td>40 cols</td>
+      </tr>
+      <tr>
+          <td>Horizontal padding</td>
+          <td>1 space each side</td>
+      </tr>
+      <tr>
+          <td>Separator</td>
+          <td>Full-width <code>─</code> line</td>
+      </tr>
+      <tr>
+          <td>Shortcut alignment</td>
+          <td>Right-aligned, 2 spaces before right border</td>
+      </tr>
+      <tr>
+          <td>Border</td>
+          <td>Level 2 (single-line)</td>
+      </tr>
+      <tr>
+          <td>Shadow</td>
+          <td>2-col × 1-row offset</td>
+      </tr>
+      <tr>
+          <td>Cascade indicator</td>
+          <td><code>▸</code> suffix (right-aligned)</td>
+      </tr>
+      <tr>
+          <td>Disabled items</td>
+          <td>Dim (SGR 2), no shortcut highlight</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r410-spin-button">§R4.10 Spin Button</h3>
+<pre tabindex="0"><code>Model Count: &lt; 5 &gt;
+</code></pre><table>
+  <thead>
+      <tr>
+          <th>Property</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Height</td>
+          <td>1 row</td>
+      </tr>
+      <tr>
+          <td>Decrease indicator</td>
+          <td><code>&lt;</code></td>
+      </tr>
+      <tr>
+          <td>Increase indicator</td>
+          <td><code>&gt;</code></td>
+      </tr>
+      <tr>
+          <td>Value padding</td>
+          <td>1 space each side of value</td>
+      </tr>
+      <tr>
+          <td>Max recommended values</td>
+          <td>20</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r411-footer-key-strip">§R4.11 Footer Key Strip</h3>
+<pre tabindex="0"><code>F1 Help  F5 Refresh  / Filter  q Quit
+</code></pre><table>
+  <thead>
+      <tr>
+          <th>Property</th>
+          <th>Value</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Height</td>
+          <td>1–2 rows</td>
+      </tr>
+      <tr>
+          <td>Key label</td>
+          <td>Key name in bold or contrasting color</td>
+      </tr>
+      <tr>
+          <td>Action label</td>
+          <td>Body typography</td>
+      </tr>
+      <tr>
+          <td>Gap key → action</td>
+          <td>1 space</td>
+      </tr>
+      <tr>
+          <td>Gap between pairs</td>
+          <td>2+ spaces</td>
+      </tr>
+      <tr>
+          <td>Position</td>
+          <td>Absolute bottom of terminal</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="r5-shadow-rendering">§R5 Shadow Rendering</h2>
+<h3 id="r51-algorithm">§R5.1 Algorithm</h3>
+<p>Shadows create depth illusion for Level 2–4 elements (Standard §6.4).</p>
+<p><strong>Offset:</strong> 2 columns right, 1 row down from the bordered element&rsquo;s edges.</p>
+<p><strong>Rendering steps:</strong></p>
+<ol>
+<li>Record the character content in cells that will be covered by shadow.</li>
+<li>Apply dim attribute (SGR 2) to those cells, preserving character codes.</li>
+<li>Shadow cells form an L-shape: the right edge (2 cols wide, full height of element) and the bottom edge (full width of element, 1 row tall), excluding the overlap with the element itself.</li>
+</ol>
+<p><strong>Visual diagram:</strong></p>
+<pre tabindex="0"><code>┌──────────┐
+│ Content  │░░
+│          │░░
+└──────────┘░░
+  ░░░░░░░░░░░░
+</code></pre><p>Where <code>░</code> represents shadow cells (underlying characters rendered dim).</p>
+<h3 id="r52-shadow-cell-attribute">§R5.2 Shadow Cell Attribute</h3>
+<p>In 16-color mode, shadow cells use attribute byte <code>0x08</code> (dark gray foreground on black background), preserving the original character code. In 256-color or truecolor mode, shadow cells apply SGR 2 (dim) to whatever attributes the underlying cell had.</p>
+<h3 id="r53-scrim-rendering">§R5.3 Scrim Rendering</h3>
+<p>Scrims create a dimmed backdrop behind Level 4 modal overlays (Standard §6.5).</p>
+<p><strong>Rendering steps:</strong></p>
+<ol>
+<li>Determine the bounding rectangle of the modal overlay (including its border and shadow).</li>
+<li>For every cell <strong>outside</strong> the modal&rsquo;s bounding rectangle, apply SGR 2 (dim) while preserving the cell&rsquo;s existing character code and foreground color.</li>
+<li>The modal itself renders normally (no dim) at its elevation level.</li>
+<li>When the modal is dismissed, restore all cells to their original attributes.</li>
+</ol>
+<p><strong>Capability degradation:</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>Color Mode</th>
+          <th>Scrim Rendering</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Truecolor</td>
+          <td>SGR 2 (dim) on all background cells</td>
+      </tr>
+      <tr>
+          <td>256-color</td>
+          <td>SGR 2 (dim) on all background cells</td>
+      </tr>
+      <tr>
+          <td>16-color</td>
+          <td>SGR 2 (dim) on all background cells</td>
+      </tr>
+      <tr>
+          <td>Monochrome</td>
+          <td>No scrim — modal distinguished by double-line border only</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="r6-braille-sparkline-encoding">§R6 Braille Sparkline Encoding</h2>
+<h3 id="r61-braille-pattern-block">§R6.1 Braille Pattern Block</h3>
+<p>Unicode Braille Patterns occupy U+2800–U+28FF (256 characters). Each character represents a 2×4 dot matrix within one character cell, providing <strong>2× horizontal and 4× vertical sub-cell resolution</strong>.</p>
+<h3 id="r62-dot-position--bit-mapping">§R6.2 Dot Position → Bit Mapping</h3>
+<p>Each Braille character&rsquo;s codepoint is <code>U+2800 + bitmask</code>, where bits map to dot positions:</p>
+<pre tabindex="0"><code>Position:    Bit:
+┌───┬───┐
+│ 1 │ 4 │   bit 0 = dot 1 (top-left)
+│ 2 │ 5 │   bit 1 = dot 2 (mid-left)
+│ 3 │ 6 │   bit 2 = dot 3 (lower-left)
+│ 7 │ 8 │   bit 3 = dot 7 (bottom-left)
+└───┴───┘   bit 4 = dot 4 (top-right)
+            bit 5 = dot 5 (mid-right)
+            bit 6 = dot 6 (lower-right)
+            bit 7 = dot 8 (bottom-right)
+</code></pre><h3 id="r63-sparkline-construction-algorithm">§R6.3 Sparkline Construction Algorithm</h3>
+<p>To render a sparkline from a sequence of values:</p>
+<ol>
+<li><strong>Normalize</strong> values to a 0–3 range (for single-column sparklines) or 0–7 range (for two-column sparklines using both dot columns).</li>
+<li><strong>For each character cell</strong> in the sparkline, determine which vertical dots to fill based on the normalized value. A value of 0 = no dots; a value of 3 = dots at positions 7, 3, 2 (bottom three on left column).</li>
+<li><strong>Compute the bitmask</strong> by OR-ing the bits for each active dot position.</li>
+<li><strong>Emit</strong> <code>U+2800 + bitmask</code>.</li>
+</ol>
+<p><strong>Example — single-column bar chart (left column only):</strong></p>
+<table>
+  <thead>
+      <tr>
+          <th>Value (0–4)</th>
+          <th>Active dots</th>
+          <th>Bitmask</th>
+          <th>Character</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>0</td>
+          <td>none</td>
+          <td>0x00</td>
+          <td><code>⠀</code> (blank)</td>
+      </tr>
+      <tr>
+          <td>1</td>
+          <td>7</td>
+          <td>0x40</td>
+          <td><code>⡀</code></td>
+      </tr>
+      <tr>
+          <td>2</td>
+          <td>3, 7</td>
+          <td>0x44</td>
+          <td><code>⡄</code></td>
+      </tr>
+      <tr>
+          <td>3</td>
+          <td>2, 3, 7</td>
+          <td>0x46</td>
+          <td><code>⡆</code></td>
+      </tr>
+      <tr>
+          <td>4</td>
+          <td>1, 2, 3, 7</td>
+          <td>0x47</td>
+          <td><code>⡇</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r64-progress-bar-using-eighth-blocks">§R6.4 Progress Bar Using Eighth Blocks</h3>
+<p>For linear progress bars, use eighth-block characters for smooth fill:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Progress</th>
+          <th>Character Sequence</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>0/8</td>
+          <td><code> </code> (space)</td>
+      </tr>
+      <tr>
+          <td>1/8</td>
+          <td><code>▏</code> (U+258F)</td>
+      </tr>
+      <tr>
+          <td>2/8</td>
+          <td><code>▎</code> (U+258E)</td>
+      </tr>
+      <tr>
+          <td>3/8</td>
+          <td><code>▍</code> (U+258D)</td>
+      </tr>
+      <tr>
+          <td>4/8</td>
+          <td><code>▌</code> (U+258C)</td>
+      </tr>
+      <tr>
+          <td>5/8</td>
+          <td><code>▋</code> (U+258B)</td>
+      </tr>
+      <tr>
+          <td>6/8</td>
+          <td><code>▊</code> (U+258A)</td>
+      </tr>
+      <tr>
+          <td>7/8</td>
+          <td><code>▉</code> (U+2589)</td>
+      </tr>
+      <tr>
+          <td>8/8</td>
+          <td><code>█</code> (U+2588)</td>
+      </tr>
+  </tbody>
+</table>
+<p>A progress bar of width W cols at P% completion:</p>
+<pre tabindex="0"><code>filled_cells = floor(W * P / 100)
+partial = ((W * P / 100) - filled_cells) * 8   → index into eighth-block table
+output = &#34;█&#34; × filled_cells + eighth_block[partial] + &#34; &#34; × remaining
+</code></pre><hr>
+<h2 id="r7-color-capability-detection">§R7 Color Capability Detection</h2>
+<h3 id="r71-detection-algorithm">§R7.1 Detection Algorithm</h3>
+<p>Applications MUST detect color capability at startup using this priority order:</p>
+<pre tabindex="0"><code>1. If COLORTERM == &#34;truecolor&#34; or COLORTERM == &#34;24bit&#34;:
+     → Truecolor (24-bit, 16.7M colors)
+2. Else if TERM contains &#34;256color&#34;:
+     → 256-color mode
+3. Else if TERM == &#34;dumb&#34;:
+     → Monochrome (attributes only: bold, dim, underline, reverse)
+4. Else:
+     → 16-color ANSI (standard + bright)
+</code></pre><h3 id="r72-graceful-degradation">§R7.2 Graceful Degradation</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Feature</th>
+          <th>Truecolor</th>
+          <th>256-color</th>
+          <th>16-color</th>
+          <th>Monochrome</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Semantic roles (§R3.2)</td>
+          <td>Exact hex</td>
+          <td>Nearest 256 index</td>
+          <td>Nearest ANSI</td>
+          <td>N/A</td>
+      </tr>
+      <tr>
+          <td>Status colors (§R3.3)</td>
+          <td>Exact hex</td>
+          <td>Nearest 256 index</td>
+          <td>Standard red/green/yellow</td>
+          <td>Bold/dim/reverse</td>
+      </tr>
+      <tr>
+          <td>Elevation shadows</td>
+          <td>Dim + color</td>
+          <td>Dim + index 240</td>
+          <td>Dim (SGR 2)</td>
+          <td>Reverse video strip</td>
+      </tr>
+      <tr>
+          <td>Scrim (Level 4)</td>
+          <td>Semi-transparent dim</td>
+          <td>Dim all bg cells</td>
+          <td>Dim all bg cells</td>
+          <td>Reverse video border</td>
+      </tr>
+      <tr>
+          <td>Typography</td>
+          <td>Full SGR</td>
+          <td>Full SGR</td>
+          <td>Full SGR</td>
+          <td>Bold, dim, reverse only</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="r8-escape-sequence-quick-reference">§R8 Escape Sequence Quick Reference</h2>
+<h3 id="r81-cursor-movement">§R8.1 Cursor Movement</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Sequence</th>
+          <th>Action</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>ESC[{n}A</code></td>
+          <td>Cursor up n rows</td>
+      </tr>
+      <tr>
+          <td><code>ESC[{n}B</code></td>
+          <td>Cursor down n rows</td>
+      </tr>
+      <tr>
+          <td><code>ESC[{n}C</code></td>
+          <td>Cursor right n cols</td>
+      </tr>
+      <tr>
+          <td><code>ESC[{n}D</code></td>
+          <td>Cursor left n cols</td>
+      </tr>
+      <tr>
+          <td><code>ESC[{row};{col}H</code></td>
+          <td>Move cursor to row, col (1-based)</td>
+      </tr>
+      <tr>
+          <td><code>ESC[s</code></td>
+          <td>Save cursor position</td>
+      </tr>
+      <tr>
+          <td><code>ESC[u</code></td>
+          <td>Restore cursor position</td>
+      </tr>
+      <tr>
+          <td><code>ESC[?25h</code></td>
+          <td>Show cursor</td>
+      </tr>
+      <tr>
+          <td><code>ESC[?25l</code></td>
+          <td>Hide cursor</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r82-scrolling-regions">§R8.2 Scrolling Regions</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Sequence</th>
+          <th>Action</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>ESC[{top};{bottom}r</code></td>
+          <td>Set scrolling region (1-based row numbers)</td>
+      </tr>
+      <tr>
+          <td><code>ESC[r</code></td>
+          <td>Reset scrolling region to full screen</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r83-screen-operations">§R8.3 Screen Operations</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Sequence</th>
+          <th>Action</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>ESC[2J</code></td>
+          <td>Clear entire screen</td>
+      </tr>
+      <tr>
+          <td><code>ESC[K</code></td>
+          <td>Clear from cursor to end of line</td>
+      </tr>
+      <tr>
+          <td><code>ESC[1K</code></td>
+          <td>Clear from start of line to cursor</td>
+      </tr>
+      <tr>
+          <td><code>ESC[2K</code></td>
+          <td>Clear entire line</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="r84-mouse-tracking-sgr-extended">§R8.4 Mouse Tracking (SGR Extended)</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Sequence</th>
+          <th>Action</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>ESC[?1000h</code></td>
+          <td>Enable basic mouse tracking</td>
+      </tr>
+      <tr>
+          <td><code>ESC[?1002h</code></td>
+          <td>Enable button-event (drag) tracking</td>
+      </tr>
+      <tr>
+          <td><code>ESC[?1003h</code></td>
+          <td>Enable all-motion tracking</td>
+      </tr>
+      <tr>
+          <td><code>ESC[?1006h</code></td>
+          <td>Enable SGR extended encoding</td>
+      </tr>
+      <tr>
+          <td><code>ESC[?1000l</code></td>
+          <td>Disable mouse tracking</td>
+      </tr>
+      <tr>
+          <td><code>ESC[?1006l</code></td>
+          <td>Disable SGR encoding</td>
+      </tr>
+  </tbody>
+</table>
+<p>SGR mouse event format: <code>ESC[&lt;{button};{col};{row}M</code> (press) or <code>m</code> (release).</p>
+<p>Button values: 0=left, 1=middle, 2=right, 64=scroll-up, 65=scroll-down. Modifier bits: +4=Shift, +8=Meta, +16=Control.</p>
+<hr>
+<h2 id="r9-mixed-border-junctions">§R9 Mixed Border Junctions</h2>
+<p>When single-line and double-line borders meet (e.g., a Level 1 panel inside a Level 3 dialog), use mixed junction characters:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Glyph</th>
+          <th>Unicode</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>╟</code></td>
+          <td>U+255F</td>
+          <td>Double vertical, single right</td>
+      </tr>
+      <tr>
+          <td><code>╢</code></td>
+          <td>U+2562</td>
+          <td>Double vertical, single left</td>
+      </tr>
+      <tr>
+          <td><code>╤</code></td>
+          <td>U+2564</td>
+          <td>Single vertical, double horizontal (top)</td>
+      </tr>
+      <tr>
+          <td><code>╧</code></td>
+          <td>U+2567</td>
+          <td>Single vertical, double horizontal (bottom)</td>
+      </tr>
+      <tr>
+          <td><code>╫</code></td>
+          <td>U+256B</td>
+          <td>Double vertical, single horizontal cross</td>
+      </tr>
+      <tr>
+          <td><code>╪</code></td>
+          <td>U+256A</td>
+          <td>Single vertical, double horizontal cross</td>
+      </tr>
+      <tr>
+          <td><code>╓</code></td>
+          <td>U+2553</td>
+          <td>Double vertical, single horizontal (down-right)</td>
+      </tr>
+      <tr>
+          <td><code>╖</code></td>
+          <td>U+2556</td>
+          <td>Double vertical, single horizontal (down-left)</td>
+      </tr>
+      <tr>
+          <td><code>╙</code></td>
+          <td>U+2559</td>
+          <td>Double vertical, single horizontal (up-right)</td>
+      </tr>
+      <tr>
+          <td><code>╜</code></td>
+          <td>U+255C</td>
+          <td>Double vertical, single horizontal (up-left)</td>
+      </tr>
+  </tbody>
+</table>
+
+  </div>
+</article>
+</main><footer class="site-footer">
+  <div class="footer-inner">
+    <p class="footer-license">Monospace Design TUI is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+    <p class="footer-links">
+      <a href="https://github.com/monospace-tui/monospace-design-tui">GitHub</a>
+    </p>
+  </div>
+</footer>
+</body>
+</html>

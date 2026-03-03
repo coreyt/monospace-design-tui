@@ -1,0 +1,20 @@
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="{{ "/" | relURL }}" class="nav-wordmark">Monospace TUI</a>
+    <div class="nav-links">
+      <a href="{{ "/standard/" | relURL }}"{{ if eq .Section "standard" }} class="active"{{ end }}>Standard</a>
+      <a href="{{ "/reference/" | relURL }}"{{ if eq .Section "reference" }} class="active"{{ end }}>Reference</a>
+      <a href="{{ "/research/" | relURL }}"{{ if eq .Section "research" }} class="active"{{ end }}>Research</a>
+      <div class="nav-more">
+        <span class="nav-more-toggle{{ if or (eq .Section "examples") (eq .Section "textual") (eq .Section "agents") }} active{{ end }}">More...</span>
+        <div class="nav-more-dropdown">
+          <div class="nav-more-dropdown-inner">
+            <a href="{{ "/examples/" | relURL }}"{{ if eq .Section "examples" }} class="active"{{ end }}>Examples</a>
+            <a href="{{ "/textual/" | relURL }}"{{ if eq .Section "textual" }} class="active"{{ end }}>Textual</a>
+            <a href="{{ "/agents/" | relURL }}"{{ if eq .Section "agents" }} class="active"{{ end }}>AI Agents</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

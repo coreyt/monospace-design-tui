@@ -1,16 +1,12 @@
-# Monospace Design TUI Standard
-
-```
-┏┳┓┏━┓┏┓┓┏━┓┏━┓┏━┓┏━┓┏━┓┏━┓  ┏┳┓┳ ┳┳
-┃┃┃┃ ┃┃┃┃┃ ┃┗━┓┣━┛┣━┫┃  ┣┫    ┃ ┃ ┃┃
-┻ ┻┗━┛┛┗┛┗━┛┗━┛┻  ┻ ┻┗━┛┗━┛   ┻ ┗━┛┻
-```
-
-**Version 1.0** — Prescriptive rules for Monospace Design TUI applications.
-
+---
+title: "Monospace Design TUI Standard"
+subtitle: "v0.1 — Prescriptive rules for Monospace Design TUI applications"
+description: "The authoritative design specification for Monospace TUI-compliant terminal applications"
+toc: true
+---
 **Package:** `mono-tui`
 
-This document defines the authoritative design rules for Monospace TUI-compliant terminal applications. It distills the research in [mono-tui.md](mono-tui.md) into falsifiable, auditable requirements. A companion [Rendering Reference](mono-tui-rendering-reference.md) provides exact character codes, SGR sequences, and measurements. A [Textual Appendix](mono-tui-textual-appendix.md) maps these rules to the Textual framework.
+This document defines the authoritative design rules for Monospace TUI-compliant terminal applications. It distills the research in the [Foundational Research](/research/) into falsifiable, auditable requirements. A companion [Rendering Reference](/reference/) provides exact character codes, SGR sequences, and measurements. A [Textual Appendix](/textual/) maps these rules to the Textual framework.
 
 ## Conventions
 
@@ -593,12 +589,12 @@ All archetypes inherit the CUA base keyboard (§2.2), three-region layout (§1.3
 
 ```
 ╔══ Dashboard Title ══════════════════════════════╗
-║  Metric A: 1,234  │  Status B  │  Warns: 3      ║
+║ ▲ Metric A: 1,234  │ ◉ Status B  │ ⚠ Warns: 3  ║
 ╠═════════════════════════════════════════════════╣
 ║ Column 1    │ Column 2 │ Column 3 │ Column 4    ║
-║ row data    │  OK     │  120ms   │ 0            ║
-║ row data    │  SLOW   │  890ms   │ 2            ║
-║ row data    │  OK     │   45ms   │ 0            ║
+║ row data    │ ◉ OK     │  120ms   │ 0           ║
+║ row data    │ ⚠ SLOW   │  890ms   │ 2           ║
+║ row data    │ ◉ OK     │   45ms   │ 0           ║
 ╠═════════════════════════════════════════════════╣
 ║ ?Help  r Refresh  /Filter  s Sort  q Quit       ║
 ╚═════════════════════════════════════════════════╝
@@ -642,9 +638,9 @@ All archetypes inherit the CUA base keyboard (§2.2), three-region layout (§1.3
 **Layout:**
 
 ```
-┌─ Categories ─┬── General Settings ───────────-───┐
+┌─ Categories ─┬── General Settings ──────────────┐
 │               │                                  │
-│ > General     │  Application Name                │
+│ ▸ General     │  Application Name                │
 │   Network     │  [ My App_____________ ]         │
 │   Security    │                                  │
 │   Advanced    │  Log Level                       │
@@ -690,9 +686,9 @@ Note: Single-letter Tier 2 keys (`d`, `e`, `a`) are suppressed in the Admin arch
 **Layout (dual-pane):**
 
 ```
-┌── /home/user ────────────┬── /home/user/docs ────-───┐
+┌── /home/user ────────────┬── /home/user/docs ───────┐
 │ ..                       │ ..                        │
-│ > documents/             │   report.pdf         12K  │
+│ ▸ documents/             │   report.pdf         12K  │
 │   downloads/             │   notes.txt           2K  │
 │   projects/              │   slides.pptx        45K  │
 │   .bashrc            1K  │                           │
@@ -700,7 +696,7 @@ Note: Single-letter Tier 2 keys (`d`, `e`, `a`) are suppressed in the Admin arch
 ├──────────────────────────┴───────────────────────────┤
 │ user@host:~$                                         │
 ├──────────────────────────────────────────────────────┤
-│ F3 View  F4 Edit  F5 Copy  F6 Move  F7 Mkdir  F8 Del │
+│ F3 View  F4 Edit  F5 Copy  F6 Move  F7 Mkdir  F8 Del│
 └──────────────────────────────────────────────────────┘
 ```
 
@@ -745,7 +741,7 @@ Note: Single-letter Tier 2 keys (`d`, `e`, `a`) are suppressed in the Admin arch
 **Layout:**
 
 ```
-┌── filename.py ──────────────-─────── ln 42, col 8 ─┐
+┌── filename.py ───────────────────── ln 42, col 8 ─┐
 │  1 │ def calculate(x, y):                          │
 │  2 │     result = x + y                            │
 │  3 │     return result                             │
@@ -755,7 +751,7 @@ Note: Single-letter Tier 2 keys (`d`, `e`, `a`) are suppressed in the Admin arch
 ├────┴───────────────────────────────────────────────┤
 │ -- INSERT --                  UTF-8  LF  Python    │
 ├────────────────────────────────────────────────────┤
-│ F1 Help  F2 Save  F3 Close  ^G Goto  ^F Find       │
+│ F1 Help  F2 Save  F3 Close  ^G Goto  ^F Find      │
 └────────────────────────────────────────────────────┘
 ```
 
@@ -793,7 +789,7 @@ The Editor archetype MAY add a modal keyboard layer (§2.6) for vi-style normal/
 ┌── Find File ─────────────────────────────────────┐
 │ > search query█                                  │
 ├──────────────────────────────────────────────────┤
-│ > src/utils/helpers.py              [92% match]  │
+│ ▸ src/utils/helpers.py              [92% match]  │
 │   src/utils/http.py                 [87% match]  │
 │   src/core/handler.py               [71% match]  │
 │   tests/test_helpers.py             [65% match]  │

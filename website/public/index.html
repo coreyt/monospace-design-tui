@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta name="generator" content="Hugo 0.139.0"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Monospace Design TUI</title>
+<meta name="description" content="Prescriptive design rules for terminal user interfaces">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body><nav class="site-nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-wordmark">Monospace TUI</a>
+    <div class="nav-links">
+      <a href="/standard/">Standard</a>
+      <a href="/reference/">Reference</a>
+      <a href="/research/">Research</a>
+      <div class="nav-more">
+        <span class="nav-more-toggle">More...</span>
+        <div class="nav-more-dropdown">
+          <a href="/examples/">Examples</a>
+          <a href="/textual/">Textual</a>
+          <a href="/agents/">AI Agents</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<main>
+<article class="home">
+  <header class="home-header">
+    <pre class="hero-logo" aria-label="Monospace TUI">
+┏┳┓┏━┓┏┓┓┏━┓┏━┓┏━┓┏━┓┏━┓┏━┓  ┏┳┓┳ ┳┳
+┃┃┃┃ ┃┃┃┃┃ ┃┗━┓┣━┛┣━┫┃  ┣┫    ┃ ┃ ┃┃
+┻ ┻┗━┛┛┗┛┗━┛┗━┛┻  ┻ ┻┗━┛┗━┛   ┻ ┗━┛┻</pre>
+    <h1 class="sr-only">Monospace Design TUI</h1>
+    <p class="home-subtitle">A design language for terminal user interfaces</p>
+    <p class="home-version">v0.1</p>
+  </header>
+
+  <div class="home-body">
+    <p>As terminal user interfaces grew beyond simple scripts into full applications — dashboards, file managers, configuration wizards — a problem became clear. Every project invented its own conventions. Keyboard shortcuts varied from app to app. Layouts followed no shared logic. Color meant different things in different tools. The experience of using one TUI taught you nothing about using the next.</p>
+
+    <p>This seemed wrong. Graphical interfaces had solved this decades ago. Apple published the Human Interface Guidelines. Google developed Material Design. IBM wrote Common User Access. These standards meant that a user who learned one application could sit down in front of another and already know how it worked. But for terminal interfaces — nothing. No shared vocabulary, no common rules, no design system.</p>
+
+    <p>We suspected the raw material already existed. The history of text-mode computing is rich with thoughtful design: IBM's CUA keyboard model from 1987, the window management conventions of OS/2, Norton Commander's dual-pane paradigm, Borland's Turbo Vision component framework. These weren't ad hoc — they were carefully engineered systems that millions of people used daily. The knowledge was there, scattered across manuals, technical references, and the muscle memory of experienced developers.</p>
+
+    <p>So we collected it. We studied seven research vectors — CUA, OS/2, Material Design 3, Apple HIG, the Keystroke-Level Model, modern terminal capabilities, and historical TUI applications — and synthesized them into a single, prescriptive design language. Not guidelines. Not suggestions. Falsifiable, auditable rules that a reviewer can check against an implementation and declare it compliant or in violation.</p>
+
+    <p>The result is Monospace Design TUI: a v0.1 design standard for terminal applications that want to look and behave like they belong to the same family.</p>
+
+    <hr>
+
+    <h2>The Documents</h2>
+
+    <p><a href="/standard/">Design Standard</a> — The authoritative specification. Grid and layout, keyboard interaction, navigation topology, components, color, borders, typography, state, accessibility, motion, and archetypes.</p>
+
+    <p><a href="/reference/">Rendering Reference</a> — The concrete companion. Exact Unicode codepoints, SGR escape sequences, component measurements, 256-color palettes, and shadow rendering algorithms.</p>
+
+    <p><a href="/textual/">Textual Appendix</a> — Mapping the standard to the Python Textual framework. Widget selection, TCSS patterns, async rules, responsive breakpoints, and a working dashboard example.</p>
+
+    <p><a href="/research/">Foundational Research</a> — The seven research vectors behind the standard. The full synthesis of legacy TUI and modern HCI research that informed every rule.</p>
+
+    <p><a href="/examples/">Examples</a> — ASCII screenshots showing the design standard in action across all five archetypes.</p>
+
+    <p><a href="/agents/">Working with AI Agents</a> — Claude Code skills for designing and auditing TUI applications against the standard.</p>
+  </div>
+</article>
+</main><footer class="site-footer">
+  <div class="footer-inner">
+    <p class="footer-license">Monospace Design TUI is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+    <p class="footer-links">
+      <a href="https://github.com/monospace-tui/monospace-design-tui">GitHub</a>
+    </p>
+  </div>
+</footer>
+</body>
+</html>

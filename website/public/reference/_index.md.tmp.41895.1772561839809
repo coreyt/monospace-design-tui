@@ -1,9 +1,8 @@
-# Monospace Design TUI Rendering Reference
-
-**Version 1.0** — Exact characters, SGR codes, and measurements for Monospace TUI (`mono-tui`) implementers.
-
-This document is the concrete companion to the [Monospace Design TUI Standard](mono-tui-design-standard.md). Where the standard says "single-line border," this document specifies the exact Unicode codepoint. Where the standard says "dim," this document gives the SGR escape sequence. Implementers SHOULD keep this open alongside the standard.
-
+---
+title: "Rendering Reference"
+subtitle: "v0.1 — Exact characters, SGR codes, and measurements for implementers"
+description: "Unicode codepoints, SGR escape sequences, component measurements, and color palettes"
+toc: true
 ---
 
 ## §R1 Box-Drawing Characters
@@ -277,30 +276,7 @@ Background: ESC[48;2;{r};{g};{b}m    (r, g, b = 0–255)
 
 ### §R3.4 Named Palettes
 
-The Dark Theme and Light Theme mappings above (§R3.2) define the default palettes. Applications MAY offer additional named palettes. Seven named palettes are defined here, drawn from the historical research that informs the standard. All palettes map to the same five semantic roles (§5.1); they differ only in color assignment.
-
-#### Default
-
-Source: Textual framework default dark theme. This is the standard modern dark palette — the recommended starting point for new applications. It uses the same 256-color mappings defined in §R3.2 Dark Theme.
-
-| Semantic Role | Foreground (index) | Background (index) | Hex Approximation |
-|--------------|-------------------|-------------------|-------------------|
-| Primary | 75 (light blue) | 17 (dark blue) | fg #5fafff, bg #00005f |
-| Secondary | 109 (muted blue) | 236 (dark gray) | fg #87afaf, bg #303030 |
-| Tertiary | 79 (teal) | 236 (dark gray) | fg #5fd7af, bg #303030 |
-| Error | 196 (bright red) | 52 (dark red) | fg #ff0000, bg #5f0000 |
-| Neutral fg | 252 (light gray) | — | fg #d0d0d0 |
-| Neutral bg | — | 235 (near-black) | bg #262626 |
-| Surface | 252 | 234 (charcoal) | bg #1c1c1c |
-
-Status colors:
-
-| Status | Foreground (index) | Paired Symbol |
-|--------|-------------------|---------------|
-| Healthy / Success | 40 (green) | `◉` or `✓` |
-| Error / Critical | 196 (bright red) | `✗` or `●` |
-| Warning / Caution | 220 (yellow) | `⚠` or `▲` |
-| Inactive / Disabled | 240 (gray) | `○` or `—` |
+The Dark Theme and Light Theme mappings above (§R3.2) define the default palettes. Applications MAY offer additional named palettes. Four named palettes are defined here, drawn from the historical research that informs the standard. All palettes map to the same five semantic roles (§5.1); they differ only in color assignment.
 
 #### Monochrome
 
@@ -337,16 +313,16 @@ Example — Dashboard rendered in Monochrome:
 │ File  View  Help                                                    [BOLD]    │
 ├───────────────────────────────────────────────────────────────────────────────┤
 │                                                                               │
-│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       │
+│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      │
 │                                                                               │
 ├───────────────────────────────────────────────────────────────────────────────┤
-│ Service              │ Status   │ Uptime       │ CPU     │ Memory             │
-│──────────────────────│──────────│──────────────│─────────│──────────────────-─│
-│ > api-gateway        │  OK      │ 14d  3h 22m  │   2.1%  │  340MB  [REVERSE]  │
-│   auth-service       │  OK      │ 14d  3h 22m  │   0.8%  │  128MB             │
-│   worker-pool        │  WARN    │  0d  1h 45m  │  78.3%  │  1.2GB  [BOLD]     │
-│   notification-svc   │  DOWN    │  0d  0h 00m  │   0.0%  │    0MB  [REV+B]    │
-│   metrics-collector  │  OK      │ 14d  3h 22m  │   1.4%  │  256MB             │
+│ Service              │ Status   │ Uptime       │ CPU     │ Memory            │
+│──────────────────────│──────────│──────────────│─────────│───────────────────│
+│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB  [REVERSE]│
+│   auth-service       │ ◉ OK     │ 14d  3h 22m  │   0.8%  │  128MB           │
+│   worker-pool        │ ⚠ WARN   │  0d  1h 45m  │  78.3%  │  1.2GB  [BOLD]   │
+│   notification-svc   │ ✗ DOWN   │  0d  0h 00m  │   0.0%  │    0MB  [REV+B]  │
+│   metrics-collector  │ ◉ OK     │ 14d  3h 22m  │   1.4%  │  256MB           │
 │                                                                               │
 ├───────────────────────────────────────────────────────────────────────────────┤
 │ ?Help  r Refresh  /Filter  q Quit                            5 services  [DIM]│
@@ -393,19 +369,19 @@ Example — Dashboard rendered in Commander:
 │ File  View  Help                                          [black on cyan bar] │
 ├───────────────────────────────────────────────────────────────────────────────┤
 │                                                      [white on blue surface]  │
-│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       │
+│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      │
 │                                                                               │
 ├───────────────────────────────────────────────────────────────────────────────┤
-│ Service              │ Status   │ Uptime       │ CPU     │ Memory             │
-│──────────────────────│──────────│──────────────│─────────│─────────────────-──│
-│ > api-gateway        │  OK     │ 14d  3h 22m  │   2.1%  │  340MB  [yel/blu]   │
-│   auth-service       │  OK     │ 14d  3h 22m  │   0.8%  │  128MB  [wht/blu]   │
-│   worker-pool        │  WARN   │  0d  1h 45m  │  78.3%  │  1.2GB  [yel/blu]   │
-│   notification-svc   │  DOWN   │  0d  0h 00m  │   0.0%  │    0MB  [red/blu]   │
-│   metrics-collector  │  OK     │ 14d  3h 22m  │   1.4%  │  256MB  [wht/blu]   │
+│ Service              │ Status   │ Uptime       │ CPU     │ Memory            │
+│──────────────────────│──────────│──────────────│─────────│───────────────────│
+│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB  [yel/blu]│
+│   auth-service       │ ◉ OK     │ 14d  3h 22m  │   0.8%  │  128MB  [wht/blu]│
+│   worker-pool        │ ⚠ WARN   │  0d  1h 45m  │  78.3%  │  1.2GB  [yel/blu]│
+│   notification-svc   │ ✗ DOWN   │  0d  0h 00m  │   0.0%  │    0MB  [red/blu]│
+│   metrics-collector  │ ◉ OK     │ 14d  3h 22m  │   1.4%  │  256MB  [wht/blu]│
 │                                                                               │
 ├───────────────────────────────────────────────────────────────────────────────┤
-│ ?Help  r Refresh  /Filter  q Quit                         5 services [cy/blu] │
+│ ?Help  r Refresh  /Filter  q Quit                         5 services [cy/blu]│
 └───────────────────────────────────────────────────────────────────────────────┘
 
 Color rendering:  Surface ─ white (#fff) on blue (#0000af).  Action bar ─
@@ -413,49 +389,6 @@ black on cyan.  Focused row ─ yellow on blue.  ◉ OK ─ cyan on blue.
 ⚠ WARN ─ yellow on blue.  ✗ DOWN ─ red on blue.  Footer ─ cyan on blue.
 Borders ─ white on blue.
 ```
-
-#### OS/2
-
-Source: OS/2 Presentation Manager text-mode conventions. The corporate CUA look — white text on navy blue, with gray action bars and reverse-video selections. More restrained than Commander, reflecting IBM's enterprise design sensibility. Active windows use double-line borders with brighter attributes; inactive windows use single-line borders with dimmer attributes (§5.5).
-
-| Semantic Role | Foreground (index) | Background (index) | Hex Approximation |
-|--------------|-------------------|-------------------|-------------------|
-| Primary | 15 (bright white) | 17 (navy) | fg #ffffff, bg #00005f |
-| Secondary | 252 (light gray) | 17 (navy) | fg #d0d0d0, bg #00005f |
-| Tertiary | 15 (bright white) | 237 (dark gray) | fg #ffffff, bg #3a3a3a |
-| Error | 196 (bright red) | 17 (navy) | fg #ff0000, bg #00005f |
-| Neutral fg | 232 (black) | — | fg #080808 |
-| Neutral bg | — | 252 (light gray) | bg #d0d0d0 |
-| Surface | 15 | 17 (navy) | bg #00005f |
-
-Key conventions:
-
-- **Action bar**: Black on light gray — the CUA standard. Distinguished from the blue panel area.
-- **Selections**: Reverse video — navy on white. No color change, just attribute inversion.
-- **Panels**: White or light gray text on navy. Subdued contrast compared to Commander's vivid blue.
-- **Active/inactive windows**: Bright white borders (active) vs. dim gray borders (inactive), with double-line vs. single-line distinction (§6.1).
-
-#### Turbo Pascal
-
-Source: Borland Turbo Vision palette system (1990) as seen in the Turbo Pascal and Turbo C++ IDEs. Yellow editor text on blue, cyan borders, light gray menus and status bars, green buttons. The most visually distinctive TUI aesthetic of the DOS era, instantly recognizable to a generation of developers.
-
-| Semantic Role | Foreground (index) | Background (index) | Hex Approximation |
-|--------------|-------------------|-------------------|-------------------|
-| Primary | 11 (bright yellow) | 19 (dark blue) | fg #ffff00, bg #0000af |
-| Secondary | 14 (bright cyan) | 19 (dark blue) | fg #00ffff, bg #0000af |
-| Tertiary | 232 (black) | 78 (green) | fg #080808, bg #5fd787 |
-| Error | 196 (bright red) | 19 (dark blue) | fg #ff0000, bg #0000af |
-| Neutral fg | 232 (black) | — | fg #080808 |
-| Neutral bg | — | 250 (light gray) | bg #bcbcbc |
-| Surface | 11 | 19 (dark blue) | bg #0000af |
-
-Key conventions from the Borland IDE:
-
-- **Editor area**: Yellow text on blue — the signature Borland look. Syntax-highlighted keywords in white or cyan.
-- **Window borders**: Cyan on blue. Double-line for active, single-line for inactive.
-- **Menu bar and status line**: Black on light gray. Hotkey letters highlighted.
-- **Dialog boxes**: Black on light gray. A visually distinct surface from the blue editor area.
-- **Buttons**: Black on green (`< OK >`). Default button uses distinct delimiters (`» OK «`).
 
 #### Amber Phosphor
 
@@ -492,19 +425,19 @@ Example — Dashboard rendered in Amber Phosphor:
 │ File  View  Help                                                [bright amber]│
 ├───────────────────────────────────────────────────────────────────────────────┤
 │                                                          [medium amber / blk] │
-│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       │
+│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%      │
 │                                                                               │
 ├───────────────────────────────────────────────────────────────────────────────┤
-│ Service              │ Status   │ Uptime       │ CPU     │ Memory             │
-│──────────────────────│──────────│──────────────│─────────│───────────────────-│
-│ > api-gateway        │  OK      │ 14d  3h 22m  │   2.1%  │  340MB  [REVERSE]  │
-│   auth-service       │  OK      │ 14d  3h 22m  │   0.8%  │  128MB  [med amb]  │
-│   worker-pool        │  WARN    │  0d  1h 45m  │  78.3%  │  1.2GB  [BOLD]     │
-│   notification-svc   │  DOWN    │  0d  0h 00m  │   0.0%  │    0MB  [REV+B]    │
-│   metrics-collector  │  OK      │ 14d  3h 22m  │   1.4%  │  256MB  [med amb]  │
+│ Service              │ Status   │ Uptime       │ CPU     │ Memory            │
+│──────────────────────│──────────│──────────────│─────────│───────────────────│
+│ ▸ api-gateway        │ ◉ OK     │ 14d  3h 22m  │   2.1%  │  340MB  [REVERSE]│
+│   auth-service       │ ◉ OK     │ 14d  3h 22m  │   0.8%  │  128MB  [med amb]│
+│   worker-pool        │ ⚠ WARN   │  0d  1h 45m  │  78.3%  │  1.2GB  [BOLD]   │
+│   notification-svc   │ ✗ DOWN   │  0d  0h 00m  │   0.0%  │    0MB  [REV+B]  │
+│   metrics-collector  │ ◉ OK     │ 14d  3h 22m  │   1.4%  │  256MB  [med amb]│
 │                                                                               │
 ├───────────────────────────────────────────────────────────────────────────────┤
-│ ?Help  r Refresh  /Filter  q Quit                          5 services [dim]   │
+│ ?Help  r Refresh  /Filter  q Quit                          5 services [dim]  │
 └───────────────────────────────────────────────────────────────────────────────┘
 
 Color rendering:  All amber on black.  Title ─ bright amber (#ffaf00), BOLD.
@@ -540,34 +473,6 @@ SGR attribute usage follows the same pattern as Amber Phosphor:
 | Error state | Black on green | Reverse + Bold |
 | Disabled | Dim green (28) | Dim (SGR 2) |
 | Links / interactive | Bright green (82) | Underline (SGR 4) |
-
-Example — Dashboard rendered in Green Phosphor:
-
-```
-┌── Service Monitor ────────────────────────────────────────────────────────────┐
-│ File  View  Help                                               [bright green] │
-├───────────────────────────────────────────────────────────────────────────────┤
-│                                                         [medium green / blk]  │
-│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       │
-│                                                                               │
-├───────────────────────────────────────────────────────────────────────────────┤
-│ Service              │ Status   │ Uptime       │ CPU     │ Memory             │
-│──────────────────────│──────────│──────────────│─────────│──────────────────-─│
-│ > api-gateway        │  OK      │ 14d  3h 22m  │   2.1%  │  340MB  [REVERSE]  │
-│   auth-service       │  OK      │ 14d  3h 22m  │   0.8%  │  128MB  [med grn]  │
-│   worker-pool        │  WARN    │  0d  1h 45m  │  78.3%  │  1.2GB  [BOLD]     │
-│   notification-svc   │  DOWN    │  0d  0h 00m  │   0.0%  │    0MB  [REV+B]    │
-│   metrics-collector  │  OK      │ 14d  3h 22m  │   1.4%  │  256MB  [med grn]  │
-│                                                                               │
-├───────────────────────────────────────────────────────────────────────────────┤
-│ ?Help  r Refresh  /Filter  q Quit                          5 services [dim]   │
-└───────────────────────────────────────────────────────────────────────────────┘
-
-Color rendering:  All green on black.  Title ─ bright green (#5fff00), BOLD.
-Body text ─ medium green (#00af00).  Focused row ─ REVERSE (black on green).
-⚠ WARN ─ bright green, BOLD.  ✗ DOWN ─ REVERSE+BOLD.  Footer ─ dim green
-(#008700).  Borders ─ dim green.
-```
 
 ---
 
@@ -640,11 +545,11 @@ Label: [input text here____]
 
 ```
 ┌── Select Model ──────────┐
-│ > claude-3-opus          │
-│   claude-3-sonnet        │
-│   gpt-4-turbo            │
-│   gpt-4o                 │
-│   gemini-1.5-pro      ↓  │
+│ ▸ claude-3-opus           │
+│   claude-3-sonnet         │
+│   gpt-4-turbo             │
+│   gpt-4o                  │
+│   gemini-1.5-pro      ↓   │
 └──────────────────────────┘
 ```
 
@@ -719,13 +624,13 @@ Label: [input text here____]
 ### §R4.9 Menu (Pull-Down)
 
 ```
-┌──────────-────────┐
+┌──────────────────┐
 │ New           ^N  │
 │ Open...       ^O  │
 │ Save          ^S  │
 │───────────────────│
 │ Close         ^W  │
-└───────────-───────┘
+└──────────────────┘
 ```
 
 | Property | Value |

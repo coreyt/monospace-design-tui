@@ -1,7 +1,7 @@
-# Monospace TUI framework: a synthesis of legacy TUI and modern HCI research
-
-**The foundational research for a Terminal Union Human Interface spans seven decades of interaction design**, from IBM's 1987 Common User Access standard through Google's Material Design 3. This report compiles the specific technical measurements, behavioral rules, keyboard conventions, color systems, and component specifications needed to build Monospace TUI — a framework that bridges the precision of text-mode interfaces with the design rigor of modern HCI paradigms. What follows is a comprehensive technical reference organized by research vector, with cross-cutting synthesis at the end.
-
+---
+title: "Foundational Research"
+subtitle: "A synthesis of legacy TUI and modern HCI research"
+description: "Seven decades of interaction design — IBM CUA, OS/2, Material Design 3, Apple HIG, KLM, terminal capabilities, and historical TUI applications"
 ---
 
 ## 1. IBM Common User Access: the original text interface grammar

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Color Scheme Preview</title>
+<style>
+  @font-face {
+    font-family: "Myna";
+    src: url("/fonts/Myna-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Myna";
+    src: url("/fonts/Myna-Bold.woff2") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Myna";
+    src: url("/fonts/Myna-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Myna", monospace;
+    font-weight: 600;
+    font-size: 1.05rem;
+    line-height: 1.55;
+    background: #111;
+    color: #ccc;
+    padding: 2rem;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 1.5rem;
+    color: #fff;
+  }
+
+  .schemes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .scheme {
+    border: 1px solid #333;
+    overflow: hidden;
+  }
+
+  .scheme-label {
+    padding: 0.75rem 1rem;
+    background: #222;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    border-bottom: 1px solid #333;
+  }
+
+  .scheme-body {
+    padding: 2rem 1.5rem;
+  }
+
+  .scheme-body nav {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .scheme-body nav .wordmark {
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .scheme-body nav .links {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.75rem;
+  }
+
+  .scheme-body nav .links .active {
+    border-bottom: 2px solid;
+  }
+
+  .scheme-body .logo {
+    font-size: 0.7rem;
+    line-height: 1.0;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    white-space: pre;
+  }
+
+  .scheme-body h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .scheme-body p {
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .scheme-body .secondary {
+    opacity: 0.7;
+  }
+
+  .scheme-body .card {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .scheme-body .card h3 {
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .scheme-body .code-block {
+    padding: 0.75rem 1rem;
+    font-size: 0.7rem;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+
+  .scheme-body table {
+    width: 100%;
+    font-size: 0.7rem;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+  }
+
+  .scheme-body th, .scheme-body td {
+    text-align: left;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .scheme-body .swatches {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .scheme-body .swatch {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.5rem;
+  }
+
+  .scheme-body .footer-preview {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    font-size: 0.65rem;
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+<h1>Terminal Color Schemes — Final Two</h1>
+
+<div class="schemes">
+
+  <!-- A: Dark on Dark -->
+  <div class="scheme">
+    <div class="scheme-label">A. Dark on Dark</div>
+    <div class="scheme-body" style="background: #1C1C1C; color: #D4D4D4;">
+      <nav style="border-bottom: 1px solid #333;">
+        <span class="wordmark" style="color: #D4D4D4;">Monospace TUI</span>
+        <span class="links">
+          <span class="active" style="color: #D4D4D4; border-color: #6CB6FF;">Standard</span>
+          <span style="color: #888;">Reference</span>
+          <span style="color: #888;">Textual</span>
+        </span>
+      </nav>
+      <div class="logo" style="color: #D4D4D4;">┏┳┓┏━┓┏┓┓┏━┓┏━┓┏━┓┏━┓┏━┓┏━┓  ┏┳┓┳ ┳┳
+┃┃┃┃ ┃┃┃┃┃ ┃┗━┓┣━┛┣━┫┃  ┣┫    ┃ ┃ ┃┃
+┻ ┻┗━┛┛┗┛┗━┛┗━┛┻  ┻ ┻┗━┛┗━┛   ┻ ┗━┛┻</div>
+      <h2 style="color: #D4D4D4;">Design Standard</h2>
+      <p>The authoritative specification for <a style="color: #6CB6FF;">terminal user interfaces</a>.</p>
+      <p class="secondary" style="color: #888;">Version 1.0 — Prescriptive rules</p>
+      <div class="card" style="background: #232323; border: 1px solid #2A2A2A;">
+        <h3>Rendering Reference</h3>
+        <p style="color: #888;">Exact Unicode codepoints and SGR sequences.</p>
+      </div>
+      <div class="code-block" style="background: #161616; border: 1px solid #2A2A2A;">
+        <code style="color: #D4D4D4;">ESC[38;2;{r};{g};{b}m  <span style="color: #888;">// truecolor fg</span></code>
+      </div>
+      <table>
+        <tr style="border-bottom: 2px solid #333;"><th>Role</th><th>SGR</th><th>Use</th></tr>
+        <tr style="border-bottom: 1px solid #2A2A2A;"><td>Display</td><td>Bold (1)</td><td>Titles</td></tr>
+        <tr style="border-bottom: 1px solid #2A2A2A;"><td>Label</td><td style="color: #888;">Dim (2)</td><td style="color: #888;">Secondary</td></tr>
+      </table>
+      <div class="swatches">
+        <div class="swatch" style="background: #1C1C1C; color: #888;">bg</div>
+        <div class="swatch" style="background: #161616; color: #888;">code</div>
+        <div class="swatch" style="background: #232323; color: #888;">card</div>
+        <div class="swatch" style="background: #D4D4D4; color: #1C1C1C;">text</div>
+        <div class="swatch" style="background: #888; color: #1C1C1C;">sec</div>
+        <div class="swatch" style="background: #6CB6FF; color: #1C1C1C;">link</div>
+        <div class="swatch" style="background: #333; color: #D4D4D4;">bdr</div>
+      </div>
+      <div class="footer-preview" style="border-top: 1px solid #333; color: #888;">
+        <span>CC BY-SA 4.0</span>
+        <span>GitHub</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- C: Cool Terminal (reduced blue) -->
+  <div class="scheme">
+    <div class="scheme-label">C. Cool Terminal</div>
+    <div class="scheme-body" style="background: #1A1C21; color: #CACDD4;">
+      <nav style="border-bottom: 1px solid #2E3138;">
+        <span class="wordmark" style="color: #CACDD4;">Monospace TUI</span>
+        <span class="links">
+          <span class="active" style="color: #CACDD4; border-color: #8AACCC;">Standard</span>
+          <span style="color: #7C8089;">Reference</span>
+          <span style="color: #7C8089;">Textual</span>
+        </span>
+      </nav>
+      <div class="logo" style="color: #CACDD4;">┏┳┓┏━┓┏┓┓┏━┓┏━┓┏━┓┏━┓┏━┓┏━┓  ┏┳┓┳ ┳┳
+┃┃┃┃ ┃┃┃┃┃ ┃┗━┓┣━┛┣━┫┃  ┣┫    ┃ ┃ ┃┃
+┻ ┻┗━┛┛┗┛┗━┛┗━┛┻  ┻ ┻┗━┛┗━┛   ┻ ┗━┛┻</div>
+      <h2 style="color: #CACDD4;">Design Standard</h2>
+      <p>The authoritative specification for <a style="color: #8AACCC;">terminal user interfaces</a>.</p>
+      <p class="secondary" style="color: #7C8089;">Version 1.0 — Prescriptive rules</p>
+      <div class="card" style="background: #20232A; border: 1px solid #272A31;">
+        <h3>Rendering Reference</h3>
+        <p style="color: #7C8089;">Exact Unicode codepoints and SGR sequences.</p>
+      </div>
+      <div class="code-block" style="background: #151719; border: 1px solid #272A31;">
+        <code style="color: #CACDD4;">ESC[38;2;{r};{g};{b}m  <span style="color: #7C8089;">// truecolor fg</span></code>
+      </div>
+      <table>
+        <tr style="border-bottom: 2px solid #2E3138;"><th>Role</th><th>SGR</th><th>Use</th></tr>
+        <tr style="border-bottom: 1px solid #272A31;"><td>Display</td><td>Bold (1)</td><td>Titles</td></tr>
+        <tr style="border-bottom: 1px solid #272A31;"><td>Label</td><td style="color: #7C8089;">Dim (2)</td><td style="color: #7C8089;">Secondary</td></tr>
+      </table>
+      <div class="swatches">
+        <div class="swatch" style="background: #1A1C21; color: #7C8089;">bg</div>
+        <div class="swatch" style="background: #151719; color: #7C8089;">code</div>
+        <div class="swatch" style="background: #20232A; color: #7C8089;">card</div>
+        <div class="swatch" style="background: #CACDD4; color: #1A1C21;">text</div>
+        <div class="swatch" style="background: #7C8089; color: #1A1C21;">sec</div>
+        <div class="swatch" style="background: #8AACCC; color: #1A1C21;">link</div>
+        <div class="swatch" style="background: #2E3138; color: #CACDD4;">bdr</div>
+      </div>
+      <div class="footer-preview" style="border-top: 1px solid #2E3138; color: #7C8089;">
+        <span>CC BY-SA 4.0</span>
+        <span>GitHub</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
