@@ -6,7 +6,7 @@
 
 **A design language for terminal user interfaces** — v0.1
 
-Website: [monospace-tui.dev](https://monospace-tui.dev/)
+Website: [coreyt.github.io/monospace-design-tui](https://coreyt.github.io/monospace-design-tui/)
 
 ---
 
