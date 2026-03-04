@@ -6,12 +6,13 @@
       <a href="{{ "reference/" | relURL }}"{{ if eq .Section "reference" }} class="active"{{ end }}>Reference</a>
       <a href="{{ "research/" | relURL }}"{{ if eq .Section "research" }} class="active"{{ end }}>Research</a>
       <div class="nav-more">
-        <span class="nav-more-toggle{{ if or (eq .Section "examples") (eq .Section "textual") (eq .Section "agents") }} active{{ end }}">More...</span>
+        <span class="nav-more-toggle{{ if or (eq .Section "examples") (eq .Section "textual") (eq .Section "agents") (eq .Section "agent-ref") }} active{{ end }}">More...</span>
         <div class="nav-more-dropdown">
           <div class="nav-more-dropdown-inner">
             <a href="{{ "examples/" | relURL }}"{{ if eq .Section "examples" }} class="active"{{ end }}>Examples</a>
             <a href="{{ "textual/" | relURL }}"{{ if eq .Section "textual" }} class="active"{{ end }}>Textual</a>
             <a href="{{ "agents/" | relURL }}"{{ if eq .Section "agents" }} class="active"{{ end }}>AI Agents</a>
+            <a href="{{ "agent-ref/" | relURL }}"{{ if eq .Section "agent-ref" }} class="active"{{ end }}>Agent Directive</a>
           </div>
         </div>
       </div>

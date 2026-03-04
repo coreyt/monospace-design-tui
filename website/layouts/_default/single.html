@@ -1,11 +1,49 @@
 {{ define "main" }}
-<article class="page">
+<article class="page page-with-nav">
   <header class="page-header">
     <h1>{{ .Title }}</h1>
     {{ with .Params.subtitle }}<p class="page-subtitle">{{ . }}</p>{{ end }}
   </header>
+  {{ $section := .CurrentSection }}
+  {{ $pages := $section.Pages.ByWeight }}
+  {{ if gt (len $pages) 1 }}
+  <nav class="section-nav" aria-label="Section navigation">
+    <h2 class="section-nav-heading"><a href="{{ $section.RelPermalink }}">{{ $section.Title }}</a></h2>
+    <ol>
+      {{ range $pages }}
+      <li{{ if eq $.RelPermalink .RelPermalink }} class="active"{{ end }}>
+        <a href="{{ .RelPermalink }}"{{ if eq $.RelPermalink .RelPermalink }} aria-current="page"{{ end }}>{{ .Title }}</a>
+      </li>
+      {{ end }}
+    </ol>
+  </nav>
+  {{ end }}
   <div class="page-body">
     {{ .Content }}
   </div>
+  {{ if gt (len $pages) 1 }}
+  <nav class="page-nav" aria-label="Previous and next pages">
+    {{ $found := false }}
+    {{ $prev := false }}
+    {{ $next := false }}
+    {{ range $i, $p := $pages }}
+      {{ if eq $.RelPermalink $p.RelPermalink }}
+        {{ $found = true }}
+        {{ if gt $i 0 }}
+          {{ $prev = index $pages (sub $i 1) }}
+        {{ end }}
+        {{ if lt (add $i 1) (len $pages) }}
+          {{ $next = index $pages (add $i 1) }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+    {{ if $prev }}
+    <a class="page-nav-prev" href="{{ $prev.RelPermalink }}">← {{ $prev.Title }}</a>
+    {{ end }}
+    {{ if $next }}
+    <a class="page-nav-next" href="{{ $next.RelPermalink }}">{{ $next.Title }} →</a>
+    {{ end }}
+  </nav>
+  {{ end }}
 </article>
 {{ end }}

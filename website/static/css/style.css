@@ -591,6 +591,135 @@ body {
   color: #d0d0d0;
 }
 
+/* --- Section Index (landing pages) --- */
+
+.section-index {
+  max-width: var(--width-prose);
+  margin-top: var(--space-lg);
+}
+
+.section-index h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.section-index ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.section-index li {
+  padding: var(--space-xs) 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.section-index li:last-child {
+  border-bottom: none;
+}
+
+.section-index a {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.15s;
+}
+
+.section-index a:hover {
+  color: var(--color-accent-hover);
+}
+
+.section-index-desc {
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+}
+
+/* --- Section Navigation (sub-pages) --- */
+
+.section-nav {
+  max-width: var(--width-prose);
+  margin-bottom: var(--space-xl);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border-light);
+  background: var(--color-bg-code);
+}
+
+.section-nav-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.section-nav-heading a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.section-nav-heading a:hover {
+  color: var(--color-accent);
+}
+
+.section-nav ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.section-nav li {
+  margin-bottom: 0.25rem;
+}
+
+.section-nav li a {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.section-nav li a:hover {
+  color: var(--color-accent);
+}
+
+.section-nav li.active a {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* --- Page Navigation (prev/next) --- */
+
+.page-nav {
+  max-width: var(--width-prose);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.page-nav a {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  transition: color 0.15s;
+}
+
+.page-nav a:hover {
+  color: var(--color-accent-hover);
+}
+
+.page-nav-next {
+  margin-left: auto;
+}
+
 /* --- Blockquotes --- */
 
 .page-body blockquote {

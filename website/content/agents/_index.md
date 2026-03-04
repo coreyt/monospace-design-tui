@@ -1,16 +1,50 @@
 ---
 title: "Working with AI Agents"
-subtitle: "Using Claude Code skills to design and audit TUI applications"
-description: "How AI coding agents can use the Monospace Design TUI standard through Claude Code skills"
+subtitle: "Three tiers of adoption for AI-assisted TUI development"
+description: "How AI coding agents can use the Monospace Design TUI standard — from a one-line snippet to full Claude Code skills"
 ---
 
 A design standard is only useful if it's applied. Monospace Design TUI was built with the expectation that developers would use AI coding agents as collaborators — and that those agents need structured, machine-readable standards to follow.
 
-The Monospace Design TUI project includes two [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skills that give AI agents direct access to the standard. When a developer asks an agent to build a TUI screen, the agent doesn't improvise — it loads the relevant sections of the standard, applies project-specific overrides, and produces compliant designs and code.
+There are three tiers of adoption, from lightweight to full integration.
 
 ---
 
-## mono-tui-design
+## Tier 1: CLAUDE.md Snippet
+
+The simplest adoption path. Add two lines to your project's `CLAUDE.md` (or equivalent agent instructions file):
+
+```
+When building TUI screens, follow the Monospace Design TUI standard.
+Fetch the agent directive at: https://monospace-tui.dev/agent-ref/
+Use the "Default" palette (or substitute your chosen palette name).
+```
+
+This gives any AI agent enough context to fetch the [Agent Reference Directive](/agent-ref/), which links to every section of the standard. The agent fetches only the sections it needs for the current task.
+
+**Valid palette names:** Default, Monochrome, Commander, OS/2, Turbo Pascal, Amber Phosphor, Green Phosphor, Airlock
+
+---
+
+## Tier 2: TUI-DESIGN.md
+
+For projects that need palette customization and rule overrides, create a `TUI-DESIGN.md` in your project root using the [template](https://github.com/coreyt/monospace-design-tui/blob/main/TUI-DESIGN.template.md).
+
+The file declares:
+- Which archetypes your project uses
+- Which palette to apply
+- Any rule overrides (WAIVE, OVERRIDE, TIGHTEN)
+- Project-specific conventions beyond the standard
+
+AI agents read this file before designing screens, applying your project's customizations on top of the base standard. The audit skill checks compliance against both the standard and your overrides.
+
+---
+
+## Tier 3: Claude Code Skills
+
+The deepest integration. The Monospace Design TUI project includes two [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skills that give AI agents direct access to the standard.
+
+### mono-tui-design
 
 The design skill handles the creative work: planning layouts, selecting widgets, assigning keyboard bindings, and generating implementation code.
 
@@ -26,9 +60,7 @@ The design skill handles the creative work: planning layouts, selecting widgets,
 
 **Invoke with:** `/mono-tui-design`
 
----
-
-## mono-tui-audit
+### mono-tui-audit
 
 The audit skill handles compliance checking. It reads your TUI code and produces a structured pass/fail report against the full standard.
 
@@ -49,18 +81,17 @@ The audit skill handles compliance checking. It reads your TUI code and produces
 
 The typical workflow:
 
-1. Create a `TUI-DESIGN.md` in your project root (use the [template](https://github.com/monospace-tui/monospace-design-tui/blob/main/TUI-DESIGN.template.md)) to declare your archetypes, framework, and any overrides.
-2. Ask the agent to design a screen — it uses `mono-tui-design` to produce a compliant wireframe and code.
-3. Build and iterate.
-4. Run `mono-tui-audit` to verify compliance. Fix violations. Repeat.
+1. **Tier 1:** Add the snippet to your `CLAUDE.md` — agents can immediately start designing compliant TUIs.
+2. **Tier 2:** Create a `TUI-DESIGN.md` when you need to lock in a palette, declare archetypes, or override rules.
+3. **Tier 3:** Clone the repository to get the Claude Code skills for full design/audit integration.
 
-The standard is the source of truth. The skills are how the agent reads and applies it. The `TUI-DESIGN.md` is how your project customizes it.
+The standard is the source of truth. The [agent directive](/agent-ref/) is how agents discover it. The `TUI-DESIGN.md` is how your project customizes it. The skills are the deepest integration for Claude Code users.
 
 ---
 
 ## Getting the Skills
 
-The skills are included in the [Monospace Design TUI repository](https://github.com/monospace-tui/monospace-design-tui) under `skills/`. To use them with Claude Code, clone the repository and the skills will be available when working within the project directory.
+The skills are included in the [Monospace Design TUI repository](https://github.com/coreyt/monospace-design-tui) under `skills/`. To use them with Claude Code, clone the repository and the skills will be available when working within the project directory.
 
 ```
 skills/

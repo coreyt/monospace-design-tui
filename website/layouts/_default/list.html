@@ -4,14 +4,24 @@
     <h1>{{ .Title }}</h1>
     {{ with .Params.subtitle }}<p class="page-subtitle">{{ . }}</p>{{ end }}
   </header>
-  {{ if .Params.toc }}
-  <nav class="page-toc" aria-label="Table of Contents">
-    <h2 class="toc-heading">Contents</h2>
-    {{ .TableOfContents }}
-  </nav>
-  {{ end }}
+  {{ if .Content }}
   <div class="page-body">
     {{ .Content }}
   </div>
+  {{ end }}
+  {{ $pages := .Pages.ByWeight }}
+  {{ if $pages }}
+  <nav class="section-index" aria-label="Section contents">
+    <h2>Sections</h2>
+    <ol>
+      {{ range $pages }}
+      <li>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        {{ with .Description }}<span class="section-index-desc"> — {{ . }}</span>{{ end }}
+      </li>
+      {{ end }}
+    </ol>
+  </nav>
+  {{ end }}
 </article>
 {{ end }}
