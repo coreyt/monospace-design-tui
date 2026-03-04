@@ -277,7 +277,7 @@ Background: ESC[48;2;{r};{g};{b}m    (r, g, b = 0–255)
 
 ### §R3.4 Named Palettes
 
-The Dark Theme and Light Theme mappings above (§R3.2) define the default palettes. Applications MAY offer additional named palettes. Seven named palettes are defined here, drawn from the historical research that informs the standard. All palettes map to the same five semantic roles (§5.1); they differ only in color assignment.
+The Dark Theme and Light Theme mappings above (§R3.2) define the default palettes. Applications MAY offer additional named palettes. Eight named palettes are defined here, drawn from the historical research that informs the standard. All palettes map to the same five semantic roles (§5.1); they differ only in color assignment.
 
 #### Default
 
@@ -569,6 +569,60 @@ Color rendering:  All green on black.  Title ─ bright green (#5fff00), BOLD.
 Body text ─ medium green (#00af00).  Focused row ─ REVERSE (black on green).
 ⚠ WARN ─ bright green, BOLD.  ✗ DOWN ─ REVERSE+BOLD.  Footer ─ dim green
 (#008700).  Borders ─ dim green.
+```
+
+#### Airlock
+
+Source: The Airlock AI-agent security proxy — a guardrail enforcement layer that inspects, scores, and controls LLM tool-call traffic in real time. The palette uses Material Design–derived signal colors (`#4caf50` healthy, `#f44336` error, `#ff9800` warning) mapped to 256-color indices, paired with a cool neutral surface. The aesthetic communicates operational security: a calm, dark control-room backdrop with high-contrast status signals that demand attention only when something changes state.
+
+| Semantic Role | Foreground (index) | Background (index) | Hex Approximation |
+|--------------|-------------------|-------------------|-------------------|
+| Primary | 71 (green) | 236 (dark gray) | fg #5faf5f, bg #303030 |
+| Secondary | 109 (muted blue) | 236 (dark gray) | fg #87afaf, bg #303030 |
+| Tertiary | 214 (orange) | 236 (dark gray) | fg #ffaf00, bg #303030 |
+| Error | 167 (red) | 52 (dark red) | fg #d75f5f, bg #5f0000 |
+| Neutral fg | 252 (light gray) | — | fg #d0d0d0 |
+| Neutral bg | — | 235 (near-black) | bg #262626 |
+| Surface | 252 | 234 (charcoal) | bg #1c1c1c |
+
+Status colors:
+
+| Status | Foreground (index) | Paired Symbol |
+|--------|-------------------|---------------|
+| Healthy / Live | 77 (green) | `◉` or `✓` |
+| Error / Blocked | 167 (red) | `⊘` or `✗` |
+| Warning / Paused | 214 (orange) | `⚠` or `⏸` |
+| Inactive / Shadow | 245 (gray) | `○` or `—` |
+
+Key conventions: Primary is green rather than blue — the healthy state is the dominant visual signal in a security proxy, reinforcing that traffic is flowing and guardrails are active. Tertiary is orange (the warning hue) because the "half-open" and "elevated score" states are the most operationally interesting. The status symbols include `⊘` (block) and `⏸` (paused) to match Airlock's enforcement vocabulary.
+
+```
+Example — Dashboard rendered in Airlock:
+
+┌── Service Monitor ────────────────────────────────────────────────────────────┐
+│ File  View  Help                                                              │
+├───────────────────────────────────────────────────────────────────────────────┤
+│                                                                               │
+│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       │
+│                                                                               │
+├───────────────────────────────────────────────────────────────────────────────┤
+│ Service              │ Status   │ Uptime       │ CPU     │ Memory             │
+│──────────────────────│──────────│──────────────│─────────│────────────────────│
+│ > api-gateway        │  OK      │ 14d  3h 22m  │   2.1%  │  340MB  [green bg] │
+│   auth-service       │  OK      │ 14d  3h 22m  │   0.8%  │  128MB  [green]    │
+│   worker-pool        │  WARN    │  0d  1h 45m  │  78.3%  │  1.2GB  [orange]   │
+│   notification-svc   │  DOWN    │  0d  0h 00m  │   0.0%  │    0MB  [red]      │
+│   metrics-collector  │  OK      │ 14d  3h 22m  │   1.4%  │  256MB  [green]    │
+│                                                                               │
+├───────────────────────────────────────────────────────────────────────────────┤
+│ ? Help  r Refresh  / Filter  q Quit                           5 services      │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+Color rendering:  Dark charcoal background (#1c1c1c).  Title ─ green (#5faf5f).
+Body text ─ light gray (#d0d0d0).  Secondary labels ─ muted blue (#87afaf).
+Focused row ─ green on dark gray (#303030).  ✓ OK ─ bright green (#5fd75f).
+⚠ WARN ─ orange (#ffaf00).  ✗ DOWN ─ red (#d75f5f).  Borders ─ dim gray
+(#585858).  Footer ─ dim gray.
 ```
 
 ---

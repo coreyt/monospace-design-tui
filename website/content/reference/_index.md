@@ -276,7 +276,7 @@ Background: ESC[48;2;{r};{g};{b}m    (r, g, b = 0–255)
 
 ### §R3.4 Named Palettes
 
-The Dark Theme and Light Theme mappings above (§R3.2) define the default palettes. Applications MAY offer additional named palettes. Seven named palettes are defined here, drawn from the historical research that informs the standard. All palettes map to the same five semantic roles (§5.1); they differ only in color assignment.
+The Dark Theme and Light Theme mappings above (§R3.2) define the default palettes. Applications MAY offer additional named palettes. Eight named palettes are defined here, drawn from the historical research that informs the standard. All palettes map to the same five semantic roles (§5.1); they differ only in color assignment.
 
 #### Default
 
@@ -606,6 +606,52 @@ Example — Dashboard rendered in Green Phosphor:
 ├───────────────────────────────────────────────────────────────────────────────┤</span>
 <span style="color:#008700">│ ? Help  r Refresh  / Filter  q Quit                           5 services      │
 └───────────────────────────────────────────────────────────────────────────────┘</span></pre>
+
+#### Airlock
+
+Source: The Airlock AI-agent security proxy — a guardrail enforcement layer that inspects, scores, and controls LLM tool-call traffic in real time. The palette uses Material Design–derived signal colors (`#4caf50` healthy, `#f44336` error, `#ff9800` warning) mapped to 256-color indices, paired with a cool neutral surface. The aesthetic communicates operational security: a calm, dark control-room backdrop with high-contrast status signals that demand attention only when something changes state.
+
+| Semantic Role | Foreground (index) | Background (index) | Hex Approximation |
+|--------------|-------------------|-------------------|-------------------|
+| Primary | 71 (green) | 236 (dark gray) | fg #5faf5f, bg #303030 |
+| Secondary | 109 (muted blue) | 236 (dark gray) | fg #87afaf, bg #303030 |
+| Tertiary | 214 (orange) | 236 (dark gray) | fg #ffaf00, bg #303030 |
+| Error | 167 (red) | 52 (dark red) | fg #d75f5f, bg #5f0000 |
+| Neutral fg | 252 (light gray) | — | fg #d0d0d0 |
+| Neutral bg | — | 235 (near-black) | bg #262626 |
+| Surface | 252 | 234 (charcoal) | bg #1c1c1c |
+
+Status colors:
+
+| Status | Foreground (index) | Paired Symbol |
+|--------|-------------------|---------------|
+| Healthy / Live | 77 (green) | `◉` or `✓` |
+| Error / Blocked | 167 (red) | `⊘` or `✗` |
+| Warning / Paused | 214 (orange) | `⚠` or `⏸` |
+| Inactive / Shadow | 245 (gray) | `○` or `—` |
+
+Key conventions: Primary is green rather than blue — the healthy state is the dominant visual signal in a security proxy, reinforcing that traffic is flowing and guardrails are active. Tertiary is orange (the warning hue) because the "half-open" and "elevated score" states are the most operationally interesting. The status symbols include `⊘` (block) and `⏸` (paused) to match Airlock's enforcement vocabulary.
+
+Example — Dashboard rendered in Airlock:
+
+<pre class="palette-example palette-airlock"><span style="color:#585858">┌──</span> <span style="font-weight:bold;color:#5faf5f">Service Monitor</span> <span style="color:#585858">────────────────────────────────────────────────────────────┐
+│</span> <span style="color:#87afaf">File  View  Help</span>                                                              <span style="color:#585858">│
+├───────────────────────────────────────────────────────────────────────────────┤</span>
+<span style="color:#585858">│</span>                                                                               <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>                                                                               <span style="color:#585858">│
+├───────────────────────────────────────────────────────────────────────────────┤</span>
+<span style="color:#585858">│</span> Service              │ Status   │ Uptime       │ CPU     │ Memory             <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>──────────────────────│──────────│──────────────│─────────│────────────────────<span style="color:#585858">│</span>
+<span style="color:#585858">│</span> <span style="background:#303030;color:#5faf5f">> api-gateway        │ </span><span style="background:#303030;color:#5fd75f"> OK</span><span style="background:#303030;color:#5faf5f">      │ 14d  3h 22m  │   2.1%  │  340MB            </span> <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>   auth-service       │ <span style="color:#5fd75f"> OK</span>      │ 14d  3h 22m  │   0.8%  │  128MB             <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>   worker-pool        │ <span style="color:#ffaf00"> WARN</span>    │  0d  1h 45m  │  78.3%  │  1.2GB             <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>   notification-svc   │ <span style="color:#d75f5f"> DOWN</span>    │  0d  0h 00m  │   0.0%  │    0MB             <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>   metrics-collector  │ <span style="color:#5fd75f"> OK</span>      │ 14d  3h 22m  │   1.4%  │  256MB             <span style="color:#585858">│</span>
+<span style="color:#585858">│</span>                                                                               <span style="color:#585858">│
+├───────────────────────────────────────────────────────────────────────────────┤</span>
+<span style="color:#585858">│</span><span style="color:#87afaf"> ? Help  r Refresh  / Filter  q Quit                             5 services    </span><span style="color:#585858">│</span>
+<span style="color:#585858">└───────────────────────────────────────────────────────────────────────────────┘</span></pre>
 
 ---
 

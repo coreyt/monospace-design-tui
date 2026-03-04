@@ -586,6 +586,11 @@ body {
   color: #00af00;
 }
 
+.page-body pre.palette-airlock {
+  background: #1c1c1c;
+  color: #d0d0d0;
+}
+
 /* --- Blockquotes --- */
 
 .page-body blockquote {
