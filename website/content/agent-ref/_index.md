@@ -120,7 +120,10 @@ Walk the user through these questions to generate their `TUI-DESIGN.md`. Ask eac
 
 Map archetype selections to section references in the Meta table: Dashboard → `§11.1 Dashboard`, Admin/Config → `§11.2 Admin`, File Manager → `§11.3 File Manager`, Editor → `§11.4 Editor`, Fuzzy Finder → `§11.5 Fuzzy Finder`.
 
-**After generating `TUI-DESIGN.md`, stop.** Tell the user the file was created and summarize the choices. Do not proceed to the Design Workflow unless the user asks you to design a screen.
+**After generating `TUI-DESIGN.md`:**
+
+- **State A (greenfield) or State B — Adopt:** Stop. Tell the user the file was created and summarize the choices. Do not proceed to the Design Workflow unless the user asks you to design a screen.
+- **State B — Redesign:** The existing TUI files have been backed up and the project needs new screens. Tell the user `TUI-DESIGN.md` was created, summarize the choices, then proceed to the [Design Workflow](#design-workflow) to build replacement screens for each archetype selected. Work through one screen at a time — show the user your design for each screen and get confirmation before generating code.
 
 ## Discipline: Follow This Directive Exactly
 
