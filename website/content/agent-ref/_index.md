@@ -26,7 +26,7 @@ Example: `/standard/layout/` → `https://raw.githubusercontent.com/coreyt/monos
 
 **These rules govern everything on this page.**
 
-1. **Fresh start.** Every time you fetch this directive, treat it as a fresh start. Do not reuse answers, context, or state from previous runs — even within the same session. Always re-scan and re-ask.
+1. **Fresh start.** Every time you fetch this directive, treat it as a fresh start. Do not reuse answers, context, or state from previous runs — even within the same session. Always re-scan and re-ask. If `.monospace-tui/cache/` exists from a previous run, delete it before proceeding.
 2. **Listed URLs only.** Every URL you need is on this page or constructable from the raw URL pattern above. Do not fetch other URLs. On 404 or error, stop and tell the user.
 3. **No exploring.** Do not scan the website, follow links from fetched pages, or fetch monolithic source files from the repository. Do not use `curl`, shell commands, or HTML scraping to work around fetch limitations — use the raw URL pattern instead. If you catch yourself doing any of this, stop and return to this directive.
 4. **Stop on uncertainty.** If unsure which archetype, section, or rule applies, ask the user.
@@ -75,11 +75,11 @@ Note what you find — framework(s), file count, design docs. You need this in S
 > 2. **Redesign** — Back up existing files, generate a fresh TUI-DESIGN.md, then build new screens
 > 3. **Cancel** — Stop
 
-- **Adopt**: Run wizard with pre-filled answers from scan. Generate `TUI-DESIGN.md`. Stop.
-- **Redesign**: Back up all TUI files (Safety rule). Run wizard with pre-filled answers. Generate `TUI-DESIGN.md`. Then proceed to [Design Workflow](#design-workflow) to build replacement screens.
+- **Adopt**: Run wizard with pre-filled answers from scan. Generate `TUI-DESIGN.md`. [Build cache](#build-local-cache). Stop.
+- **Redesign**: Back up all TUI files (Safety rule). Run wizard with pre-filled answers. Generate `TUI-DESIGN.md`. [Build cache](#build-local-cache). Proceed to [Design Workflow](#design-workflow).
 - **Cancel**: Stop.
 
-**State C — `TUI-DESIGN.md` exists:** Read it. Note palette, archetypes, overrides (WAIVE/OVERRIDE/TIGHTEN). Proceed to [Design Workflow](#design-workflow).
+**State C — `TUI-DESIGN.md` exists:** Read it. Note palette, archetypes, overrides (WAIVE/OVERRIDE/TIGHTEN). [Build cache](#build-local-cache) if `.monospace-tui/cache/` does not exist. Proceed to [Design Workflow](#design-workflow).
 
 To redo setup: user must explicitly ask. Back up existing `TUI-DESIGN.md` first. Never overwrite without being asked.
 
@@ -117,27 +117,62 @@ The design standard applies to all frameworks. Automated implementation support 
 
 Archetype mapping: Dashboard → `§11.1`, Admin/Config → `§11.2`, File Manager → `§11.3`, Editor → `§11.4`, Fuzzy Finder → `§11.5`.
 
-**After generating:** Tell the user the file was created and summarize choices. For **Redesign**, proceed to Design Workflow. For **Greenfield/Adopt**, stop unless the user asks to design a screen.
+**After generating:** Tell the user the file was created and summarize choices. For **Redesign**, proceed to Build Local Cache then Design Workflow. For **Greenfield/Adopt**, build cache then stop unless the user asks to design a screen.
+
+---
+
+## Build Local Cache
+
+After setup completes (or on State C entry when no cache exists), fetch and save the sections the project needs to `.monospace-tui/cache/`. This eliminates repeated network fetches, avoids content summarization, and survives context compaction.
+
+**Always cache:**
+
+| File | Source |
+|------|--------|
+| `directive.md` | This page (raw URL) |
+| `layout.md` | [§1 Grid & Layout](/standard/layout/) |
+| `keyboard.md` | [§2 Keyboard Interaction](/standard/keyboard/) |
+
+**Cache based on `TUI-DESIGN.md` selections:**
+
+| If project uses... | File | Source |
+|---------------------|------|--------|
+| Dashboard archetype | `archetype-dashboard.md` | [§11 Archetypes](/standard/archetypes/) — extract §11.1 only |
+| Admin archetype | `archetype-admin.md` | [§11 Archetypes](/standard/archetypes/) — extract §11.2 only |
+| File Manager archetype | `archetype-filemanager.md` | [§11 Archetypes](/standard/archetypes/) — extract §11.3 only |
+| Editor archetype | `archetype-editor.md` | [§11 Archetypes](/standard/archetypes/) — extract §11.4 only |
+| Fuzzy Finder archetype | `archetype-fuzzyfinder.md` | [§11 Archetypes](/standard/archetypes/) — extract §11.5 only |
+| Default palette | `palette.md` | [§R3 Color Palette](/reference/color-palette/) — extract Default section only |
+| Monochrome palette | `palette.md` | Same source — extract Monochrome section only |
+| Commander palette | `palette.md` | Same source — extract Commander section only |
+| *(same pattern for OS/2, Turbo Pascal, Amber Phosphor, Green Phosphor, Airlock)* | | |
+| Textual framework | `textual.md` | [Textual Appendix](/textual/) |
+
+Fetch the full source page once, extract only the relevant section, and save that to the cache file. This keeps each cached file small and focused.
+
+**After caching:** Tell the user what was cached and where. The cache is at `.monospace-tui/cache/`.
 
 ---
 
 ## Design Workflow
 
-**Before each screen:** Re-fetch this directive page. Re-read `TUI-DESIGN.md`. This prevents drift across multiple screens.
+**Before each screen:** Re-read `.monospace-tui/cache/directive.md` and `TUI-DESIGN.md`. This resets your grounding and prevents drift across multiple screens. Do not re-fetch from the network — use the cache.
 
-**Always fetch (steps 1–3):**
+For each screen you build:
 
-1. **Pick archetype** — Fetch [§11 Archetypes](/standard/archetypes/).
-2. **Architect layout** — Fetch [§1 Grid & Layout](/standard/layout/).
-3. **Apply color** — Fetch your palette: [Default](/reference/color-palette/#default), [Monochrome](/reference/color-palette/#monochrome), [Commander](/reference/color-palette/#commander), [OS/2](/reference/color-palette/#os2), [Turbo Pascal](/reference/color-palette/#turbo-pascal), [Amber Phosphor](/reference/color-palette/#amber-phosphor), [Green Phosphor](/reference/color-palette/#green-phosphor), [Airlock](/reference/color-palette/#airlock).
+**Read from cache (steps 1–3):**
 
-**Fetch as needed (steps 4–6):**
+1. **Pick archetype** — Read the cached archetype file (e.g., `.monospace-tui/cache/archetype-dashboard.md`).
+2. **Architect layout** — Read `.monospace-tui/cache/layout.md`.
+3. **Apply color** — Read `.monospace-tui/cache/palette.md`.
 
-4. **Assign keys** — [§2 Keyboard Interaction](/standard/keyboard/) for the base three-tier system. Archetype page (step 1) has archetype-specific keys.
-5. **Select widgets** — [§4 Component Rules](/standard/components/) + [§R4 Measurements](/reference/measurements/).
-6. **Check rules** — [§5 Color](/standard/color/) (independence), [§8 State](/standard/state/) (focus/disabled/error), [§9 Accessibility](/standard/accessibility/) (contrast/labels).
+**Fetch as needed (steps 4–6) — check cache first, fetch and cache if missing:**
 
-**Generate code.** Textual: see [Textual Appendix](/textual/). Other frameworks: apply rules using framework idioms.
+4. **Assign keys** — Read `.monospace-tui/cache/keyboard.md`.
+5. **Select widgets** — Fetch [§4 Component Rules](/standard/components/) + [§R4 Measurements](/reference/measurements/) if not cached. Save to cache.
+6. **Check rules** — Fetch as relevant: [§5 Color](/standard/color/), [§8 State](/standard/state/), [§9 Accessibility](/standard/accessibility/). Save to cache.
+
+**Generate code.** Textual: read `.monospace-tui/cache/textual.md`. Other frameworks: apply rules using framework idioms.
 
 ### Per-Screen Checklist
 
@@ -149,6 +184,14 @@ Verify after generating code. Tell the user the result. Fix failures before the 
 - [ ] **Keyboard** — Tier 1 keys bound; archetype keys assigned; no conflicts
 - [ ] **Color independence** — info conveyed by color also conveyed by text/shape/position
 - [ ] **Overrides** — WAIVE/OVERRIDE/TIGHTEN from `TUI-DESIGN.md` applied
+
+---
+
+## Cleanup
+
+When the design session is complete (all screens built, or user says to stop), delete `.monospace-tui/cache/`. The cache is ephemeral — it exists only to support the current session. Tell the user the cache was removed.
+
+The `.monospace-tui/_backup_*/` directories are **not** deleted — those are the user's safety net.
 
 ---
 
@@ -186,6 +229,6 @@ Projects customize the standard through `TUI-DESIGN.md`:
 - **OVERRIDE** — Rule replaced. Use the replacement text.
 - **TIGHTEN** — SHOULD/MAY elevated to MUST. Treat as mandatory.
 
-Each override targets a rule ID (e.g., `§2.2`, `§R3.2`). When fetching a section, apply overrides from `TUI-DESIGN.md` instead of the original rule.
+Each override targets a rule ID (e.g., `§2.2`, `§R3.2`). When reading a cached section, apply overrides from `TUI-DESIGN.md` instead of the original rule.
 
 Template: [TUI-DESIGN.md](https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/TUI-DESIGN.template.md)
