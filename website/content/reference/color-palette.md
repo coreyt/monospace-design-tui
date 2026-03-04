@@ -24,8 +24,11 @@ weight: 3
 | Tertiary | 79 (teal) | 236 (dark gray) | fg #5fd7af, bg #303030 |
 | Error | 196 (bright red) | 52 (dark red) | fg #ff0000, bg #5f0000 |
 | Neutral fg | 252 (light gray) | — | fg #d0d0d0 |
+| Neutral fg bright | 231 (white) | — | fg #ffffff |
 | Neutral bg | — | 235 (near-black) | bg #262626 |
 | Surface | 252 | 234 (charcoal) | bg #1c1c1c |
+
+**Neutral fg bright** is for text on colored backgrounds (headers, selected tabs, active indicators) where standard neutral fg lacks sufficient contrast.
 
 ### Light Theme
 
@@ -63,6 +66,7 @@ Source: Textual framework default dark theme. This is the standard modern dark p
 | Tertiary | 79 (teal) | 236 (dark gray) | fg #5fd7af, bg #303030 |
 | Error | 196 (bright red) | 52 (dark red) | fg #ff0000, bg #5f0000 |
 | Neutral fg | 252 (light gray) | — | fg #d0d0d0 |
+| Neutral fg bright | 231 (white) | — | fg #ffffff |
 | Neutral bg | — | 235 (near-black) | bg #262626 |
 | Surface | 252 | 234 (charcoal) | bg #1c1c1c |
 
@@ -392,6 +396,7 @@ Source: The Airlock AI-agent security proxy — a guardrail enforcement layer th
 | Tertiary | 214 (orange) | 236 (dark gray) | fg #ffaf00, bg #303030 |
 | Error | 167 (red) | 52 (dark red) | fg #d75f5f, bg #5f0000 |
 | Neutral fg | 252 (light gray) | — | fg #d0d0d0 |
+| Neutral fg bright | 231 (white) | — | fg #ffffff |
 | Neutral bg | — | 235 (near-black) | bg #262626 |
 | Surface | 252 | 234 (charcoal) | bg #1c1c1c |
 
