@@ -13,7 +13,7 @@ Copy this file to your project root as `TUI-DESIGN.md` and fill in each section.
 | Key              | Value                                         |
 |------------------|-----------------------------------------------|
 | Project          | _project name_                                |
-| Standard URL     | https://monospace-tui.dev/                    |
+| Standard URL     | https://coreyt.github.io/monospace-design-tui/ |
 | Standard version | 1.0                                           |
 | Palette          | _Default / Monochrome / Commander / OS/2 / Turbo Pascal / Amber Phosphor / Green Phosphor / Airlock_ |
 | Archetypes       | _§11.1 Dashboard, §11.2 Admin, etc._         |

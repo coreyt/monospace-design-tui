@@ -6,7 +6,7 @@ description: "Concise directive page telling AI agents what to fetch and when fr
 
 You are building a terminal user interface that conforms to the Monospace Design TUI standard. This page tells you what to fetch and when. **Do not memorize this page** — fetch the specific sections you need during each design task.
 
-**Base URL:** `https://monospace-tui.dev`
+**Base URL:** `https://coreyt.github.io/monospace-design-tui`
 
 ## Safety: Backup Before Modifying
 
