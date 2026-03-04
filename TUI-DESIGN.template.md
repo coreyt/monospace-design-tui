@@ -1,8 +1,8 @@
 # TUI-DESIGN.md — Project Override Template
 
 **Version 1.0** — Template for project-specific overrides to the
-[Monospace Design TUI Standard](mono-tui-design-standard.md) and
-[Rendering Reference](mono-tui-rendering-reference.md).
+[Monospace Design TUI Standard](https://coreyt.github.io/monospace-design-tui/standard/) and
+[Rendering Reference](https://coreyt.github.io/monospace-design-tui/reference/).
 
 Copy this file to your project root as `TUI-DESIGN.md` and fill in each section.
 

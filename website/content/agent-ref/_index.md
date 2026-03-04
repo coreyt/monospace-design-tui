@@ -65,7 +65,7 @@ Note what you find — framework(s) detected, number of TUI-related files, any d
 
 If **Adopt**: Run the wizard but pre-fill answers from the scan (detected framework, inferred archetypes from screen patterns). Let the user confirm or change each answer. Generate `TUI-DESIGN.md`.
 
-If **Redesign**: Back up all existing TUI files first (see Safety rule above). Then run the wizard from scratch. Generate `TUI-DESIGN.md`.
+If **Redesign**: Back up all existing TUI files first (see Safety rule above). Then run the wizard, pre-filling answers from the scan (detected framework, inferred archetypes) so the user can confirm or change each one. Generate `TUI-DESIGN.md`.
 
 If **Cancel**: Stop. Do not generate any files.
 
@@ -75,11 +75,11 @@ If the user explicitly asks to redo or reinitialize their TUI setup, back up the
 
 ## First-Time Setup
 
-Walk the user through these questions to generate their `TUI-DESIGN.md`. Ask each question interactively and wait for the user's answer before proceeding to the next. If you detected existing TUI work (State B — Adopt), pre-fill the suggested answer and let the user confirm or change it.
+Walk the user through these questions to generate their `TUI-DESIGN.md`. Ask each question interactively and wait for the user's answer before proceeding to the next. If you detected existing TUI work (State B — Adopt or Redesign), pre-fill suggested answers from the scan (detected framework, inferred archetypes from screen patterns) and let the user confirm or change each one.
 
 **Step 1 — Project name:** Ask the user for the name of their project.
 
-**Step 2 — Archetypes:** Ask which screen archetypes their project will use. Allow multiple selections.
+**Step 2 — Archetypes:** Ask which screen archetypes their project will use. Allow multiple selections. If you scanned existing code, pre-select archetypes that match the screens you found and list which screens mapped to which archetype. If any existing screens don't map cleanly to an archetype, mention them and ask the user how to classify them.
 
 - Dashboard — real-time monitoring, status overview
 - Admin / Config — settings panels, setup wizards
@@ -87,7 +87,7 @@ Walk the user through these questions to generate their `TUI-DESIGN.md`. Ask eac
 - Editor — text editing, document manipulation
 - Fuzzy Finder — rapid search and selection from large sets
 
-**Step 3 — Palette:** Ask which named color palette to use.
+**Step 3 — Palette:** Ask which named color palette to use. Tell the user this can be changed later by editing the `Palette` field in `TUI-DESIGN.md`.
 
 - Default — modern dark theme (recommended)
 - Monochrome — no color, SGR attributes only
@@ -111,14 +111,28 @@ Walk the user through these questions to generate their `TUI-DESIGN.md`. Ask eac
 
 **Important:** The design standard applies to all frameworks. However, automated implementation support (code generation, TCSS patterns, the [Textual Appendix](/textual/)) is currently only available for **Textual**. For other frameworks, you can still generate `TUI-DESIGN.md`, guide layout and keyboard decisions, and apply all design rules — but code generation must follow the framework's own idioms rather than Textual-specific patterns.
 
-**Step 5 — Minimum terminal size:** Ask for the minimum terminal size they need to support.
+**Step 5 — Minimum terminal size:** Ask for the minimum terminal size they need to support. This determines layout breakpoints and whether the full three-region layout is available.
 
 - 80×24 (VT100 standard — widest compatibility)
 - 120×40 (recommended — full layout canvas)
 
-**After collecting answers:** Generate `TUI-DESIGN.md` in the project root using the [template structure](https://github.com/coreyt/monospace-design-tui/blob/main/TUI-DESIGN.template.md). Fill in the Meta table with the user's answers. Set `Created` and `Last reviewed` to today's date. Leave the Overrides, Project Conventions, and Decision Log sections with their placeholder text (`_No overrides yet._`, etc.) — the user will populate these as the project evolves.
+**After collecting answers:** Fetch the [TUI-DESIGN.md template](https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/TUI-DESIGN.template.md) and generate `TUI-DESIGN.md` in the project root. Fill in the Meta table with the user's answers. Set `Created` and `Last reviewed` to today's date. Leave the Overrides, Project Conventions, and Decision Log sections with their placeholder text (`_No overrides yet._`, etc.) — the user will populate these as the project evolves.
 
 Map archetype selections to section references in the Meta table: Dashboard → `§11.1 Dashboard`, Admin/Config → `§11.2 Admin`, File Manager → `§11.3 File Manager`, Editor → `§11.4 Editor`, Fuzzy Finder → `§11.5 Fuzzy Finder`.
+
+**After generating `TUI-DESIGN.md`, stop.** Tell the user the file was created and summarize the choices. Do not proceed to the Design Workflow unless the user asks you to design a screen.
+
+## Discipline: Follow This Directive Exactly
+
+**This rule applies to everything on this page.**
+
+1. **Only fetch URLs listed on this page.** Every URL you need is provided in this directive — the section tables, the palette links, the template link. If a URL is not on this page, do not fetch it. If a link returns a 404 or error, **stop and tell the user** — do not guess alternative URLs, do not try raw.githubusercontent.com variants, do not search for the content elsewhere.
+
+2. **Do not explore or improvise.** If you find yourself scanning the website for pages, following links from fetched pages to other pages, or fetching the monolithic source files from the repository — stop. You are off-track. Return to this directive and find the correct section link.
+
+3. **Stop on uncertainty.** If you are unsure which archetype applies, which section to fetch, or how to interpret a rule, stop and ask the user. Do not make assumptions and push forward.
+
+4. **One step at a time.** After completing any discrete step (setup, backup, generating a file, designing a screen), tell the user what you did. Do not chain steps together without the user's go-ahead.
 
 ## Design Workflow
 
