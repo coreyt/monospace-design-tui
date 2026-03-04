@@ -8,7 +8,17 @@ You are building a terminal user interface that conforms to the Monospace Design
 
 **Base URL:** `https://coreyt.github.io/monospace-design-tui`
 
-**If your fetch tool summarizes or truncates this page**, fetch the raw markdown instead: `https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/website/content/agent-ref/_index.md`
+**Raw content:** If your fetch tool summarizes or truncates content, use raw markdown URLs instead of HTML pages. This directive as raw markdown: `https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/website/content/agent-ref/_index.md`
+
+For any section link on this page, construct the raw URL with this pattern:
+
+| Page link | Raw URL |
+|-----------|---------|
+| `/standard/{page}/` | `https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/website/content/standard/{page}.md` |
+| `/reference/{page}/` | `https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/website/content/reference/{page}.md` |
+| `/textual/` | `https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/website/content/textual/_index.md` |
+
+Example: `/standard/layout/` → `https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/website/content/standard/layout.md`
 
 ---
 
@@ -17,8 +27,8 @@ You are building a terminal user interface that conforms to the Monospace Design
 **These rules govern everything on this page.**
 
 1. **Fresh start.** Every time you fetch this directive, treat it as a fresh start. Do not reuse answers, context, or state from previous runs — even within the same session. Always re-scan and re-ask.
-2. **Listed URLs only.** Every URL you need is on this page. Do not fetch URLs not listed here. On 404 or error, stop and tell the user.
-3. **No exploring.** Do not scan the website, follow links from fetched pages, or fetch monolithic source files from the repository. If you catch yourself doing this, stop and return to this directive.
+2. **Listed URLs only.** Every URL you need is on this page or constructable from the raw URL pattern above. Do not fetch other URLs. On 404 or error, stop and tell the user.
+3. **No exploring.** Do not scan the website, follow links from fetched pages, or fetch monolithic source files from the repository. Do not use `curl`, shell commands, or HTML scraping to work around fetch limitations — use the raw URL pattern instead. If you catch yourself doing any of this, stop and return to this directive.
 4. **Stop on uncertainty.** If unsure which archetype, section, or rule applies, ask the user.
 5. **One step at a time.** After each discrete step, tell the user what you did. Do not chain steps without their go-ahead.
 

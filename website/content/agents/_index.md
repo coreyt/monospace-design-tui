@@ -16,7 +16,8 @@ The simplest adoption path. Add two lines to your project's `CLAUDE.md` (or equi
 
 ```
 When building TUI screens, follow the Monospace Design TUI standard.
-Fetch the agent directive at: https://coreyt.github.io/monospace-design-tui/agent-ref/
+Fetch the agent directive (raw markdown) at:
+  https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/website/content/agent-ref/_index.md
 Use the "Default" palette (or substitute your chosen palette name).
 ```
 
