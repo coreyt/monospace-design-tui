@@ -8,18 +8,74 @@ You are building a terminal user interface that conforms to the Monospace Design
 
 **Base URL:** `https://monospace-tui.dev`
 
+## Safety: Backup Before Modifying
+
+**This rule applies to everything below.** Before modifying any existing file as part of TUI design work:
+
+1. Create the backup directory: `.monospace-tui/_backup_YYYYMMDD-HHMMSS/` (using the current timestamp). Reuse the same backup directory within a single session.
+2. Copy each file you are about to modify into that directory, preserving its relative path from the project root.
+3. Tell the user what was backed up and where.
+
+This applies to all modifications — screen code, stylesheets, widget files, configuration, and `TUI-DESIGN.md` itself. It does NOT apply to newly created files (no prior state to protect).
+
 ## Setup
 
-Check if `TUI-DESIGN.md` exists in the project root.
+Perform these checks in order:
 
-- **If it exists:** Read it. Note the palette name, archetypes, and any overrides (WAIVE, OVERRIDE, TIGHTEN). Note which rule IDs are affected — you will skip or modify those rules when you encounter them in fetched sections. **Do not overwrite or regenerate this file.** Proceed to [Design Workflow](#design-workflow).
-- **If it does NOT exist:** Run the [First-Time Setup](#first-time-setup) wizard below to generate it.
+### Step 1 — Scan for existing TUI work
+
+Before checking `TUI-DESIGN.md`, scan the project for existing TUI-related files. Check for **all** of the following frameworks, not just the one the user intends to use:
+
+**Textual (Python):**
+- Python files importing `textual`, `curses`, `blessed`, or containing ANSI escape sequences
+- `.tcss` files or inline `DEFAULT_CSS` / `CSS` class variables
+
+**Ratatui (Rust):**
+- `Cargo.toml` listing `ratatui`, `tui`, or `crossterm` as dependencies
+- Rust files importing `ratatui::` or `tui::`
+
+**Bubble Tea (Go):**
+- `go.mod` listing `github.com/charmbracelet/bubbletea` or `github.com/charmbracelet/lipgloss`
+- Go files importing `tea "github.com/charmbracelet/bubbletea"`
+
+**tview (Go):**
+- `go.mod` listing `github.com/rivo/tview` or `github.com/gdamore/tcell`
+- Go files importing `"github.com/rivo/tview"`
+
+**Ink (Node.js / TypeScript):**
+- `package.json` listing `ink`, `blessed`, or `neo-blessed` as dependencies
+- JS/TS files importing `ink` or `blessed`
+
+**Also check for:**
+- Design documents (e.g., `tui-architect.md`, `tui-review.md`, or similar in `.agents/`, `docs/`, or project root)
+- Existing `TUI-DESIGN.md`
+
+Note what you find — framework(s) detected, number of TUI-related files, any design documents. You will need this inventory in the next step.
+
+### Step 2 — Route based on project state
+
+**State A — No `TUI-DESIGN.md`, no existing TUI files:** Greenfield project. Run [First-Time Setup](#first-time-setup).
+
+**State B — No `TUI-DESIGN.md`, but existing TUI files found:** Existing project adopting the standard. Tell the user what you found (number of screen files, widget files, CSS, design docs). Then ask:
+
+> This project already has TUI code. Do you want to:
+> 1. **Adopt** — Generate a TUI-DESIGN.md that reflects the existing project (I'll pre-fill archetypes and framework from what I found)
+> 2. **Redesign** — Generate a fresh TUI-DESIGN.md and redesign screens to comply with the standard (existing files will be backed up before any changes)
+> 3. **Cancel** — Stop and let you set things up manually
+
+If **Adopt**: Run the wizard but pre-fill answers from the scan (detected framework, inferred archetypes from screen patterns). Let the user confirm or change each answer. Generate `TUI-DESIGN.md`.
+
+If **Redesign**: Back up all existing TUI files first (see Safety rule above). Then run the wizard from scratch. Generate `TUI-DESIGN.md`.
+
+If **Cancel**: Stop. Do not generate any files.
+
+**State C — `TUI-DESIGN.md` exists:** Read it. Note the palette name, archetypes, and any overrides (WAIVE, OVERRIDE, TIGHTEN). Note which rule IDs are affected — you will skip or modify those rules when you encounter them in fetched sections. Proceed to [Design Workflow](#design-workflow).
+
+If the user explicitly asks to redo or reinitialize their TUI setup, back up the existing `TUI-DESIGN.md` (see Safety rule), then run the wizard. Otherwise, **never overwrite or regenerate `TUI-DESIGN.md` without being asked.**
 
 ## First-Time Setup
 
-> **Guard:** Only run this section if `TUI-DESIGN.md` does NOT exist. If it exists, skip entirely — the user's configuration is authoritative.
-
-Walk the user through these questions to generate their `TUI-DESIGN.md`. Ask each question interactively and wait for the user's answer before proceeding to the next.
+Walk the user through these questions to generate their `TUI-DESIGN.md`. Ask each question interactively and wait for the user's answer before proceeding to the next. If you detected existing TUI work (State B — Adopt), pre-fill the suggested answer and let the user confirm or change it.
 
 **Step 1 — Project name:** Ask the user for the name of their project.
 
@@ -42,12 +98,18 @@ Walk the user through these questions to generate their `TUI-DESIGN.md`. Ask eac
 - Green Phosphor — single-hue green on black (DEC VT100)
 - Airlock — green primary with orange warning signals
 
-**Step 4 — Framework:** Ask which TUI framework they are using.
+**Step 4 — Framework:** Ask which TUI framework they are using. Pre-fill from the scan if a framework was detected.
 
 - Textual (Python)
+- Ratatui (Rust)
+- Bubble Tea (Go)
+- tview (Go)
+- Ink (Node.js / TypeScript)
 - curses / ncurses
 - Raw ANSI escape sequences
 - Other (let user specify)
+
+**Important:** The design standard applies to all frameworks. However, automated implementation support (code generation, TCSS patterns, the [Textual Appendix](/textual/)) is currently only available for **Textual**. For other frameworks, you can still generate `TUI-DESIGN.md`, guide layout and keyboard decisions, and apply all design rules — but code generation must follow the framework's own idioms rather than Textual-specific patterns.
 
 **Step 5 — Minimum terminal size:** Ask for the minimum terminal size they need to support.
 
@@ -57,16 +119,6 @@ Walk the user through these questions to generate their `TUI-DESIGN.md`. Ask eac
 **After collecting answers:** Generate `TUI-DESIGN.md` in the project root using the [template structure](https://github.com/coreyt/monospace-design-tui/blob/main/TUI-DESIGN.template.md). Fill in the Meta table with the user's answers. Set `Created` and `Last reviewed` to today's date. Leave the Overrides, Project Conventions, and Decision Log sections with their placeholder text (`_No overrides yet._`, etc.) — the user will populate these as the project evolves.
 
 Map archetype selections to section references in the Meta table: Dashboard → `§11.1 Dashboard`, Admin/Config → `§11.2 Admin`, File Manager → `§11.3 File Manager`, Editor → `§11.4 Editor`, Fuzzy Finder → `§11.5 Fuzzy Finder`.
-
-## Safety: Backup Before Modifying
-
-Before modifying any existing file as part of TUI design work, back it up:
-
-1. Create the backup directory: `.monospace-tui/_backup_YYYYMMDD-HHMMSS/` (using the current timestamp).
-2. Copy each file you are about to modify into that directory, preserving its relative path from the project root.
-3. Tell the user what was backed up and where.
-
-This applies to all modifications — screen code, stylesheets, widget files, configuration. It does NOT apply to newly created files (no prior state to protect) or to the initial `TUI-DESIGN.md` generation (first-time setup creates a new file).
 
 ## Design Workflow
 
@@ -84,7 +136,7 @@ For each screen you build:
 5. **Select widgets** — Fetch [§4 Component Rules](/standard/components/) for the widget selection table, and [§R4 Measurements](/reference/measurements/) for exact character-cell dimensions.
 6. **Check rules** — Fetch as relevant: [§5 Color](/standard/color/) (color independence), [§8 State](/standard/state/) (focus, disabled, error states), [§9 Accessibility](/standard/accessibility/) (contrast, labels).
 
-**Then generate code.** If using Textual, see the [Textual Appendix](/textual/) for framework-specific patterns. Otherwise, apply the rules from the fetched sections directly.
+**Then generate code.** If using Textual, see the [Textual Appendix](/textual/) for TCSS patterns, widget mapping, async rules, and a working example. For Ratatui, Bubble Tea, tview, Ink, or other frameworks, apply the design rules from the fetched sections directly using your framework's idioms.
 
 ## All Sections
 
