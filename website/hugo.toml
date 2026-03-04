@@ -17,4 +17,4 @@ enableEmoji = false
 
 [params]
   description = "Prescriptive design rules for terminal user interfaces"
-  github = "https://github.com/monospace-tui/monospace-design-tui"
+  github = "https://github.com/coreyt/monospace-design-tui"
