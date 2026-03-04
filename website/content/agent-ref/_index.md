@@ -139,6 +139,8 @@ Map archetype selections to section references in the Meta table: Dashboard → 
 
 ## Design Workflow
 
+**Before each screen**, re-fetch this directive page to reset your grounding. Then re-read the project's `TUI-DESIGN.md` for palette, archetypes, and overrides. This prevents context drift when building multiple screens in sequence.
+
 For each screen you build:
 
 **Always fetch (steps 1–3):**
@@ -154,6 +156,19 @@ For each screen you build:
 6. **Check rules** — Fetch as relevant: [§5 Color](/standard/color/) (color independence), [§8 State](/standard/state/) (focus, disabled, error states), [§9 Accessibility](/standard/accessibility/) (contrast, labels).
 
 **Then generate code.** If using Textual, see the [Textual Appendix](/textual/) for TCSS patterns, widget mapping, async rules, and a working example. For Ratatui, Bubble Tea, tview, Ink, or other frameworks, apply the design rules from the fetched sections directly using your framework's idioms.
+
+### Per-Screen Checklist
+
+After generating code for a screen, verify each item before moving on. Tell the user the result.
+
+- [ ] **Archetype** — Screen follows the selected archetype's layout and required regions
+- [ ] **Layout** — Three-region structure (header, body, footer) is present; footer key strip is visible
+- [ ] **Palette** — Only colors from the project's named palette are used; no hardcoded color values outside the palette
+- [ ] **Keyboard** — Tier 1 keys (Quit, Help, Tab) are bound; archetype-specific keys are assigned; no conflicts between tiers
+- [ ] **Color independence** — All information conveyed by color is also conveyed by text, shape, or position (§5)
+- [ ] **Overrides** — Any WAIVE/OVERRIDE/TIGHTEN rules from `TUI-DESIGN.md` have been applied
+
+If any item fails, fix it before proceeding to the next screen.
 
 ## All Sections
 
