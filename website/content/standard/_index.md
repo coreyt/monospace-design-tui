@@ -13,4 +13,4 @@ The key words "MUST", "MUST NOT", "SHOULD", "SHOULD NOT", and "MAY" are to be in
 
 **Falsifiability:** Every rule in this document is written so that a reviewer can declare a specific implementation "compliant" or "in violation." If a rule cannot be tested, it is not a rule.
 
-**Traceability:** Rules cite their research basis in parentheses — e.g., (CUA §1.3) refers to mono-tui.md §1 "IBM Common User Access," (M3 §3.2) to §3 "Material Design 3," etc.
+**Traceability:** Rules cite their research basis in parentheses — e.g., (CUA §1.3) refers to monospace-design-tui-research.md §1 "IBM Common User Access," (M3 §3.2) to §3 "Material Design 3," etc.

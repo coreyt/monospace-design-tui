@@ -1,8 +1,15 @@
 # Monospace Design TUI Rendering Reference
 
-**Version 1.0** — Exact characters, SGR codes, and measurements for Monospace TUI (`mono-tui`) implementers.
+**Version 0.1.1** — Exact characters, SGR codes, and measurements for Monospace TUI (`mono-tui`) implementers.
 
-This document is the concrete companion to the [Monospace Design TUI Standard](mono-tui-design-standard.md). Where the standard says "single-line border," this document specifies the exact Unicode codepoint. Where the standard says "dim," this document gives the SGR escape sequence. Implementers SHOULD keep this open alongside the standard.
+This document is the concrete companion to the [Monospace Design TUI Standard](monospace-tui-design-standard.md). Where the standard says "single-line border," this document specifies the exact Unicode codepoint. Where the standard says "dim," this document gives the SGR escape sequence. Implementers SHOULD keep this open alongside the standard.
+
+### Changelog
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 0.1.1 | 2026-03-05 | Added §R10 Workflow Archetype Rendering (step indicators, breadcrumb trails, queue counters, stage indicators, category indicators) |
+| 0.1.0 | — | Initial release |
 
 ---
 
@@ -1043,3 +1050,128 @@ When single-line and double-line borders meet (e.g., a Level 1 panel inside a Le
 | `╖` | U+2556 | Double vertical, single horizontal (down-left) |
 | `╙` | U+2559 | Double vertical, single horizontal (up-right) |
 | `╜` | U+255C | Double vertical, single horizontal (up-left) |
+
+---
+
+## §R10 Workflow Archetype Rendering
+
+Rendering specifications for visual elements used by workflow archetypes (Standard §12).
+
+### §R10.1 Step Indicator (Wizard / Pipeline)
+
+Used in Wizard (§12.1) and Pipeline (§12.6) workflows to show progress through a multi-step sequence.
+
+**Inline format** (panel title or header row):
+
+```
+Step 2 of 5 ── Configure Network
+```
+
+**Breadcrumb format** (compact, for narrow terminals):
+
+```
+Source › Config › Preview
+         ~~~~~~
+```
+
+Active step rendered in **bold** (SGR 1). Completed steps in **normal** (SGR 0). Future steps in **dim** (SGR 2). The `›` separator is U+203A SINGLE RIGHT-POINTING ANGLE QUOTATION MARK.
+
+**Sidebar step list** (Region A, when available):
+
+```
+ ✓ 1  Source
+ ▸ 2  Configure    ← current
+   3  Preview
+   4  Execute
+   5  Results
+```
+
+| Element | Glyph | Unicode | SGR |
+|---------|-------|---------|-----|
+| Completed step marker | `✓` | U+2713 | Normal (SGR 0) + status-success color |
+| Current step indicator | `▸` | U+25B8 | Bold (SGR 1) + primary color |
+| Future step (no marker) | ` ` | U+0020 | Dim (SGR 2) |
+
+Measurements:
+- Sidebar step list width: 2 (marker) + 1 (space) + step number width + 2 (space) + label = minimum 12 cols
+- Inline step indicator: `Step N of M ── Label` = 12 + label length cols
+
+### §R10.2 Breadcrumb Trail (Drill-Down)
+
+Used in Drill-Down (§12.5) workflows to show the navigation path from root to current level.
+
+```
+Overview › Cluster A › Node 7 › Containers
+```
+
+Rendering:
+- Each level is a text label
+- Separator: ` › ` (space + U+203A + space = 3 cols)
+- Current level (rightmost): **bold** (SGR 1)
+- Parent levels: **normal** (SGR 0)
+- Truncation: when the trail exceeds available width, collapse leftmost levels to `… › `
+
+```
+… › Node 7 › Containers
+```
+
+The ellipsis is U+2026 HORIZONTAL ELLIPSIS.
+
+Placement: panel title bar or first row of Region B.
+
+### §R10.3 Queue Counter (Review-Approve)
+
+Used in Review-Approve (§12.7) workflows to show queue position and remaining items.
+
+```
+ 3 of 17 remaining ── Review: PR #482
+```
+
+| Element | Rendering |
+|---------|-----------|
+| Position / total | `{current} of {total}` in bold (SGR 1) |
+| Status summary | `remaining` / `reviewed` in normal (SGR 0) |
+| Item identifier | After ` ── ` separator in bold (SGR 1) |
+
+When a decision is made and auto-advance occurs, the counter updates before the next item renders.
+
+### §R10.4 Stage Indicator (Pipeline Execution)
+
+Used during Pipeline (§12.6) execution to show stage progress alongside the progress bar (§R6.4).
+
+```
+Executing ███████████░░░░░░░░░  56%  1,204 / 2,148 records
+```
+
+| Element | Rendering |
+|---------|-----------|
+| Stage label | Bold (SGR 1): `Executing`, `Complete`, `Failed` |
+| Progress bar | §R6.4 eighth-block encoding, width = available cols - label - stats |
+| Percentage | Normal (SGR 0), right-aligned, 3–4 cols |
+| Stats | Normal (SGR 0), format: `{processed} / {total} {unit}` |
+
+Error during execution:
+
+```
+Failed ██████████████░░░░░░  70%  ERROR at record 1,504
+```
+
+The progress bar fill switches to status-error color. The error message replaces the stats.
+
+### §R10.5 Category Indicator (Configuration)
+
+Used in Configuration (§12.8) workflows to show which settings category is active and which have unsaved changes.
+
+```
+ ▸ General ●
+   Network
+   Security
+   Advanced ●
+```
+
+| Element | Glyph | Unicode | Meaning |
+|---------|-------|---------|---------|
+| Active category | `▸` | U+25B8 | Current selection |
+| Modified marker | `●` | U+25CF | Category has unsaved changes |
+
+The modified marker renders in status-warning color (Standard §5.2). Active category label renders in **bold** (SGR 1). Inactive categories in **normal** (SGR 0).

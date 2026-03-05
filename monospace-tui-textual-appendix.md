@@ -1,10 +1,17 @@
 # Monospace Design TUI Textual Appendix
 
-**Version 1.0** — Mapping Monospace Design TUI Standard rules to Python Textual framework.
+**Version 0.1.1** — Mapping Monospace Design TUI Standard rules to Python Textual framework.
 
 **Package:** `mono-tui`
 
-This document maps the framework-agnostic [Monospace Design TUI Standard](mono-tui-design-standard.md) to concrete [Textual](https://textual.textualize.io/) widgets, TCSS patterns, and code conventions. It assumes familiarity with the standard and the [Rendering Reference](mono-tui-rendering-reference.md).
+### Changelog
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 0.1.1 | 2026-03-05 | Added §T8 Workflow Archetype Patterns (wizard, CRUD, monitor-respond, drill-down, configuration, review-approve). Renumbered §T8 Command Palette to §T9. |
+| 0.1.0 | — | Initial release |
+
+This document maps the framework-agnostic [Monospace Design TUI Standard](monospace-tui-design-standard.md) to concrete [Textual](https://textual.textualize.io/) widgets, TCSS patterns, and code conventions. It assumes familiarity with the standard and the [Rendering Reference](monospace-tui-rendering-reference.md).
 
 ---
 
@@ -693,9 +700,357 @@ class ConfirmDialog(ModalScreen[bool]):
 
 ---
 
-## §T8 Command Palette
+## §T8 Workflow Archetype Patterns
 
-Textual's built-in command palette maps to the Fuzzy Finder archetype (Standard §11.5). It activates with `Ctrl+P` by default and provides type-to-filter over registered commands.
+Maps Standard §12 workflow archetypes to Textual screen management, navigation, and state patterns.
+
+### §T8.1 Workflow → Textual Navigation Table
+
+| Workflow Archetype (§12) | Navigation Model | Textual Implementation |
+|--------------------------|-----------------|----------------------|
+| Wizard (§12.1) | Sequential/linear | `Screen` subclasses, `push_screen()` / `pop_screen()` per step |
+| CRUD (§12.2) | Hub-and-spoke | List `Screen` as hub, `push_screen()` to detail/edit, `pop_screen()` to return |
+| Monitor-Respond (§12.3) | Hub-and-spoke + real-time | Single `Screen` with `set_interval()` or `@work` for auto-refresh |
+| Search-Act (§12.4) | Funnel | `ModalScreen` overlay or inline container with `Input` + `ListView` |
+| Drill-Down (§12.5) | Hierarchical/tree | `push_screen()` per level, maintain stack state in app |
+| Pipeline (§12.6) | Sequential + preview loop | Same as Wizard but with `pop_screen()` loop between preview and config |
+| Review-Approve (§12.7) | Queue with auto-advance | Single `Screen` that swaps content; `call_after_refresh()` for auto-advance |
+| Configuration (§12.8) | Flat/lateral | `TabbedContent` + `TabPane` per category |
+
+### §T8.2 Wizard Flow
+
+Implements §12.1 with a base `WizardScreen` and per-step subclasses.
+
+```python
+from textual.app import App, ComposeResult
+from textual.screen import Screen
+from textual.widgets import Button, Footer, Label, Static
+from textual.containers import Horizontal, Vertical
+
+
+class WizardStep(Screen):
+    """Base for wizard steps (Standard §12.1)."""
+
+    step_number: int = 0
+    total_steps: int = 1
+    step_title: str = ""
+
+    def compose(self) -> ComposeResult:
+        yield Static(
+            f"Step {self.step_number} of {self.total_steps} ── {self.step_title}",
+            classes="typography-title",
+        )
+        yield from self.compose_step()
+        with Horizontal(id="wizard-buttons"):
+            if self.step_number > 1:
+                yield Button("Back", id="back")
+            yield Button("Next", variant="primary", id="next")
+            yield Button("Cancel", id="cancel")
+        yield Footer()
+
+    def compose_step(self) -> ComposeResult:
+        """Override in subclasses to provide step content."""
+        yield Label("Step content goes here")
+
+    BINDINGS = [
+        ("escape", "back_step", "Back"),
+        ("enter", "next_step", "Next"),
+    ]
+
+    def action_next_step(self) -> None:
+        # Subclasses override to validate before advancing
+        self.dismiss(True)
+
+    def action_back_step(self) -> None:
+        self.dismiss(False)
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "next":
+            self.action_next_step()
+        elif event.button.id == "back":
+            self.action_back_step()
+        elif event.button.id == "cancel":
+            self.app.pop_screen()  # Exit wizard entirely
+```
+
+Step data is preserved by storing it on the `App` instance or a shared state object, so navigating backward does not lose input (§12.1 state rules).
+
+### §T8.3 CRUD Hub-and-Spoke
+
+Implements §12.2 with a list screen as the hub.
+
+```python
+class ItemListScreen(Screen):
+    """CRUD list view — the hub (Standard §12.2)."""
+
+    BINDINGS = [
+        *ci("a", "add_item", "Add"),
+        *ci("e", "edit_item", "Edit"),
+        *ci("d", "delete_item", "Delete"),
+        ("enter", "view_item", "View"),
+        ("escape", "back", "Back"),
+        ("slash", "filter", "/Filter"),
+    ]
+
+    def action_view_item(self) -> None:
+        """Enter — push detail screen (spoke)."""
+        row_key = self._get_selected_row_key()
+        if row_key:
+            self.app.push_screen(ItemDetailScreen(row_key))
+
+    def action_edit_item(self) -> None:
+        """e — push edit form (spoke)."""
+        row_key = self._get_selected_row_key()
+        if row_key:
+            self.app.push_screen(ItemEditScreen(row_key))
+
+    def action_delete_item(self) -> None:
+        """d — confirm then delete (Standard §12.2: MUST confirm)."""
+        def on_confirm(result: bool) -> None:
+            if result:
+                self._delete_selected()
+
+        self.app.push_screen(ConfirmDialog("Delete this item?"), on_confirm)
+```
+
+List scroll position is preserved automatically — Textual maintains widget state when screens are pushed/popped (§12.2 state rules).
+
+### §T8.4 Monitor-Respond with Auto-Refresh
+
+Implements §12.3 with `set_interval()` for continuous updates.
+
+```python
+from textual.worker import work
+
+
+class MonitorScreen(Screen):
+    """Live dashboard with auto-refresh (Standard §12.3)."""
+
+    BINDINGS = [
+        *ci("r", "force_refresh", "Refresh"),
+        ("enter", "open_detail", "Detail"),
+        *ci("a", "acknowledge", "Ack"),
+    ]
+
+    def on_mount(self) -> None:
+        """Start auto-refresh on mount."""
+        self.set_interval(5.0, self.refresh_data)
+
+    @work(thread=True, exclusive=True)
+    async def refresh_data(self) -> None:
+        """Background refresh — never blocks UI (§10.2, §12.3)."""
+        data = await fetch_metrics()
+        # Textual's call_from_thread ensures safe UI update
+        self.app.call_from_thread(self._update_display, data)
+
+    def _update_display(self, data) -> None:
+        """Update widgets while preserving scroll position (§12.3 state rules)."""
+        table = self.query_one(DataTable)
+        cursor_row = table.cursor_row
+        table.clear()
+        table.add_rows(data)
+        table.move_cursor(row=cursor_row)
+
+    def action_open_detail(self) -> None:
+        """Enter — drill into alert. Dashboard continues refreshing."""
+        self.app.push_screen(AlertDetailScreen(self._selected_alert_id()))
+```
+
+### §T8.5 Drill-Down with State Stack
+
+Implements §12.5 with a navigation stack preserving per-level state.
+
+```python
+from dataclasses import dataclass
+
+
+@dataclass
+class DrillDownState:
+    """Preserved state per hierarchy level (Standard §12.5)."""
+    level_id: str
+    scroll_offset: int = 0
+    filter_text: str = ""
+    selected_index: int = 0
+
+
+class DrillDownScreen(Screen):
+    """Hierarchical drill-down (Standard §12.5)."""
+
+    BINDINGS = [
+        ("enter", "drill_in", "Open"),
+        ("escape", "drill_out", "Back"),
+        ("slash", "filter", "/Filter"),
+        *ci("g", "jump_root", "Root"),
+    ]
+
+    def __init__(self, level_id: str) -> None:
+        super().__init__()
+        self.level_id = level_id
+
+    def compose(self) -> ComposeResult:
+        # Breadcrumb trail (Rendering Reference §R10.2)
+        yield Static(self._build_breadcrumb(), id="breadcrumb")
+        yield DataTable(id="items")
+        yield Footer()
+
+    def _build_breadcrumb(self) -> str:
+        """Build breadcrumb from app's nav stack."""
+        path = getattr(self.app, "_nav_path", [])
+        parts = [s.level_id for s in path] + [self.level_id]
+        return " \u203a ".join(parts)  # › separator
+
+    def action_drill_in(self) -> None:
+        """Enter — push deeper level, save current state."""
+        state = DrillDownState(
+            level_id=self.level_id,
+            scroll_offset=self.query_one(DataTable).cursor_row,
+        )
+        if not hasattr(self.app, "_nav_path"):
+            self.app._nav_path = []
+        self.app._nav_path.append(state)
+        child_id = self._get_selected_item_id()
+        self.app.push_screen(DrillDownScreen(child_id))
+
+    def action_drill_out(self) -> None:
+        """Esc — pop stack, restore parent state (§12.5 state rules)."""
+        if hasattr(self.app, "_nav_path") and self.app._nav_path:
+            self.app._nav_path.pop()
+        self.app.pop_screen()
+
+    def action_jump_root(self) -> None:
+        """g — return to overview (§12.5)."""
+        if hasattr(self.app, "_nav_path"):
+            self.app._nav_path.clear()
+        while len(self.app.screen_stack) > 2:
+            self.app.pop_screen()
+```
+
+### §T8.6 Configuration with TabbedContent
+
+Implements §12.8 with Textual's `TabbedContent` for lateral navigation.
+
+```python
+from textual.widgets import TabbedContent, TabPane, Input, Switch
+
+
+class ConfigScreen(Screen):
+    """Non-linear settings (Standard §12.8)."""
+
+    BINDINGS = [
+        ("ctrl+s", "save_all", "Save"),
+        ("escape", "exit_config", "Exit"),
+        ("left_square_bracket", "previous_tab", "[Prev"),
+        ("right_square_bracket", "next_tab", "]Next"),
+    ]
+
+    def compose(self) -> ComposeResult:
+        with TabbedContent("General", "Network", "Security", "Advanced"):
+            with TabPane("General", id="general"):
+                yield Label("Application Name")
+                yield Input(value="My App", id="app-name")
+                yield Label("Enable Caching")
+                yield Switch(value=True, id="caching")
+            with TabPane("Network", id="network"):
+                yield Label("API Host")
+                yield Input(value="localhost", id="api-host")
+            with TabPane("Security", id="security"):
+                yield Label("Require Auth")
+                yield Switch(value=True, id="require-auth")
+            with TabPane("Advanced", id="advanced"):
+                yield Label("Log Level")
+                yield Input(value="INFO", id="log-level")
+        yield Footer()
+
+    # Track dirty state per tab (§12.8 state rules)
+    _dirty_tabs: set[str] = set()
+
+    def on_input_changed(self, event: Input.Changed) -> None:
+        """Mark current tab as modified (§12.8: indicate modified categories)."""
+        active_tab = self.query_one(TabbedContent).active
+        self._dirty_tabs.add(active_tab)
+
+    def on_switch_changed(self, event: Switch.Changed) -> None:
+        active_tab = self.query_one(TabbedContent).active
+        self._dirty_tabs.add(active_tab)
+
+    def action_exit_config(self) -> None:
+        """Esc — prompt if unsaved changes (§12.8 state rules)."""
+        if self._dirty_tabs:
+            def on_confirm(result: bool) -> None:
+                if result:
+                    self.app.pop_screen()
+
+            self.app.push_screen(
+                ConfirmDialog("Discard unsaved changes?"), on_confirm
+            )
+        else:
+            self.app.pop_screen()
+```
+
+### §T8.7 Review-Approve with Auto-Advance
+
+Implements §12.7 with inline decision keys and automatic progression.
+
+```python
+class ReviewScreen(Screen):
+    """Queue-based review with auto-advance (Standard §12.7)."""
+
+    BINDINGS = [
+        *ci("a", "approve", "Approve"),
+        *ci("x", "reject", "Reject"),
+        *ci("d", "defer", "Defer"),
+        *ci("c", "comment", "Comment"),
+        *ci("n", "skip", "Skip"),
+        ("ctrl+z", "undo_decision", "Undo"),
+        ("escape", "back_to_queue", "Queue"),
+    ]
+
+    def __init__(self, queue: list, index: int = 0) -> None:
+        super().__init__()
+        self._queue = queue
+        self._index = index
+        self._last_decision: tuple | None = None
+
+    def _show_current_item(self) -> None:
+        """Render the current queue item with counter (§R10.3)."""
+        remaining = sum(1 for i in self._queue if i["status"] == "pending")
+        counter = f"{self._index + 1} of {len(self._queue)} ── {remaining} remaining"
+        self.query_one("#queue-counter", Static).update(counter)
+        self.query_one("#item-content", Static).update(
+            self._queue[self._index]["content"]
+        )
+
+    def _advance(self) -> None:
+        """Auto-advance to next undecided item (§12.7 state rules)."""
+        for i in range(self._index + 1, len(self._queue)):
+            if self._queue[i]["status"] == "pending":
+                self._index = i
+                self._show_current_item()
+                return
+        # No more items — return to queue
+        self.app.pop_screen()
+
+    def action_approve(self) -> None:
+        """a — approve and auto-advance (§12.7)."""
+        self._last_decision = (self._index, self._queue[self._index]["status"])
+        self._queue[self._index]["status"] = "approved"
+        self._advance()
+
+    def action_undo_decision(self) -> None:
+        """Ctrl+Z — undo last decision (§12.7 state rules)."""
+        if self._last_decision:
+            idx, prev_status = self._last_decision
+            self._queue[idx]["status"] = prev_status
+            self._index = idx
+            self._show_current_item()
+            self._last_decision = None
+```
+
+---
+
+## §T9 Command Palette
+
+Textual's built-in command palette maps to the Fuzzy Finder archetype (Standard §11.5) and the Search-Act workflow (Standard §12.4). It activates with `Ctrl+P` by default and provides type-to-filter over registered commands.
 
 ```python
 from textual.command import Provider, Hit
@@ -739,5 +1094,7 @@ This appendix targets **Textual >= 0.40**. Key features used:
 | `@work` decorator | 0.18 | §10.2 async operations |
 | `Sparkline` widget | 0.36 | §R6 Braille sparklines |
 | `Select` widget | 0.25 | §4.1 exclusive choice 6–25 |
-| `command.Provider` | 0.32 | §11.5 Fuzzy Finder |
+| `command.Provider` | 0.32 | §11.5 Fuzzy Finder, §12.4 Search-Act |
 | CSS variables (`$name`) | 0.24 | §5.1 semantic color roles |
+| `Screen` stack (`push/pop`) | 0.11 | §12 Workflow archetypes (drill-down, wizard, CRUD) |
+| `set_interval()` | 0.11 | §12.3 Monitor-Respond auto-refresh |

@@ -3,6 +3,21 @@ languageCode = "en-us"
 title = "Monospace Design TUI"
 enableEmoji = false
 
+[mediaTypes]
+  [mediaTypes."text/markdown"]
+    suffixes = ["md"]
+
+[outputFormats]
+  [outputFormats.markdown]
+    mediaType = "text/markdown"
+    baseName = "index"
+    isPlainText = true
+
+[outputs]
+  home = ["HTML"]
+  section = ["HTML", "markdown"]
+  page = ["HTML", "markdown"]
+
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]

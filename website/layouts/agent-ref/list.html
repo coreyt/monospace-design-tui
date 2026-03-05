@@ -1,0 +1,12 @@
+{{ define "main" }}
+<article class="page">
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.subtitle }}<p class="page-subtitle">{{ . }}</p>{{ end }}
+    <p>This page is designed for AI agents to consume as raw text. The content below is the unrendered markdown source.</p>
+  </header>
+  <div class="page-body">
+    <pre><code>{{ .RawContent }}</code></pre>
+  </div>
+</article>
+{{ end }}

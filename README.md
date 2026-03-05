@@ -22,17 +22,26 @@ The result is Monospace Design TUI: a v0.1 design standard for terminal applicat
 
 ## The Documents
 
-**[Design Standard](mono-tui-design-standard.md)** — The authoritative specification. Grid and layout, keyboard interaction, navigation topology, components, color, borders, typography, state, accessibility, motion, and archetypes.
+**[Design Standard](monospace-tui-design-standard.md)** — The authoritative specification. Grid and layout, keyboard interaction, navigation topology, components, color, borders, typography, state, accessibility, motion, and archetypes.
 
-**[Rendering Reference](mono-tui-rendering-reference.md)** — The concrete companion. Exact Unicode codepoints, SGR escape sequences, component measurements, 256-color palettes, and shadow rendering algorithms.
+**[Rendering Reference](monospace-tui-rendering-reference.md)** — The concrete companion. Exact Unicode codepoints, SGR escape sequences, component measurements, 256-color palettes, and shadow rendering algorithms.
 
-**[Textual Appendix](mono-tui-textual-appendix.md)** — Mapping the standard to the Python Textual framework. Widget selection, TCSS patterns, async rules, responsive breakpoints, and a working dashboard example.
+**[Textual Appendix](monospace-tui-textual-appendix.md)** — Mapping the standard to the Python Textual framework. Widget selection, TCSS patterns, async rules, responsive breakpoints, and a working dashboard example.
 
-**[Foundational Research](mono-tui.md)** — The seven research vectors behind the standard. The full synthesis of legacy TUI and modern HCI research that informed every rule.
+**Framework Appendices (outlines):**
+
+- **[Rich](monospace-tui-rich-appendix.md)** — Python Rich rendering library (non-interactive output, `Live` displays, progress bars)
+- **[Bubble Tea](monospace-tui-bubbletea-appendix.md)** — Go Elm-architecture TUI (includes Bubbles, Lip Gloss, Huh?, and Gum)
+- **[Ratatui](monospace-tui-ratatui-appendix.md)** — Rust immediate-mode rendering (crossterm backend, constraint layout)
+- **[Ink](monospace-tui-ink-appendix.md)** — Node.js/TypeScript React-based TUI (Flexbox layout, `@inkjs/ui` components)
+
+**[Foundational Research](monospace-design-tui-research.md)** — The seven research vectors behind the standard. The full synthesis of legacy TUI and modern HCI research that informed every rule.
 
 **[Examples](website/content/examples/_index.md)** — ASCII screenshots showing the design standard in action across all five archetypes.
 
-**[Working with AI Agents](website/content/agents/_index.md)** — Claude Code skills for designing and auditing TUI applications against the standard.
+**[Working with AI Agents](website/content/agents/_index.md)** — Four tiers of adoption for AI-assisted TUI development, from a one-line snippet to full MCP integration.
+
+**[MCP Server](mcp-server/)** — Connect AI agents in any project to the design system via MCP. Query design rules, palettes, components, keyboard bindings, and archetypes — 18 tools including interactive design consultation.
 
 ## License
 

@@ -39,7 +39,7 @@ Color MUST NOT be the sole indicator of any state or meaning. Every use of color
 - Typographic attribute (bold, dim, underline)
 - Symbol or marker (e.g., `✓`, `✗`, `⚠`, `◉`)
 
-This rule is non-negotiable for accessibility. (Apple HIG §4 color independence, mono-tui.md cross-cutting synthesis)
+This rule is non-negotiable for accessibility. (Apple HIG §4 color independence, monospace-design-tui-research.md cross-cutting synthesis)
 
 ## §5.4 Dialog Severity Colors
 

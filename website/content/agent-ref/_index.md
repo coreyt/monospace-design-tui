@@ -8,17 +8,14 @@ You are building a terminal user interface that conforms to the Monospace Design
 
 **Base URL:** `https://coreyt.github.io/monospace-design-tui`
 
-**Raw content:** If your fetch tool summarizes or truncates content, use raw markdown URLs instead of HTML pages. This directive as raw markdown: `https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/website/content/agent-ref/_index.md`
+**Raw markdown:** Every page on this site is available as raw markdown by appending `index.md` to the URL. Prefer this over the HTML version — it avoids conversion artifacts and truncation.
 
-For any section link on this page, construct the raw URL with this pattern:
+| Format | URL pattern | Example |
+|--------|-------------|---------|
+| HTML (human) | `{base}/{path}/` | `https://coreyt.github.io/monospace-design-tui/standard/layout/` |
+| Markdown (agent) | `{base}/{path}/index.md` | `https://coreyt.github.io/monospace-design-tui/standard/layout/index.md` |
 
-| Page link | Raw URL |
-|-----------|---------|
-| `/standard/{page}/` | `https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/website/content/standard/{page}.md` |
-| `/reference/{page}/` | `https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/website/content/reference/{page}.md` |
-| `/textual/` | `https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/website/content/textual/_index.md` |
-
-Example: `/standard/layout/` → `https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/website/content/standard/layout.md`
+This directive as raw markdown: `https://coreyt.github.io/monospace-design-tui/agent-ref/index.md`
 
 ---
 
@@ -27,8 +24,8 @@ Example: `/standard/layout/` → `https://raw.githubusercontent.com/coreyt/monos
 **These rules govern everything on this page.**
 
 1. **Fresh start.** Every time you fetch this directive, treat it as a fresh start. Do not reuse answers, context, or state from previous runs — even within the same session. Always re-scan and re-ask. If `.monospace-tui/cache/` exists from a previous run, delete it before proceeding.
-2. **Listed URLs only.** Every URL you need is on this page or constructable from the raw URL pattern above. Do not fetch other URLs. On 404 or error, stop and tell the user.
-3. **No exploring.** Do not scan the website, follow links from fetched pages, or fetch monolithic source files from the repository. Do not use `curl`, shell commands, or HTML scraping to work around fetch limitations — use the raw URL pattern instead. If you catch yourself doing any of this, stop and return to this directive.
+2. **Listed URLs only.** Every URL you need is on this page or constructable by appending `index.md` to a page link. Do not fetch other URLs. On 404 or error, stop and tell the user.
+3. **No exploring.** Do not scan the website, follow links from fetched pages, or fetch monolithic source files from the repository. Do not use `curl`, shell commands, or HTML scraping to work around fetch limitations — use `index.md` URLs instead. If you catch yourself doing any of this, stop and return to this directive.
 4. **Stop on uncertainty.** If unsure which archetype, section, or rule applies, ask the user.
 5. **One step at a time.** After each discrete step, tell the user what you did. Do not chain steps without their go-ahead.
 
@@ -113,7 +110,7 @@ The design standard applies to all frameworks. Automated implementation support 
 
 - 80×24 (VT100 standard) or 120×40 (recommended)
 
-**Generate `TUI-DESIGN.md`:** Fetch the [template](https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/TUI-DESIGN.template.md). Fill in Meta table. Set dates to today. Leave Overrides/Conventions/Decision Log as placeholders.
+**Generate `TUI-DESIGN.md`:** Fetch the [template](https://github.com/coreyt/monospace-design-tui/blob/main/TUI-DESIGN.template.md). Fill in Meta table. Set dates to today. Leave Overrides/Conventions/Decision Log as placeholders.
 
 Archetype mapping: Dashboard → `§11.1`, Admin/Config → `§11.2`, File Manager → `§11.3`, Editor → `§11.4`, Fuzzy Finder → `§11.5`.
 
@@ -231,4 +228,4 @@ Projects customize the standard through `TUI-DESIGN.md`:
 
 Each override targets a rule ID (e.g., `§2.2`, `§R3.2`). When reading a cached section, apply overrides from `TUI-DESIGN.md` instead of the original rule.
 
-Template: [TUI-DESIGN.md](https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/TUI-DESIGN.template.md)
+Template: [TUI-DESIGN.md](https://github.com/coreyt/monospace-design-tui/blob/main/TUI-DESIGN.template.md)

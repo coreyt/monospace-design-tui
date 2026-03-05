@@ -1,12 +1,12 @@
 ---
 title: "Working with AI Agents"
-subtitle: "Three tiers of adoption for AI-assisted TUI development"
-description: "How AI coding agents can use the Monospace Design TUI standard — from a one-line snippet to full Claude Code skills"
+subtitle: "Four tiers of adoption for AI-assisted TUI development"
+description: "How AI coding agents can use the Monospace Design TUI standard — from a one-line snippet to full MCP integration"
 ---
 
 A design standard is only useful if it's applied. Monospace Design TUI was built with the expectation that developers would use AI coding agents as collaborators — and that those agents need structured, machine-readable standards to follow.
 
-There are three tiers of adoption, from lightweight to full integration.
+There are four tiers of adoption, from lightweight to full integration.
 
 ---
 
@@ -17,7 +17,7 @@ The simplest adoption path. Add two lines to your project's `CLAUDE.md` (or equi
 ```
 When building TUI screens, follow the Monospace Design TUI standard.
 Fetch the agent directive (raw markdown) at:
-  https://raw.githubusercontent.com/coreyt/monospace-design-tui/main/website/content/agent-ref/_index.md
+  https://coreyt.github.io/monospace-design-tui/agent-ref/index.md
 Use the "Default" palette (or substitute your chosen palette name).
 ```
 
@@ -78,6 +78,59 @@ The audit skill handles compliance checking. It reads your TUI code and produces
 
 ---
 
+## Tier 4: MCP Server
+
+The most portable integration. The MCP server gives any coding agent — Claude Code, Cursor, Windsurf, or any MCP-compatible client — direct tool access to the full design system from any project, without cloning the repository into that project.
+
+### What it provides
+
+18 tools organized by category:
+
+- **Design consultation** — Multi-turn design sessions using MCP sampling. Describe your project and get proposals for workflows, screens, components, keyboard maps, and palettes.
+- **Workflow archetypes** — Task-flow patterns (wizard, crud, monitor-respond, search-act, drill-down, pipeline, review-approve) with screen sequences, navigation models, and state management rules.
+- **UI archetypes** — Screen layout patterns (dashboard, admin, file-manager, editor, fuzzy-finder) with region maps and component assignments.
+- **Standard & reference sections** — Direct access to any section of the design standard and rendering reference.
+- **Color palettes** — All 8 palettes with full color definitions.
+- **Components** — Measurements and specs for all 11 component types, plus widget recommendations by data type.
+- **Keyboard bindings** — All three tiers of key bindings, queryable individually.
+
+### Installation
+
+1. Clone the repository:
+
+```
+git clone https://github.com/coreyt/monospace-design-tui.git
+```
+
+2. Install the MCP Python SDK:
+
+```
+pip install mcp
+```
+
+3. Add the server to your agent's MCP configuration.
+
+**Claude Code** (`~/.claude/settings.json` or project `.mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "mono-tui": {
+      "command": "python3",
+      "args": ["/path/to/monospace-design-tui/mcp-server/server.py"]
+    }
+  }
+}
+```
+
+Replace `/path/to/` with the actual path where you cloned the repository.
+
+For other MCP-compatible agents, consult their documentation for MCP server configuration. The server uses the standard MCP stdio transport.
+
+See the full [MCP Server README](https://github.com/coreyt/monospace-design-tui/blob/main/mcp-server/README.md) for the complete tool reference and the design consultation sampling flow.
+
+---
+
 ## How It Fits Together
 
 The typical workflow:
@@ -85,8 +138,9 @@ The typical workflow:
 1. **Tier 1:** Add the snippet to your `CLAUDE.md` — agents can immediately start designing compliant TUIs.
 2. **Tier 2:** Create a `TUI-DESIGN.md` when you need to lock in a palette, declare archetypes, or override rules.
 3. **Tier 3:** Clone the repository to get the Claude Code skills for full design/audit integration.
+4. **Tier 4:** Install the MCP server to give any coding agent direct tool access to the design system from any project.
 
-The standard is the source of truth. The [agent directive](/agent-ref/) is how agents discover it. The `TUI-DESIGN.md` is how your project customizes it. The skills are the deepest integration for Claude Code users.
+The standard is the source of truth. The [agent directive](/agent-ref/) is how agents discover it. The `TUI-DESIGN.md` is how your project customizes it. The skills are the deepest integration for Claude Code users. The MCP server is the most portable — it works with any MCP-compatible agent without requiring project-level setup.
 
 ---
 

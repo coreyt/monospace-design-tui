@@ -16,7 +16,7 @@ Applications MUST use exactly 5 elevation levels:
 | 3 | Dialogs, secondary windows | Double-line (`═║╔╗╚╝`) | 2-col × 1-row offset |
 | 4 | Modal overlays | Double-line (`═║╔╗╚╝`) | 2-col × 1-row + background scrim (dim) |
 
-Applications MUST NOT use double-line borders for Level 0–2 elements. Applications MUST NOT use single-line borders for Level 3–4 elements. (OS/2 §2 window decoration, M3 §3 elevation levels, mono-tui.md cross-cutting synthesis)
+Applications MUST NOT use double-line borders for Level 0–2 elements. Applications MUST NOT use single-line borders for Level 3–4 elements. (OS/2 §2 window decoration, M3 §3 elevation levels, monospace-design-tui-research.md cross-cutting synthesis)
 
 ## §6.2 Active/Inactive Window Borders
 

@@ -6,11 +6,18 @@
 ┻ ┻┗━┛┛┗┛┗━┛┗━┛┻  ┻ ┻┗━┛┗━┛   ┻ ┗━┛┻
 ```
 
-**Version 1.0** — Prescriptive rules for Monospace Design TUI applications.
+**Version 0.1.1** — Prescriptive rules for Monospace Design TUI applications.
 
 **Package:** `mono-tui`
 
-This document defines the authoritative design rules for Monospace TUI-compliant terminal applications. It distills the research in [mono-tui.md](mono-tui.md) into falsifiable, auditable requirements. A companion [Rendering Reference](mono-tui-rendering-reference.md) provides exact character codes, SGR sequences, and measurements. A [Textual Appendix](mono-tui-textual-appendix.md) maps these rules to the Textual framework.
+This document defines the authoritative design rules for Monospace TUI-compliant terminal applications. It distills the research in [monospace-design-tui-research.md](monospace-design-tui-research.md) into falsifiable, auditable requirements. A companion [Rendering Reference](monospace-tui-rendering-reference.md) provides exact character codes, SGR sequences, and measurements. A [Textual Appendix](monospace-tui-textual-appendix.md) maps these rules to the Textual framework.
+
+### Changelog
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 0.1.1 | 2026-03-05 | Added §12 Workflow Archetypes (wizard, CRUD, monitor-respond, search-act, drill-down, pipeline, review-approve, configuration) |
+| 0.1.0 | — | Initial release |
 
 ## Conventions
 
@@ -18,7 +25,7 @@ The key words "MUST", "MUST NOT", "SHOULD", "SHOULD NOT", and "MAY" are to be in
 
 **Falsifiability:** Every rule in this document is written so that a reviewer can declare a specific implementation "compliant" or "in violation." If a rule cannot be tested, it is not a rule.
 
-**Traceability:** Rules cite their research basis in parentheses — e.g., (CUA §1.3) refers to mono-tui.md §1 "IBM Common User Access," (M3 §3.2) to §3 "Material Design 3," etc.
+**Traceability:** Rules cite their research basis in parentheses — e.g., (CUA §1.3) refers to monospace-design-tui-research.md §1 "IBM Common User Access," (M3 §3.2) to §3 "Material Design 3," etc.
 
 ---
 
@@ -223,7 +230,7 @@ Archetypes MAY add additional keyboard layers beyond the CUA base, provided:
 - Esc MUST always return to the base CUA layer.
 - Layer-specific keys MUST NOT shadow CUA base keys unless the layer is explicitly activated.
 
-(mono-tui.md §7 six keyboard interaction models)
+(monospace-design-tui-research.md §7 six keyboard interaction models)
 
 ### §2.7 Archetype Key Overrides
 
@@ -361,7 +368,7 @@ Color MUST NOT be the sole indicator of any state or meaning. Every use of color
 - Typographic attribute (bold, dim, underline)
 - Symbol or marker (e.g., `✓`, `✗`, `⚠`, `◉`)
 
-This rule is non-negotiable for accessibility. (Apple HIG §4 color independence, mono-tui.md cross-cutting synthesis)
+This rule is non-negotiable for accessibility. (Apple HIG §4 color independence, monospace-design-tui-research.md cross-cutting synthesis)
 
 ### §5.4 Dialog Severity Colors
 
@@ -406,7 +413,7 @@ Applications MUST use exactly 5 elevation levels:
 | 3 | Dialogs, secondary windows | Double-line (`═║╔╗╚╝`) | 2-col × 1-row offset |
 | 4 | Modal overlays | Double-line (`═║╔╗╚╝`) | 2-col × 1-row + background scrim (dim) |
 
-Applications MUST NOT use double-line borders for Level 0–2 elements. Applications MUST NOT use single-line borders for Level 3–4 elements. (OS/2 §2 window decoration, M3 §3 elevation levels, mono-tui.md cross-cutting synthesis)
+Applications MUST NOT use double-line borders for Level 0–2 elements. Applications MUST NOT use single-line borders for Level 3–4 elements. (OS/2 §2 window decoration, M3 §3 elevation levels, monospace-design-tui-research.md cross-cutting synthesis)
 
 ### §6.2 Active/Inactive Window Borders
 
@@ -463,14 +470,14 @@ Applications MUST use exactly 4 typographic treatments:
 | Body | Normal (no attributes) | Content text, field values, menu items |
 | Label | Dim (SGR 2) | Secondary info, placeholders, help text, timestamps |
 
-Applications MUST NOT combine more than 2 SGR attributes on a single text span (e.g., Bold + Underline is acceptable; Bold + Dim + Italic is not). (mono-tui.md cross-cutting synthesis — 4 text treatments)
+Applications MUST NOT combine more than 2 SGR attributes on a single text span (e.g., Bold + Underline is acceptable; Bold + Dim + Italic is not). (monospace-design-tui-research.md cross-cutting synthesis — 4 text treatments)
 
 ### §7.2 Focus and Selection Indication
 
 - Focused text MUST use reverse video (SGR 7).
 - If reverse video is insufficient for the context (e.g., list items that are already highlighted), bracket markers `[▸ item ◂]` MAY be used as an alternative.
 
-(mono-tui.md unified state model)
+(monospace-design-tui-research.md unified state model)
 
 ### §7.3 Error Text
 
@@ -555,7 +562,7 @@ Applications MUST categorize all visual transitions into these 4 tiers:
 | Standard | 150–300ms | Panel transitions, menu open/close, tab switch |
 | Slow | 300–500ms | Screen transitions, progressive disclosure reveal |
 
-Durations exceeding 500ms MUST NOT be used for UI transitions. (M3 §3 motion tokens, mono-tui.md cross-cutting synthesis)
+Durations exceeding 500ms MUST NOT be used for UI transitions. (M3 §3 motion tokens, monospace-design-tui-research.md cross-cutting synthesis)
 
 ### §10.2 Long-Running Operation Feedback
 
@@ -830,6 +837,294 @@ Tier 1/2 single-letter keys (`q`, `r`, `/`, `d`, etc.) are captured by the filte
 
 ---
 
+## §12 Workflow Archetypes
+
+Workflow archetypes define task-flow patterns — the sequence of screens and decisions a user traverses to complete a task. Each workflow archetype specifies a navigation model, screen sequence, keyboard mapping, and state management rules. Applications MUST select one workflow archetype per task flow. A single application MAY implement multiple workflow archetypes for different tasks. Workflow archetypes compose screen archetypes (§11) — each screen in a workflow maps to a screen archetype for its layout.
+
+| Navigation Model | Description | Workflow Archetype |
+|------------------|-------------|-------------------|
+| Sequential/Linear | Step-by-step, forward/back | Wizard, Pipeline |
+| Hub-and-Spoke | Central hub, spoke pages return to hub | CRUD, Monitor-Respond |
+| Hierarchical/Tree | Parent-child levels, push/pop | Drill-Down |
+| Flat/Lateral | Sibling screens at same level, tabs | Configuration |
+| Funnel | Broad to narrow, progressive filtering | Search-Act |
+| Queue | Sequential with auto-advance | Review-Approve |
+
+Applications MUST NOT mix navigation models within a single workflow. Different workflows within the same application MAY use different navigation models. (CUA §1, M3 §3 navigation patterns)
+
+### §12.1 Wizard
+
+**Purpose:** Linear multi-step progression for infrequent tasks (installation, onboarding, first-run setup). (CUA §1 dialog sequences, Windows 95 wizard paradigm)
+
+**Screen Sequence:**
+
+| Step | Screen | Screen Archetype (§11) | Purpose |
+|------|--------|------------------------|---------|
+| 1 | Introduction | — | Explain what the wizard will accomplish |
+| 2 | Step 1..N | Admin (§11.2) | Collect input — one concern per step |
+| 3 | Confirmation | Admin (§11.2) | Review all choices before committing |
+| 4 | Result | Dashboard (§11.1) | Show outcome and next steps |
+
+**Navigation model:** Sequential/linear.
+
+- Forward: Enter or Next button
+- Backward: Esc or Back button
+- Cancel: Esc from step 1, or Cancel button
+- Finish: Enter on confirmation screen
+
+**Keyboard:**
+
+| Key | Action | Tier |
+|-----|--------|------|
+| Tab | Next field within step | Tier 1 |
+| Enter | Advance to next step | Tier 1 |
+| Esc | Back to previous step (cancel from step 1) | Tier 1 |
+| 1-9 | Jump to step N (optional, non-sequential wizards only) | Archetype |
+
+**State rules:**
+
+- Applications MUST preserve all step input when navigating backward.
+- Applications MUST validate each step on forward navigation and MUST NOT advance if validation fails.
+- Applications MUST show a step indicator (e.g., "Step 2 of 5" or sidebar step list).
+- Applications SHOULD show completion state per step.
+
+**Layout:** Single Region B content area. Step indicator in panel title or dedicated header row. Footer shows Back/Next/Cancel. Region A sidebar MAY show step list.
+
+### §12.2 CRUD
+
+**Purpose:** List → Detail → Edit cycle for record management. (CUA §1 primary/secondary window model, OS/2 universal object operations)
+
+**Screen Sequence:**
+
+| Step | Screen | Screen Archetype (§11) | Purpose |
+|------|--------|------------------------|---------|
+| 1 | List | Dashboard (§11.1) | Browse, search, filter, sort records |
+| 2 | Detail | Dashboard (§11.1) | Inspect single record read-only |
+| 3 | Edit form | Admin (§11.2) | Create or modify record |
+| 4 | Delete confirmation | — (Level 4 modal) | Confirm destructive action |
+
+**Navigation model:** Hub-and-spoke. List view is the hub.
+
+**Keyboard:**
+
+| Key | Action | Tier |
+|-----|--------|------|
+| `a` | Create new record | Tier 2 |
+| `e` or Enter | Edit/open selected record | Tier 2 / Tier 1 |
+| `d` | Delete selected (MUST confirm) | Tier 2 |
+| `/` | Filter/search list | Tier 1 |
+| `s` | Sort | Tier 2 |
+| `y` | Copy record value | Tier 2 |
+| Esc | Return to list | Tier 1 |
+| Ctrl+S | Save in edit form | Archetype |
+
+**State rules:**
+
+- Applications MUST preserve list scroll position and selection when returning from detail/edit.
+- Applications MUST display a confirmation dialog before destructive actions (delete).
+- Applications MUST prompt for unsaved changes when user presses Esc in edit form with dirty state.
+
+### §12.3 Monitor-Respond
+
+**Purpose:** Continuous observation with action triggers for real-time systems. (htop/btop dashboard pattern, SAP SM21 system monitoring)
+
+**Screen Sequence:**
+
+| Step | Screen | Screen Archetype (§11) | Purpose |
+|------|--------|------------------------|---------|
+| 1 | Live dashboard | Dashboard (§11.1) | Real-time metrics, event stream |
+| 2 | Alert/item detail | Dashboard (§11.1) | Inspect specific alert or anomaly |
+| 3 | Action dialog | — (Level 3/4 modal) | Confirm remediation (restart, acknowledge, escalate) |
+| 4 | Result | Dashboard (§11.1) | Show outcome, return to dashboard |
+
+**Navigation model:** Hub-and-spoke. Dashboard is the hub. Dashboard MUST continue updating while spoke views are open.
+
+**Keyboard:**
+
+| Key | Action | Tier |
+|-----|--------|------|
+| `r` | Force refresh | Tier 1 |
+| Enter | Open detail for selected item | Tier 1 |
+| `/` | Filter event stream | Tier 1 |
+| `a` | Acknowledge alert | Tier 2 |
+| Esc | Return to dashboard | Tier 1 |
+| 1-9 | Switch dashboard tabs/views | Archetype |
+
+**State rules:**
+
+- Applications MUST auto-refresh dashboard data. Manual refresh (`r`/F5) MUST also be available.
+- Applications MUST preserve user scroll position across auto-refreshes.
+- Alert state transitions (new → acknowledged → resolved) MUST be reflected in real time.
+
+### §12.4 Search-Act
+
+**Purpose:** Find then operate — search for items, inspect results, act on selection. (fzf paradigm, CUA F4 Prompt, SAP matchcode/search help)
+
+**Screen Sequence:**
+
+| Step | Screen | Screen Archetype (§11) | Purpose |
+|------|--------|------------------------|---------|
+| 1 | Search input | Fuzzy Finder (§11.5) | Type query, results update in real time |
+| 2 | Results list | Fuzzy Finder (§11.5) | Ranked results with match highlighting |
+| 3 | Preview | Editor (§11.4) | Inspect selected result |
+| 4 | Action | — | Operate on selection |
+
+**Navigation model:** Funnel (broad → narrow → act).
+
+**Keyboard:**
+
+| Key | Action | Tier |
+|-----|--------|------|
+| Any printable | Appends to search filter | Fuzzy layer (§2.6) |
+| Ctrl+N / Down | Next result | Archetype |
+| Ctrl+P / Up | Previous result | Archetype |
+| Enter | Act on selected result | Tier 1 |
+| Tab | Toggle preview pane | Archetype |
+| Esc | Clear search or exit | Tier 1 |
+
+**State rules:**
+
+- Applications MUST preserve search query when navigating to preview and back.
+- Applications MUST maintain result scroll position during preview.
+- Applications SHOULD provide search history via Up arrow in search input.
+
+### §12.5 Drill-Down
+
+**Purpose:** Hierarchical navigation from summary to detail. (CUA '91 Workplace container model, Apple Finder Miller columns, ranger)
+
+**Screen Sequence:**
+
+| Step | Screen | Screen Archetype (§11) | Purpose |
+|------|--------|------------------------|---------|
+| 1 | Overview | Dashboard (§11.1) | Top-level summary |
+| 2 | Category | Dashboard (§11.1) | Filtered segment or group |
+| 3 | Item list | File Manager (§11.3) | Items within category |
+| 4 | Item detail | Admin (§11.2) | Full detail of single item |
+
+**Navigation model:** Hierarchical/tree.
+
+**Keyboard:**
+
+| Key | Action | Tier |
+|-----|--------|------|
+| Enter | Drill into selected item | Tier 1 |
+| Esc or Backspace | Return to parent level | Tier 1 |
+| `/` | Filter within current level | Tier 1 |
+| `g` | Jump to root (overview) | Tier 2 |
+
+**State rules:**
+
+- Applications MUST maintain a navigation stack preserving each level's scroll position, selection, and filter state.
+- Esc MUST pop the stack and restore the parent level's exact state.
+- Applications MUST display a breadcrumb trail showing the path from root to current level.
+
+### §12.6 Pipeline
+
+**Purpose:** Sequential data transformation with preview loop. (Unix pipe philosophy, ETL tools, CI/CD systems, SAP batch processing)
+
+**Screen Sequence:**
+
+| Step | Screen | Screen Archetype (§11) | Purpose |
+|------|--------|------------------------|---------|
+| 1 | Source selection | File Manager (§11.3) | Choose input data |
+| 2 | Configuration | Admin (§11.2) | Set transformation options |
+| 3 | Preview | Dashboard (§11.1) | Show sample output |
+| 4 | Execution | Dashboard (§11.1) | Progress bar, live stats |
+| 5 | Results | Dashboard (§11.1) | Summary of completed operation |
+
+**Navigation model:** Sequential with preview loop. Identical to Wizard except: (a) a Preview → Configuration loop is expected, and (b) execution is irreversible.
+
+Use Pipeline when the user transforms data through visible stages and needs to see intermediate results. Use Wizard (§12.1) when collecting user preferences toward a single configuration outcome.
+
+**Keyboard:**
+
+| Key | Action | Tier |
+|-----|--------|------|
+| Enter | Advance to next stage | Tier 1 |
+| Esc | Return to previous stage (disabled during execution) | Tier 1 |
+| Ctrl+S | Save pipeline configuration for reuse | Archetype |
+| `r` | Re-run preview | Tier 2 |
+
+**State rules:**
+
+- Applications MUST preserve configuration across preview iterations.
+- Applications MUST display a confirmation dialog before starting execution.
+- Applications MUST NOT allow backward navigation during execution. Only Cancel (with confirmation) is available.
+- Applications MUST provide a progress indicator during execution (§10.2).
+- The results screen SHOULD offer "Run Again" to return to configuration with the same settings.
+
+### §12.7 Review-Approve
+
+**Purpose:** Inspect items from a queue and make decisions. (SAP approval workflows, code review tools, email triage, Linear triage inbox)
+
+**Screen Sequence:**
+
+| Step | Screen | Screen Archetype (§11) | Purpose |
+|------|--------|------------------------|---------|
+| 1 | Queue | Dashboard (§11.1) | Items pending review with status/priority |
+| 2 | Item review | Editor (§11.4) | Full content under review |
+| 3 | Decision | — (inline or Level 3 dialog) | Approve/reject/defer with optional comment |
+| 4 | Next item | Editor (§11.4) | Auto-advance to next undecided item |
+
+**Navigation model:** Queue with auto-advance.
+
+**Keyboard:**
+
+| Key | Action | Tier |
+|-----|--------|------|
+| Enter | Open selected item for review | Tier 1 |
+| `a` | Approve | Tier 2 |
+| `x` | Reject | Archetype |
+| `d` | Defer (return to queue without deciding) | Tier 2 |
+| `n` or Tab | Skip to next item | Archetype |
+| `c` | Add comment | Archetype |
+| `/` | Filter queue | Tier 1 |
+| Esc | Return to queue | Tier 1 |
+| Ctrl+Z | Undo last decision (within session) | Tier 1 |
+
+**State rules:**
+
+- After a decision, applications MUST auto-advance to the next undecided item in the queue.
+- Decisions MUST be committed immediately (no separate save step).
+- Applications MUST support undo of the last decision via Ctrl+Z.
+- The queue SHOULD update in real time if new items arrive.
+
+### §12.8 Configuration
+
+**Purpose:** Non-linear settings management across tabbed categories. (CUA '91 notebook control, OS/2 property notebooks, Windows 95 property sheets)
+
+**Screen Sequence:**
+
+| Step | Screen | Screen Archetype (§11) | Purpose |
+|------|--------|------------------------|---------|
+| 1 | Category list | Admin (§11.2) | Settings organized by category |
+| 2 | Settings form | Admin (§11.2) | Fields for current category |
+| 3 | Save/Apply | — | Persist changes |
+
+**Navigation model:** Flat/lateral. Users move freely between categories.
+
+Note: Configuration differs from Wizard in that there is no required order — users jump between categories at will. It differs from CRUD in that it operates on a single object's properties, not a list of records.
+
+**Keyboard:**
+
+| Key | Action | Tier |
+|-----|--------|------|
+| `[` / `]` | Previous / next category | Archetype |
+| 1-9 | Jump to category N | Archetype |
+| Tab | Next field within category | Tier 1 |
+| Ctrl+S | Save all changes | Archetype |
+| Esc | Exit (prompt if unsaved changes) | Tier 1 |
+| `/` | Search settings | Tier 1 |
+
+**State rules:**
+
+- Applications MUST preserve unsaved changes when switching between categories.
+- Applications MUST prompt for unsaved changes when user presses Esc with dirty state.
+- Applications SHOULD indicate which categories have been modified.
+- Applications MAY support per-category save or global save, but MUST be consistent within the application.
+
+---
+
 ## Appendix A: Rule Index
 
 For auditing convenience, every section's prescriptive rules are summarized:
@@ -847,6 +1142,7 @@ For auditing convenience, every section's prescriptive rules are summarized:
 | §9 Accessibility | 6 | Dual rendering, scrolling regions, text labels, contrast ratios, focus visibility |
 | §10 Motion | 3 | 4 timing tiers, long-operation feedback, capability degradation |
 | §11 Archetypes | 5 | Dashboard, Admin, File Manager, Editor, Fuzzy Finder |
+| §12 Workflow Archetypes | 8 | Wizard, CRUD, Monitor-Respond, Search-Act, Drill-Down, Pipeline, Review-Approve, Configuration; navigation model consistency |
 
 ---
 
@@ -863,3 +1159,5 @@ For auditing convenience, every section's prescriptive rules are summarized:
 | Scrim | A dim overlay applied to background content behind a modal |
 | SGR | Select Graphic Rendition — ANSI escape codes for text styling |
 | Monospace TUI | Monospace Design TUI — the design system defined by this standard (package: `mono-tui`) |
+| Navigation model | The structural pattern of movement between screens: sequential, hub-and-spoke, hierarchical, flat, funnel, or queue |
+| Workflow archetype | A task-flow pattern defining the screen sequence, navigation model, and state rules for a multi-screen user task |

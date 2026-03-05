@@ -137,7 +137,7 @@ Archetypes MAY add additional keyboard layers beyond the CUA base, provided:
 - Esc MUST always return to the base CUA layer.
 - Layer-specific keys MUST NOT shadow CUA base keys unless the layer is explicitly activated.
 
-(mono-tui.md §7 six keyboard interaction models)
+(monospace-design-tui-research.md §7 six keyboard interaction models)
 
 ## §2.7 Archetype Key Overrides
 

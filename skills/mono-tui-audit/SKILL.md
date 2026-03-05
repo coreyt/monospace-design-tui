@@ -6,7 +6,7 @@ description: Audit TUI code for compliance with the Monospace Design TUI standar
 # Mono-TUI Audit
 
 Audit terminal user interface code for compliance with the
-[Monospace Design TUI Standard](../../mono-tui-design-standard.md), respecting
+[Monospace Design TUI Standard](../../monospace-tui-design-standard.md), respecting
 project-specific overrides in `TUI-DESIGN.md`.
 
 ## Invocation
@@ -24,14 +24,14 @@ When invoked without a path, scan for TUI-related files (`.py` files importing
 
 ### Phase 1: Load Ruleset
 
-1. **Read the Design Standard** (`mono-tui-design-standard.md`).
+1. **Read the Design Standard** (`monospace-tui-design-standard.md`).
    Extract every rule that uses RFC 2119 language (MUST, MUST NOT, SHOULD,
    SHOULD NOT, MAY). Each rule has:
    - **ID**: Section number (e.g., `§1.3`, `§2.2`, `§5.3`)
    - **Level**: MUST or SHOULD (MAY rules are informational, not audited)
    - **Text**: The falsifiable requirement
 
-2. **Read the Rendering Reference** (`mono-tui-rendering-reference.md`).
+2. **Read the Rendering Reference** (`monospace-tui-rendering-reference.md`).
    Extract `§R`-prefixed rules using the same criteria.
 
 3. **Read TUI-DESIGN.md** from the project root (or nearest ancestor).
@@ -254,8 +254,8 @@ weren't reviewed against the new version.
 
 | Document | Path | Purpose |
 |----------|------|---------|
-| Design Standard | `mono-tui-design-standard.md` | Source of all §-prefixed rules |
-| Rendering Reference | `mono-tui-rendering-reference.md` | Source of all §R-prefixed rules |
-| Textual Appendix | `mono-tui-textual-appendix.md` | Source of §T-prefixed rules (Textual only) |
+| Design Standard | `monospace-tui-design-standard.md` | Source of all §-prefixed rules |
+| Rendering Reference | `monospace-tui-rendering-reference.md` | Source of all §R-prefixed rules |
+| Textual Appendix | `monospace-tui-textual-appendix.md` | Source of §T-prefixed rules (Textual only) |
 | TUI-DESIGN.md | Project root | Overrides, conventions, and decisions |
 | TUI-DESIGN.template.md | `TUI-DESIGN.template.md` | Template for new projects |

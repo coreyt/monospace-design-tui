@@ -26,10 +26,10 @@ REFERENCE_DIR = PROJECT_ROOT / "website" / "content" / "reference"
 TEXTUAL_DIR = PROJECT_ROOT / "website" / "content" / "textual"
 
 CORE_DOCS = {
-    "design-standard": PROJECT_ROOT / "mono-tui-design-standard.md",
-    "rendering-reference": PROJECT_ROOT / "mono-tui-rendering-reference.md",
-    "textual-appendix": PROJECT_ROOT / "mono-tui-textual-appendix.md",
-    "research": PROJECT_ROOT / "mono-tui.md",
+    "design-standard": PROJECT_ROOT / "monospace-tui-design-standard.md",
+    "rendering-reference": PROJECT_ROOT / "monospace-tui-rendering-reference.md",
+    "textual-appendix": PROJECT_ROOT / "monospace-tui-textual-appendix.md",
+    "research": PROJECT_ROOT / "monospace-design-tui-research.md",
     "template": PROJECT_ROOT / "TUI-DESIGN.template.md",
 }
 

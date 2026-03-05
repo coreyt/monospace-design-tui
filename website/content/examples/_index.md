@@ -94,10 +94,10 @@ Archetype §11.3. Norton Commander / Midnight Commander paradigm. Dual symmetric
 │ Name                          Size   Date  │ Name                          Size   Date          │
 │────────────────────────────────────────────│─────────────────────────────────────────────────────│
 │ ..                               ─   ─     │ ..                               ─   ─             │
-│ ▸ mono-tui/                      ─   Mar 3 │   mono-tui-design-standard.md   24K  Mar 3         │
+│ ▸ mono-tui/                      ─   Mar 3 │   monospace-tui-design-standard.md   24K  Mar 3         │
 │   airlock/                       ─   Feb 8 │   mono-tui-rendering-reference   19K  Mar 3        │
-│   dotfiles/                      ─   Jan 2 │   mono-tui-textual-appendix.md  21K  Mar 3         │
-│   scripts/                       ─   Feb 1 │   mono-tui.md                   11K  Mar 3         │
+│   dotfiles/                      ─   Jan 2 │   monospace-tui-textual-appendix.md  21K  Mar 3         │
+│   scripts/                       ─   Feb 1 │   monospace-design-tui-research.md                   11K  Mar 3         │
 │   .bashrc                       2K   Jan 5 │   TUI-DESIGN.template.md         5K  Mar 3         │
 │   .gitconfig                    1K   Jan 5 │   LICENSE                        1K  Mar 3         │
 │   notes.txt                     4K   Feb 28│   logo.txt                       1K  Mar 3         │

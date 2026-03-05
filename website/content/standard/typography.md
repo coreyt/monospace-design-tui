@@ -15,14 +15,14 @@ Applications MUST use exactly 4 typographic treatments:
 | Body | Normal (no attributes) | Content text, field values, menu items |
 | Label | Dim (SGR 2) | Secondary info, placeholders, help text, timestamps |
 
-Applications MUST NOT combine more than 2 SGR attributes on a single text span (e.g., Bold + Underline is acceptable; Bold + Dim + Italic is not). (mono-tui.md cross-cutting synthesis — 4 text treatments)
+Applications MUST NOT combine more than 2 SGR attributes on a single text span (e.g., Bold + Underline is acceptable; Bold + Dim + Italic is not). (monospace-design-tui-research.md cross-cutting synthesis — 4 text treatments)
 
 ## §7.2 Focus and Selection Indication
 
 - Focused text MUST use reverse video (SGR 7).
 - If reverse video is insufficient for the context (e.g., list items that are already highlighted), bracket markers `[▸ item ◂]` MAY be used as an alternative.
 
-(mono-tui.md unified state model)
+(monospace-design-tui-research.md unified state model)
 
 ## §7.3 Error Text
 

@@ -6,7 +6,7 @@ description: Design and implement TUI screens following the Monospace Design TUI
 # Mono-TUI Design
 
 Design and implement terminal user interfaces following the
-[Monospace Design TUI Standard](../../mono-tui-design-standard.md).
+[Monospace Design TUI Standard](../../monospace-tui-design-standard.md).
 
 ## Context Loading
 
@@ -155,8 +155,8 @@ Override/Convention/Decision sections.
 
 | Document | Path | When to Read |
 |----------|------|-------------|
-| Design Standard | `mono-tui-design-standard.md` | Always — authoritative rules |
-| Rendering Reference | `mono-tui-rendering-reference.md` | Implementation — exact chars, SGR, measurements |
-| Textual Appendix | `mono-tui-textual-appendix.md` | When framework is Textual |
+| Design Standard | `monospace-tui-design-standard.md` | Always — authoritative rules |
+| Rendering Reference | `monospace-tui-rendering-reference.md` | Implementation — exact chars, SGR, measurements |
+| Textual Appendix | `monospace-tui-textual-appendix.md` | When framework is Textual |
 | TUI-DESIGN.md | Project root | Always — project overrides and conventions |
 | TUI-DESIGN.template.md | `TUI-DESIGN.template.md` | When bootstrapping a new project |

@@ -15,7 +15,7 @@ Applications MUST categorize all visual transitions into these 4 tiers:
 | Standard | 150–300ms | Panel transitions, menu open/close, tab switch |
 | Slow | 300–500ms | Screen transitions, progressive disclosure reveal |
 
-Durations exceeding 500ms MUST NOT be used for UI transitions. (M3 §3 motion tokens, mono-tui.md cross-cutting synthesis)
+Durations exceeding 500ms MUST NOT be used for UI transitions. (M3 §3 motion tokens, monospace-design-tui-research.md cross-cutting synthesis)
 
 ## §10.2 Long-Running Operation Feedback
 
