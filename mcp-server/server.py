@@ -66,12 +66,70 @@ def _list_sections(directory: Path) -> list[str]:
 
 mcp = FastMCP(
     "mono-tui",
-    instructions=(
-        "Monospace Design TUI server. Provides design system rules, color "
-        "palettes, component specs, keyboard bindings, and archetypes for "
-        "building standards-compliant terminal user interfaces. Query "
-        "individual sections or get structured token data."
-    ),
+    instructions="""\
+Monospace Design TUI — a complete design system for terminal user interfaces.
+
+Use this server when building, designing, or auditing a TUI application.
+The tools are organized around a recommended workflow, but you can jump to
+any tool at any point.
+
+## Recommended workflow
+
+1. **Pick an archetype** — Start here. Call `list_archetypes()` to see the
+   five defined application patterns (dashboard, admin, file-manager, editor,
+   fuzzy-finder), then `get_archetype(name)` to get the layout, component
+   list, and keyboard bindings for your pattern. If none fit, skip to step 2.
+
+2. **Get layout rules** — Call `get_standard_section("layout")` for the
+   three-region layout model, responsive breakpoints, and footer requirements.
+   Call `get_design_tokens()` for the spacing scale, elevation levels, timing
+   tiers, and minimum dimensions as structured data.
+
+3. **Choose components** — Call `get_widget_recommendation(data_type)` to get
+   the correct widget for your data (boolean → toggle, exclusive 2-5 → radio,
+   exclusive 6-25 → list box, etc.). Then call `get_component_spec(name)` for
+   exact measurements, formats, and interaction rules.
+
+4. **Apply a color palette** — Call `list_palettes()` to browse the eight
+   named palettes, then `get_palette(name)` for the full semantic-role color
+   mapping with 256-color indices and hex values.
+
+5. **Wire keyboard bindings** — Call `get_keyboard_bindings()` for all three
+   tiers, or filter by tier. Tier 1 (global) keys are mandatory. Tier 2
+   (common actions) should be bound when the action exists. Tier 3 (screen
+   mnemonics) are application-defined.
+
+6. **Render correctly** — Call `get_box_drawing(style)` for border characters
+   with Unicode codepoints. Call `get_state_model()` for the 7-state rendering
+   model (enabled, focused, hovered, pressed, selected, disabled, error) with
+   SGR codes. Call `get_reference_section(name)` for shadows, SGR codes,
+   sparklines, escape sequences, or color detection.
+
+7. **Implement in Textual** — Call `get_textual_guide()` for the full mapping
+   of standard rules to Python Textual widgets, TCSS patterns, async/worker
+   rules, and the `ci()` case-insensitive binding helper.
+
+8. **Document overrides** — Call `get_project_template()` to get the
+   TUI-DESIGN.template.md file for recording project-specific WAIVE, OVERRIDE,
+   or TIGHTEN decisions against the standard.
+
+## Quick reference
+
+- Standard sections (markdown): layout, keyboard, navigation, components,
+  color, borders, typography, state, accessibility, motion, archetypes
+- Reference sections (markdown): box-drawing, sgr-codes, color-palette,
+  measurements, shadows, escape-sequences, color-detection, mixed-borders,
+  sparklines
+- Palettes: default, monochrome, commander, os2, turbo, amber, green, airlock
+- Components: push-button, entry-field, toggle, radio-group, list-box,
+  data-table, metric-card, dialog, menu, spin-button, footer
+- Archetypes: dashboard, admin, file-manager, editor, fuzzy-finder
+- Widget data types: boolean, exclusive, free_text, numeric, action, spin_value
+- Keyboard tiers: tier1_global, tier1_scrolling, tier1_text_entry,
+  tier2_common, tier3_mnemonics
+- Box-drawing styles: single, heavy, double, rounded, dashed, blocks,
+  indicators
+""",
 )
 
 # ---- Standard sections ----------------------------------------------------
