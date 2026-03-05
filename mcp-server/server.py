@@ -9,10 +9,12 @@ terminal user interfaces.
 from __future__ import annotations
 
 import re
+import uuid
 from pathlib import Path
 from typing import Optional
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.fastmcp import Context, FastMCP
+from mcp.types import SamplingMessage, TextContent
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -70,60 +72,78 @@ mcp = FastMCP(
 Monospace Design TUI — a complete design system for terminal user interfaces.
 
 Use this server when building, designing, or auditing a TUI application.
-The tools are organized around a recommended workflow, but you can jump to
-any tool at any point.
 
-## Recommended workflow
+## Two ways to use this server
 
-1. **Pick an archetype** — Start here. Call `list_archetypes()` to see the
-   five defined application patterns (dashboard, admin, file-manager, editor,
-   fuzzy-finder), then `get_archetype(name)` to get the layout, component
-   list, and keyboard bindings for your pattern. If none fit, skip to step 2.
+### Option A: Design consultation (recommended for new projects)
 
-2. **Get layout rules** — Call `get_standard_section("layout")` for the
+Call `design_consultation(message)` with a description of your project. The
+server will propose workflow patterns, screen layouts, component choices,
+keyboard bindings, and a color palette — all grounded in the Monospace TUI
+standard. Pass the returned `session_id` in follow-up calls to continue the
+conversation:
+
+  1. `design_consultation("I'm building a log aggregator with real-time tail
+     and severity filtering")` → get initial proposal + session_id
+  2. `design_consultation("What about adding saved searches?",
+     session_id="abc123")` → refined proposal with context
+
+### Option B: Direct tool queries (for specific lookups)
+
+Query individual tools when you need specific design data. The recommended
+workflow:
+
+1. **Identify the task flow** — Call `list_workflow_archetypes()` to find the
+   right workflow pattern (wizard, crud, monitor-respond, search-act,
+   drill-down, pipeline, review-approve), then `get_workflow_archetype(name)`
+   for the full screen sequence, navigation model, and state management rules.
+
+2. **Pick a screen archetype** — Call `list_archetypes()` for the five UI
+   screen patterns (dashboard, admin, file-manager, editor, fuzzy-finder),
+   then `get_archetype(name)` for layout, components, and keyboard bindings.
+
+3. **Get layout rules** — Call `get_standard_section("layout")` for the
    three-region layout model, responsive breakpoints, and footer requirements.
-   Call `get_design_tokens()` for the spacing scale, elevation levels, timing
-   tiers, and minimum dimensions as structured data.
+   Call `get_design_tokens()` for spacing scale, elevation levels, timing
+   tiers, and minimum dimensions.
 
-3. **Choose components** — Call `get_widget_recommendation(data_type)` to get
+4. **Choose components** — Call `get_widget_recommendation(data_type)` to get
    the correct widget for your data (boolean → toggle, exclusive 2-5 → radio,
-   exclusive 6-25 → list box, etc.). Then call `get_component_spec(name)` for
+   exclusive 6-25 → list box, etc.). Then `get_component_spec(name)` for
    exact measurements, formats, and interaction rules.
 
-4. **Apply a color palette** — Call `list_palettes()` to browse the eight
+5. **Apply a color palette** — Call `list_palettes()` to browse the eight
    named palettes, then `get_palette(name)` for the full semantic-role color
    mapping with 256-color indices and hex values.
 
-5. **Wire keyboard bindings** — Call `get_keyboard_bindings()` for all three
+6. **Wire keyboard bindings** — Call `get_keyboard_bindings()` for all three
    tiers, or filter by tier. Tier 1 (global) keys are mandatory. Tier 2
    (common actions) should be bound when the action exists. Tier 3 (screen
    mnemonics) are application-defined.
 
-6. **Render correctly** — Call `get_box_drawing(style)` for border characters
-   with Unicode codepoints. Call `get_state_model()` for the 7-state rendering
-   model (enabled, focused, hovered, pressed, selected, disabled, error) with
-   SGR codes. Call `get_reference_section(name)` for shadows, SGR codes,
-   sparklines, escape sequences, or color detection.
+7. **Render correctly** — Call `get_box_drawing(style)` for border characters.
+   Call `get_state_model()` for the 7-state rendering model with SGR codes.
+   Call `get_reference_section(name)` for shadows, SGR codes, sparklines,
+   escape sequences, or color detection.
 
-7. **Implement in Textual** — Call `get_textual_guide()` for the full mapping
-   of standard rules to Python Textual widgets, TCSS patterns, async/worker
-   rules, and the `ci()` case-insensitive binding helper.
+8. **Implement in Textual** — Call `get_textual_guide()` for the full mapping
+   to Python Textual widgets, TCSS patterns, and async/worker rules.
 
-8. **Document overrides** — Call `get_project_template()` to get the
-   TUI-DESIGN.template.md file for recording project-specific WAIVE, OVERRIDE,
-   or TIGHTEN decisions against the standard.
+9. **Document overrides** — Call `get_project_template()` to get the template
+   for recording project-specific WAIVE, OVERRIDE, or TIGHTEN decisions.
 
 ## Quick reference
 
-- Standard sections (markdown): layout, keyboard, navigation, components,
-  color, borders, typography, state, accessibility, motion, archetypes
-- Reference sections (markdown): box-drawing, sgr-codes, color-palette,
-  measurements, shadows, escape-sequences, color-detection, mixed-borders,
-  sparklines
+- Workflow archetypes: wizard, crud, monitor-respond, search-act, drill-down,
+  pipeline, review-approve
+- UI archetypes: dashboard, admin, file-manager, editor, fuzzy-finder
+- Standard sections: layout, keyboard, navigation, components, color, borders,
+  typography, state, accessibility, motion, archetypes
+- Reference sections: box-drawing, sgr-codes, color-palette, measurements,
+  shadows, escape-sequences, color-detection, mixed-borders, sparklines
 - Palettes: default, monochrome, commander, os2, turbo, amber, green, airlock
 - Components: push-button, entry-field, toggle, radio-group, list-box,
   data-table, metric-card, dialog, menu, spin-button, footer
-- Archetypes: dashboard, admin, file-manager, editor, fuzzy-finder
 - Widget data types: boolean, exclusive, free_text, numeric, action, spin_value
 - Keyboard tiers: tier1_global, tier1_scrolling, tier1_text_entry,
   tier2_common, tier3_mnemonics
@@ -735,6 +755,330 @@ def get_archetype(name: str) -> dict | str:
     return archetype
 
 
+# ---- Workflow archetypes ---------------------------------------------------
+
+WORKFLOW_ARCHETYPES = {
+    "wizard": {
+        "name": "Wizard / Setup Flow",
+        "pattern": "Linear multi-step progression",
+        "description": (
+            "Guides the user through a sequence of steps toward a single goal. "
+            "Each step collects input or confirms a choice before advancing. "
+            "Used for installation, onboarding, first-run configuration, and "
+            "multi-part data entry."
+        ),
+        "screen_sequence": [
+            {"screen": "Introduction", "ui_archetype": None, "purpose": "Explain what the wizard will do and what is needed"},
+            {"screen": "Step 1..N", "ui_archetype": "admin", "purpose": "Collect input — one concern per step"},
+            {"screen": "Confirmation", "ui_archetype": "admin", "purpose": "Review all choices before committing"},
+            {"screen": "Result", "ui_archetype": "dashboard", "purpose": "Show outcome — success, errors, or next steps"},
+        ],
+        "navigation": {
+            "model": "linear",
+            "forward": "Enter or Tab to next step",
+            "backward": "Esc or Shift+Tab to previous step",
+            "cancel": "Esc from step 1 or explicit Cancel button",
+            "finish": "Enter on confirmation screen",
+        },
+        "keyboard": {
+            "Tab": "Next field within step",
+            "Enter": "Advance to next step (when step is complete)",
+            "Esc": "Back to previous step (or cancel from step 1)",
+            "1-9": "Jump to step N (if steps are non-sequential)",
+        },
+        "layout_guidance": (
+            "Use a single Region B content area. Show a step indicator "
+            "(e.g., 'Step 2 of 5' or a breadcrumb trail) in the panel title "
+            "or a dedicated header row. Footer shows Back/Next/Cancel actions. "
+            "Region A sidebar MAY show step list with current step highlighted."
+        ),
+        "state_management": [
+            "Persist all step data — user must be able to go back without losing input",
+            "Validate each step on forward navigation, block advancement on error",
+            "Show completion state per step in the step indicator",
+        ],
+    },
+    "crud": {
+        "name": "CRUD Management",
+        "pattern": "List → Detail → Edit cycle",
+        "description": (
+            "The core record-management workflow: browse a list, inspect a "
+            "record, create or edit it, then return to the list. Used for "
+            "managing users, API keys, config entries, database rows, and any "
+            "entity collection."
+        ),
+        "screen_sequence": [
+            {"screen": "List view", "ui_archetype": "dashboard", "purpose": "Browse, search, filter, sort all records"},
+            {"screen": "Detail view", "ui_archetype": "dashboard", "purpose": "Inspect a single record read-only"},
+            {"screen": "Edit form", "ui_archetype": "admin", "purpose": "Create new or modify existing record"},
+            {"screen": "Delete confirmation", "ui_archetype": None, "purpose": "Level 4 modal dialog confirming destructive action"},
+        ],
+        "navigation": {
+            "model": "hub-and-spoke",
+            "hub": "List view — always the return point",
+            "spoke_entry": "Enter on selected row → detail or edit",
+            "spoke_exit": "Esc → back to list",
+        },
+        "keyboard": {
+            "a": "Add / create new record",
+            "e or Enter": "Edit selected record",
+            "d": "Delete selected record (with confirmation)",
+            "/": "Filter / search the list",
+            "s": "Sort by current column",
+            "y": "Yank / copy record value",
+            "Esc": "Return to list from detail/edit",
+            "Ctrl+S": "Save in edit form",
+        },
+        "layout_guidance": (
+            "List view: Region B data table fills the screen. Region A sidebar "
+            "MAY hold saved filters or category tree. Detail view: Region B shows "
+            "record fields. Edit form: Region B shows input fields with labels. "
+            "Delete confirmation: Level 4 modal dialog with double-line border."
+        ),
+        "state_management": [
+            "List position and scroll offset preserved when returning from detail/edit",
+            "Unsaved changes in edit form trigger confirmation dialog on Esc",
+            "Optimistic updates in list after successful save",
+        ],
+    },
+    "monitor-respond": {
+        "name": "Monitor → Respond",
+        "pattern": "Continuous observation with action triggers",
+        "description": (
+            "A live-updating view where the user watches system state and "
+            "intervenes when something needs attention. Used for ops dashboards, "
+            "security monitoring, CI/CD pipelines, and service health."
+        ),
+        "screen_sequence": [
+            {"screen": "Live dashboard", "ui_archetype": "dashboard", "purpose": "Real-time metrics, status indicators, event stream"},
+            {"screen": "Alert detail", "ui_archetype": "dashboard", "purpose": "Drill into a specific alert or anomaly"},
+            {"screen": "Action dialog", "ui_archetype": None, "purpose": "Confirm remediation action (restart, acknowledge, escalate)"},
+            {"screen": "Result", "ui_archetype": "dashboard", "purpose": "Show action outcome, return to dashboard"},
+        ],
+        "navigation": {
+            "model": "hub-and-spoke",
+            "hub": "Live dashboard — always visible, always updating",
+            "spoke_entry": "Enter on alert row or status indicator",
+            "spoke_exit": "Esc → back to dashboard",
+            "auto_trigger": "Alerts may push a notification that the user can act on",
+        },
+        "keyboard": {
+            "r": "Force refresh (though auto-refresh is primary)",
+            "Enter": "Open detail for selected alert",
+            "/": "Filter event stream",
+            "a": "Acknowledge selected alert",
+            "Esc": "Return to dashboard",
+            "1-9": "Switch between dashboard tabs/views",
+        },
+        "layout_guidance": (
+            "Dashboard: Region B shows primary metrics and event table. Region C "
+            "shows a live log tail or sparkline panel. Region A MAY show service "
+            "tree or category filter. Alert detail: Region B expands to show full "
+            "alert context. Action dialog: Level 3 or 4 modal."
+        ),
+        "state_management": [
+            "Dashboard continues updating while detail/dialog is open (background refresh)",
+            "Alert state transitions (new → acknowledged → resolved) reflected in real time",
+            "User's scroll position in event stream preserved across refreshes",
+        ],
+    },
+    "search-act": {
+        "name": "Search → Act",
+        "pattern": "Find then do",
+        "description": (
+            "The user searches for something, inspects results, and takes "
+            "action on a selection. Used for log analysis, code search, "
+            "issue triage, package management, and any find-then-operate flow."
+        ),
+        "screen_sequence": [
+            {"screen": "Search input", "ui_archetype": "fuzzy-finder", "purpose": "Type query, see results update in real time"},
+            {"screen": "Results list", "ui_archetype": "fuzzy-finder", "purpose": "Scored/ranked results with match highlighting"},
+            {"screen": "Preview", "ui_archetype": "editor", "purpose": "Inspect selected result in detail"},
+            {"screen": "Action", "ui_archetype": None, "purpose": "Operate on selection (open, copy, delete, assign)"},
+        ],
+        "navigation": {
+            "model": "funnel",
+            "flow": "Broad search → narrow results → select → act",
+            "refinement": "Typing narrows results; Esc widens (clears filter)",
+        },
+        "keyboard": {
+            "type-to-filter": "All printable input goes to search",
+            "Ctrl+N/Down": "Next result",
+            "Ctrl+P/Up": "Previous result",
+            "Enter": "Act on selected result",
+            "Tab": "Toggle preview pane",
+            "Esc": "Clear search or exit",
+        },
+        "layout_guidance": (
+            "Search input at top of Region B. Results list below, filling "
+            "available space. Region C shows preview of selected result. "
+            "On narrow terminals, preview is hidden until Tab toggles it. "
+            "Footer shows result count and available actions."
+        ),
+        "state_management": [
+            "Search query preserved if user navigates to preview and back",
+            "Result scroll position maintained during preview",
+            "Search history accessible via Up arrow in search input",
+        ],
+    },
+    "drill-down": {
+        "name": "Drill-Down",
+        "pattern": "Hierarchical navigation from summary to detail",
+        "description": (
+            "The user starts with a high-level overview and progressively "
+            "navigates deeper into more specific data. Used for analytics, "
+            "system exploration, reporting, dependency trees, and any data "
+            "with natural hierarchy."
+        ),
+        "screen_sequence": [
+            {"screen": "Overview", "ui_archetype": "dashboard", "purpose": "Top-level summary with aggregated metrics"},
+            {"screen": "Category", "ui_archetype": "dashboard", "purpose": "Filtered view of one segment or group"},
+            {"screen": "Item list", "ui_archetype": "file-manager", "purpose": "Individual items within the category"},
+            {"screen": "Item detail", "ui_archetype": "admin", "purpose": "Full detail view of a single item"},
+        ],
+        "navigation": {
+            "model": "tree",
+            "deeper": "Enter drills into selected node",
+            "shallower": "Esc or Backspace returns to parent level",
+            "breadcrumb": "Show path from root to current level in panel title",
+        },
+        "keyboard": {
+            "Enter": "Drill into selected item",
+            "Esc": "Return to parent level",
+            "/": "Filter within current level",
+            "g": "Jump to root (overview)",
+        },
+        "layout_guidance": (
+            "Region A sidebar shows the hierarchy tree with current position "
+            "highlighted. Region B shows content for the current level. "
+            "Breadcrumb trail in panel title: 'Overview > Category > Item'. "
+            "At each level, the data table or list shows items appropriate "
+            "to that depth."
+        ),
+        "state_management": [
+            "Each level's scroll position and filter state preserved in a stack",
+            "Esc pops the stack and restores the parent level's state",
+            "Breadcrumb is clickable (if mouse enabled) or navigable via keyboard",
+        ],
+    },
+    "pipeline": {
+        "name": "Pipeline",
+        "pattern": "Sequential data transformation",
+        "description": (
+            "A multi-stage process where data flows through discrete steps: "
+            "select source, configure transformation, preview results, execute. "
+            "Used for data import/export, ETL, batch operations, migration "
+            "tools, and build pipelines."
+        ),
+        "screen_sequence": [
+            {"screen": "Source selection", "ui_archetype": "file-manager", "purpose": "Choose input data (file, URL, database)"},
+            {"screen": "Configuration", "ui_archetype": "admin", "purpose": "Set transformation options, mapping, filters"},
+            {"screen": "Preview", "ui_archetype": "dashboard", "purpose": "Show sample output before committing"},
+            {"screen": "Execution", "ui_archetype": "dashboard", "purpose": "Progress bar, live stats, error log"},
+            {"screen": "Results", "ui_archetype": "dashboard", "purpose": "Summary of completed operation with output location"},
+        ],
+        "navigation": {
+            "model": "linear with preview loop",
+            "forward": "Enter advances to next stage",
+            "backward": "Esc returns to previous stage (except during execution)",
+            "preview_loop": "Preview → adjust config → preview again until satisfied",
+        },
+        "keyboard": {
+            "Enter": "Advance to next stage",
+            "Esc": "Return to previous stage",
+            "Ctrl+S": "Save pipeline configuration for reuse",
+            "r": "Re-run preview with current settings",
+        },
+        "layout_guidance": (
+            "Similar to Wizard but with a preview loop. Stage indicator in "
+            "header. During execution, Region B shows progress bar and stats. "
+            "Region C MAY show a live error/warning log. Execution stage "
+            "disables Back — only Cancel (with confirmation) is available."
+        ),
+        "state_management": [
+            "Pipeline config persists across preview iterations",
+            "Execution is non-reversible — confirm before starting",
+            "Results screen offers 'Run Again' to return to config with same settings",
+        ],
+    },
+    "review-approve": {
+        "name": "Review → Approve",
+        "pattern": "Inspect and decide",
+        "description": (
+            "The user works through a queue of items, inspecting each one "
+            "and making a decision (approve, reject, defer, flag). Used for "
+            "code review, content moderation, approval workflows, and "
+            "quality assurance."
+        ),
+        "screen_sequence": [
+            {"screen": "Queue", "ui_archetype": "dashboard", "purpose": "List of items pending review with status and priority"},
+            {"screen": "Item review", "ui_archetype": "editor", "purpose": "Full content of the item under review"},
+            {"screen": "Decision", "ui_archetype": None, "purpose": "Approve/reject/defer with optional comment — inline or dialog"},
+            {"screen": "Next item", "ui_archetype": "editor", "purpose": "Auto-advance to next item in queue after decision"},
+        ],
+        "navigation": {
+            "model": "queue with auto-advance",
+            "flow": "Pick from queue → review → decide → auto-advance to next",
+            "skip": "Tab or n to skip current item without deciding",
+            "return": "Esc to return to queue from review",
+        },
+        "keyboard": {
+            "Enter": "Open selected item for review",
+            "a": "Approve current item",
+            "x": "Reject current item",
+            "d": "Defer current item (return to queue)",
+            "n or Tab": "Skip to next item without deciding",
+            "c": "Add comment to current item",
+            "/": "Filter queue by status, priority, or assignee",
+            "Esc": "Return to queue",
+        },
+        "layout_guidance": (
+            "Queue: Region B data table with columns for item, status, "
+            "priority, submitter. Review: Region B shows full item content. "
+            "Region C shows metadata, history, or diff. Decision actions "
+            "shown in footer key strip — single keypress to decide. "
+            "After decision, auto-advance to next item without returning "
+            "to queue (queue is implicit)."
+        ),
+        "state_management": [
+            "Queue position preserved — after deciding, advance to next undecided item",
+            "Decision is immediately committed (no separate save step)",
+            "Undo last decision available via Ctrl+Z within the session",
+            "Queue updates in real time if new items arrive",
+        ],
+    },
+}
+
+
+@mcp.tool()
+def list_workflow_archetypes() -> list[dict]:
+    """List all workflow archetypes (task-flow patterns).
+
+    Workflow archetypes describe *how users move through tasks* — the
+    sequence of screens and decisions. They complement the UI archetypes
+    (which describe individual screen layouts).
+    """
+    return [
+        {"id": wid, "name": w["name"], "pattern": w["pattern"], "description": w["description"]}
+        for wid, w in WORKFLOW_ARCHETYPES.items()
+    ]
+
+
+@mcp.tool()
+def get_workflow_archetype(name: str) -> dict | str:
+    """Get a workflow archetype with screen sequence, navigation model,
+    keyboard bindings, layout guidance, and state management rules.
+
+    Args:
+        name: Workflow identifier. One of: wizard, crud, monitor-respond,
+              search-act, drill-down, pipeline, review-approve.
+    """
+    workflow = WORKFLOW_ARCHETYPES.get(name)
+    if workflow is None:
+        return f"Workflow '{name}' not found. Available: {', '.join(WORKFLOW_ARCHETYPES.keys())}"
+    return workflow
+
+
 # ---- Widget recommendation ------------------------------------------------
 
 WIDGET_TABLE = [
@@ -929,6 +1273,186 @@ def get_project_template() -> str:
     if path.is_file():
         return path.read_text()
     return "Template file not found."
+
+
+# ---- Design consultation (sampling) ----------------------------------------
+
+_MAX_SESSIONS = 64
+
+_CONSULTATION_SESSIONS: dict[str, list[dict]] = {}
+
+_CONSULTATION_SYSTEM_PROMPT = """\
+You are a TUI design consultant. You have deep expertise in the Monospace \
+Design TUI standard — a prescriptive design system for terminal user \
+interfaces that synthesizes IBM CUA, Material Design 3, Apple HIG, and \
+decades of TUI history.
+
+Your job is to help the user design their TUI application. Given a project \
+description, propose:
+
+1. **Workflow archetype** — Which task-flow pattern fits (wizard, crud, \
+monitor-respond, search-act, drill-down, pipeline, review-approve), or a \
+combination. Explain the screen sequence.
+
+2. **Screen breakdown** — List each screen the application needs. For each \
+screen, specify:
+   - Which UI archetype it maps to (dashboard, admin, file-manager, editor, \
+fuzzy-finder)
+   - The three-region layout (Region A navigation, Region B content, \
+Region C context) with column widths
+   - Which components to use (data-table, entry-field, toggle, list-box, etc.)
+
+3. **Keyboard map** — Tier 1 globals are always present. Specify Tier 2 \
+and Tier 3 bindings specific to this application.
+
+4. **Palette recommendation** — Which named palette fits the application's \
+domain (default, monochrome, commander, os2, turbo, amber, green, airlock), \
+and why.
+
+5. **ASCII wireframe** — For the primary screen, draw an ASCII wireframe \
+showing the layout with box-drawing characters.
+
+Be specific and prescriptive. Reference standard section numbers (e.g., \
+§1.3 three-region layout, §2.2 key assignments) when making recommendations. \
+Keep proposals concise but complete.
+
+## Design system reference
+
+### Workflow archetypes (task-flow patterns)
+{workflow_archetypes}
+
+### UI archetypes (screen layouts)
+{ui_archetypes}
+
+### Design tokens
+{design_tokens}
+
+### Keyboard tiers
+{keyboard_summary}
+
+### Available palettes
+{palette_summary}
+
+### Component selection
+{widget_table}
+"""
+
+
+def _build_system_prompt() -> str:
+    """Build the consultation system prompt with current design system data."""
+    workflow_summary = "\n".join(
+        f"- **{w['name']}** ({wid}): {w['pattern']}. {w['description']}"
+        for wid, w in WORKFLOW_ARCHETYPES.items()
+    )
+    ui_summary = "\n".join(
+        f"- **{a['name']}** ({aid}): {a['description']}. Layout: {a['layout']}"
+        for aid, a in ARCHETYPES.items()
+    )
+    tokens = get_design_tokens()
+    tokens_summary = (
+        f"Spacing scale: {tokens['spacing_scale']['values']} character cells\n"
+        f"Elevation: 5 levels (0=inline, 1=panel/single-line, 2=menu+shadow, "
+        f"3=dialog/double-line+shadow, 4=modal/double-line+scrim)\n"
+        f"Breakpoints: compact 40-79, standard 80-119, expanded 120-159, wide 160+\n"
+        f"Min dimensions: 80x24 MUST, 120x40 SHOULD\n"
+        f"Typography: display (bold+uppercase), title (bold), body (none), label (dim)"
+    )
+    keyboard_summary = (
+        "Tier 1 (MUST): ?, Esc, r, PageUp/Down, Tab/Shift+Tab, Enter, Space, "
+        "Arrow keys, q, /\n"
+        "Tier 2 (SHOULD): d=delete, e=edit, a=add, y=yank, s=sort, :=command\n"
+        "Tier 3 (app-defined): screen mnemonics, must not conflict with Tier 1/2\n"
+        "Key scope: single-letter keys suppressed when text input focused"
+    )
+    palette_summary = "\n".join(
+        f"- **{p['name']}** ({pid}): {p['description']}"
+        for pid, p in PALETTES.items()
+    )
+    widget_summary = "\n".join(
+        f"- {w['data_type']} ({w['count']}): {w['widget']} — {w['key']}"
+        for w in WIDGET_TABLE
+    )
+    return _CONSULTATION_SYSTEM_PROMPT.format(
+        workflow_archetypes=workflow_summary,
+        ui_archetypes=ui_summary,
+        design_tokens=tokens_summary,
+        keyboard_summary=keyboard_summary,
+        palette_summary=palette_summary,
+        widget_table=widget_summary,
+    )
+
+
+@mcp.tool()
+async def design_consultation(
+    ctx: Context,
+    message: str,
+    session_id: Optional[str] = None,
+) -> dict:
+    """Start or continue a TUI design consultation.
+
+    Describe your project, its functionality, and its users. The design
+    system will propose workflows, screen layouts, component choices,
+    keyboard bindings, and a color palette grounded in the Monospace TUI
+    standard.
+
+    Args:
+        message: Your project description or follow-up question. Examples:
+                 - "I'm building a log aggregator with real-time tail,
+                    filtering by severity, and saved searches"
+                 - "What about adding a split-pane view for comparing
+                    two log streams?"
+                 - "Show me the keyboard map for the main dashboard"
+        session_id: Optional. Pass the session_id from a previous response
+                    to continue the conversation with full context.
+
+    Returns a dict with 'session_id' (for follow-up calls) and 'proposal'
+    (the design consultation response).
+    """
+    # Initialize or resume session
+    if session_id and session_id in _CONSULTATION_SESSIONS:
+        history = _CONSULTATION_SESSIONS[session_id]
+    else:
+        session_id = uuid.uuid4().hex[:12]
+        history = []
+        # Evict oldest session if at capacity
+        if len(_CONSULTATION_SESSIONS) >= _MAX_SESSIONS:
+            oldest = next(iter(_CONSULTATION_SESSIONS))
+            del _CONSULTATION_SESSIONS[oldest]
+        _CONSULTATION_SESSIONS[session_id] = history
+
+    # Add user message to history
+    history.append({"role": "user", "content": message})
+
+    # Build sampling messages from history
+    sampling_messages = [
+        SamplingMessage(
+            role=msg["role"],
+            content=TextContent(type="text", text=msg["content"]),
+        )
+        for msg in history
+    ]
+
+    # Request LLM completion via MCP sampling
+    result = await ctx.session.create_message(
+        messages=sampling_messages,
+        max_tokens=4096,
+        system_prompt=_build_system_prompt(),
+        include_context="thisServer",
+    )
+
+    # Extract response text
+    if isinstance(result.content, TextContent):
+        response_text = result.content.text
+    else:
+        response_text = str(result.content)
+
+    # Add assistant response to history
+    history.append({"role": "assistant", "content": response_text})
+
+    return {
+        "session_id": session_id,
+        "proposal": response_text,
+    }
 
 
 # ---------------------------------------------------------------------------

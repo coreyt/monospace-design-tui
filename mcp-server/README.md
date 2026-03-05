@@ -25,7 +25,27 @@ Add to your Claude Code MCP settings (`~/.claude/settings.json` or project
 }
 ```
 
-## Available Tools (15)
+## Available Tools (18)
+
+### Design Consultation (sampling)
+
+| Tool | Description |
+|------|-------------|
+| `design_consultation(message, session_id?)` | Start or continue a multi-turn design consultation. Describe your project and get proposals for workflows, screens, components, keyboard maps, and palettes. Uses MCP sampling to reason with full design system context. Pass `session_id` from a previous response to continue the conversation. |
+
+### Workflow Archetypes
+
+| Tool | Description |
+|------|-------------|
+| `list_workflow_archetypes()` | List all 7 workflow archetypes (task-flow patterns) |
+| `get_workflow_archetype(name)` | Get workflow details: screen sequence, navigation model, keyboard map, layout guidance, state management (wizard, crud, monitor-respond, search-act, drill-down, pipeline, review-approve) |
+
+### UI Archetypes
+
+| Tool | Description |
+|------|-------------|
+| `list_archetypes()` | List all 5 UI screen archetypes |
+| `get_archetype(name)` | Get screen archetype details (dashboard, admin, file-manager, editor, fuzzy-finder) |
 
 ### Standard & Reference Sections
 
@@ -58,21 +78,41 @@ Add to your Claude Code MCP settings (`~/.claude/settings.json` or project
 | `get_component_spec(component)` | Get measurements for a component (push-button, entry-field, toggle, etc.) |
 | `get_widget_recommendation(data_type?)` | Widget selection by data type (boolean, exclusive, free_text, numeric, action, spin_value) |
 
-### Keyboard
+### Keyboard & Characters
 
 | Tool | Description |
 |------|-------------|
 | `get_keyboard_bindings(tier?)` | Get bindings by tier (tier1_global, tier1_scrolling, tier1_text_entry, tier2_common, tier3_mnemonics) |
-
-### Archetypes
-
-| Tool | Description |
-|------|-------------|
-| `list_archetypes()` | List all 5 archetypes |
-| `get_archetype(name)` | Get archetype details (dashboard, admin, file-manager, editor, fuzzy-finder) |
-
-### Characters
-
-| Tool | Description |
-|------|-------------|
 | `get_box_drawing(style?)` | Box-drawing characters (single, heavy, double, rounded, dashed, blocks, indicators) |
+
+## How it works
+
+### Direct queries
+
+An agent building a TUI calls individual tools to get specific design data:
+archetype → layout rules → components → palette → keyboard → rendering.
+
+### Design consultation (agent-to-agent)
+
+An agent describes its project and has a multi-turn conversation with the
+design system. The `design_consultation` tool uses **MCP sampling** — the
+server requests an LLM completion from the client with the full Monospace TUI
+standard as context. The calling agent provides the reasoning capability; the
+server provides the design knowledge.
+
+```
+Project agent                    mono-tui MCP server
+    │                                    │
+    ├─ design_consultation(desc) ──────> │
+    │                                    ├─ loads standard context
+    │                                    ├─ builds system prompt with
+    │                                    │  workflow archetypes, UI archetypes,
+    │                                    │  tokens, palettes, keyboard tiers
+    │           sampling request <────── ├─ requests LLM completion
+    ├─ LLM reasoning ──────────────────> │
+    │           proposal <────────────── ├─ returns proposal + session_id
+    │                                    │
+    ├─ design_consultation(follow_up,    │
+    │    session_id=...) ──────────────> │  (continues with full history)
+    │              ...                   │
+```
