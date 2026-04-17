@@ -11,11 +11,13 @@ Choose the navigation pattern based on the relationship between views:
 | Relationship | Pattern | Implementation |
 |-------------|---------|---------------|
 | Parallel contexts (peer-level views) | Tabs or sidebar items | Region A list or tab bar |
-| Hierarchical drill-down | Screens (push/pop) | New screen replaces content |
+| Hierarchical drill-down | Screens (push/pop) or in-place depth | New screen replaces content, or Region B/C deepens while frame remains stable |
 | Transient confirmation or input | Modal dialog | Overlay with scrim |
 | Contextual detail for selected item | Panel (split or overlay) | Region C or overlay pane |
 
-Applications MUST NOT mix patterns for the same relationship type within a single workflow. (CUA §1, M3 §3 navigation patterns, tui-architect navigation topology)
+Applications MUST NOT mix patterns for the same relationship type within a single workflow. When hierarchical drill-down is implemented in place rather than as full screen replacement, applications MUST preserve a visible back path and stable spatial anchors so users do not lose orientation.[^spatial-memory] (CUA §1, M3 §3 navigation patterns, tui-architect navigation topology)
+
+[^spatial-memory]: Stable spatial anchors and visible back paths support spatial memory in dense interfaces. See canonical layout guidance in Material Design and historical panel-based TUI conventions summarized in the research.
 
 ## §3.2 Menu Hierarchy
 

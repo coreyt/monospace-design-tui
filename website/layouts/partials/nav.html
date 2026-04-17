@@ -3,6 +3,7 @@
     <a href="{{ "" | relURL }}" class="nav-wordmark">Monospace TUI</a>
     <div class="nav-links">
       <a href="{{ "standard/" | relURL }}"{{ if eq .Section "standard" }} class="active"{{ end }}>Standard</a>
+      <a href="{{ "patterns/" | relURL }}"{{ if eq .Section "patterns" }} class="active"{{ end }}>Patterns</a>
       <a href="{{ "reference/" | relURL }}"{{ if eq .Section "reference" }} class="active"{{ end }}>Reference</a>
       <a href="{{ "research/" | relURL }}"{{ if eq .Section "research" }} class="active"{{ end }}>Research</a>
       <div class="nav-more">

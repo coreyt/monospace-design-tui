@@ -36,8 +36,10 @@ jobs:
         env:
           HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache
           HUGO_ENVIRONMENT: production
+          EXPECTED_HUGO_VERSION: ${{ env.HUGO_VERSION }}
+          BUILD_BASE_URL: "${{ steps.pages.outputs.base_url }}/"
           TZ: America/Chicago
-        run: hugo --minify --source website --baseURL "${{ steps.pages.outputs.base_url }}/"
+        run: ./scripts/build-prefilght.sh
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

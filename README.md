@@ -24,6 +24,8 @@ The result is Monospace Design TUI: a v0.1 design standard for terminal applicat
 
 **[Design Standard](monospace-tui-design-standard.md)** — The authoritative specification. Grid and layout, keyboard interaction, navigation topology, components, color, borders, typography, state, accessibility, motion, and archetypes.
 
+**[Pattern Library](monospace-tui-pattern-library.md)** — Reusable interaction patterns distilled from modern TUIs. Footer command bars, focused surfaces, master-detail layouts, expand-to-focus behavior, object-local actions, command jumps, selection grammar, and live drill-down.
+
 **[Rendering Reference](monospace-tui-rendering-reference.md)** — The concrete companion. Exact Unicode codepoints, SGR escape sequences, component measurements, 256-color palettes, and shadow rendering algorithms.
 
 **[Textual Appendix](monospace-tui-textual-appendix.md)** — Mapping the standard to the Python Textual framework. Widget selection, TCSS patterns, async rules, responsive breakpoints, and a working dashboard example.

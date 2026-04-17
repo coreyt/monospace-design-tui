@@ -107,6 +107,8 @@ Common mnemonic patterns (for reference, not prescriptive):
 
 All available keys for the current context MUST be displayed in the footer key strip ([§1.4](/standard/layout/#14-footer-key-strip)). A key that is not shown in the footer MUST NOT be required to complete a task — though it MAY exist as an accelerator for expert users if the same action is available through a visible path. (CUA §1, Norton Commander §7)
 
+When `?` help is provided, it SHOULD be filtered to the focused pane, active keyboard layer, or current object scope rather than showing a global unfiltered command dump.[^recognition-recall] This keeps help aligned with the current task surface and reduces recall burden in dense multi-pane interfaces.
+
 ## §2.4 Mnemonic Rules
 
 Menu items and labeled controls SHOULD have mnemonic accelerators (underlined letters). Mnemonics:
@@ -136,6 +138,7 @@ Archetypes MAY add additional keyboard layers beyond the CUA base, provided:
 - The current layer MUST be indicated in the status area or footer.
 - Esc MUST always return to the base CUA layer.
 - Layer-specific keys MUST NOT shadow CUA base keys unless the layer is explicitly activated.
+- Prefix layers SHOULD expose available continuations in a lightweight popup, status hint, or other non-blocking surface while the prefix is pending.[^progressive-disclosure]
 
 (monospace-design-tui-research.md §7 six keyboard interaction models)
 
@@ -150,3 +153,30 @@ An archetype ([§11](/standard/archetypes/)) MAY override keys from the Tier 1 o
 Example: The File Manager archetype ([§11.3](/standard/archetypes/#113-file-manager)) overrides F3 (normally Back/Cancel) with "View file" and F5/`r` (normally Refresh) with "Copy." In this archetype, Esc serves as Back/Cancel and Ctrl+R serves as Refresh. The `r` key is freed for reuse within the archetype since Refresh has moved to Ctrl+R.
 
 (CUA §1, Norton Commander §7 — domain conventions)
+
+## §2.8 Key Sets
+
+A **key set** is a coherent cluster of bindings that are intended to be used together across related screens. Applications SHOULD define one or more key sets and apply them consistently across screens serving the same task family.[^consistency]
+
+Rules for key sets:
+
+- A key's meaning MUST remain stable across screens that share a key set.
+- Applications MUST NOT remap the same single-letter key to a different domain action on sibling screens within the same key set.
+- If a screen changes to a different key set, the change MUST be visible through the footer key strip, status area, or explicit mode/screen labeling.
+- Tier 1 keys remain in force unless an archetype override ([§2.7](#27-archetype-key-overrides)) applies.
+- Arrow keys MUST remain within one control only ([§2.5](#25-navigation-order)). Multi-pane or multi-widget switching within a key set MUST use Tab/Shift+Tab, numbered view mnemonics, or another non-arrow binding.
+
+Recommended key sets:
+
+| Key Set | Intended screens | Core bindings used together | Notes |
+|---------|------------------|-----------------------------|-------|
+| Browse/Inspect | Lists, tables, file/resource browsers | Enter=open/inspect, Esc=back, `/`=filter, `n`=next match, `g`/`G`=top/bottom, `y`=copy value, `e`=edit, `d`=delete, `s`=sort | Default object browser set |
+| Monitor/Respond | Live dashboards, alert consoles, event streams | `r`=refresh, `/`=filter stream, Enter=inspect item, `a`=acknowledge/act, `s`=sort, `1`–`9`=switch views, Tab/Shift+Tab=switch focused panel | For operational cockpit screens; panel movement MUST NOT use arrows |
+| Search/Select | Fuzzy finders, pickers, command palettes | printable=text input, Ctrl+N/Ctrl+P or Up/Down=result move, Enter=select, Esc=cancel, Tab=toggle preview or advance focus | Filter-first funnel set |
+| Edit/Transform | Editors, review surfaces, structured text manipulation | Ctrl+S=save, Ctrl+F or `/`=find, Ctrl+G=goto, Esc=leave insert/prefix layer, selection commands remain consistent across editor screens | Pairs well with modal or prefix layers |
+
+Applications MAY define additional domain-specific key sets, but the set MUST be documented and applied consistently across the screens that claim it.
+
+[^recognition-recall]: Recognition over recall is a long-standing usability principle; filtering help to the active surface reduces memory burden by presenting only currently valid actions.
+[^progressive-disclosure]: Progressive disclosure reduces cognitive load by revealing detail when a user signals intent. Prefix continuation popups are a terminal-native version of that pattern.
+[^consistency]: Internal consistency across related screens improves transfer of learning and reduces command interference. This is a core theme in CUA, Apple HIG, and other platform design systems synthesized by the research.

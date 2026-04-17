@@ -12,6 +12,8 @@
 
 This document defines the authoritative design rules for Monospace TUI-compliant terminal applications. It distills the research in [monospace-design-tui-research.md](monospace-design-tui-research.md) into falsifiable, auditable requirements. A companion [Rendering Reference](monospace-tui-rendering-reference.md) provides exact character codes, SGR sequences, and measurements. A [Textual Appendix](monospace-tui-textual-appendix.md) maps these rules to the Textual framework.
 
+Monospace TUI explicitly supports **aesthetic-first terminal applications** — character user interfaces (CUIs) that treat the terminal as a high-fidelity visual medium rather than as a purely utilitarian text transport.[^cui-aesthetic] Expressive rendering, atmospheric composition, and strong visual identity are encouraged provided they do not violate semantic clarity, keyboard operability, accessibility, or state visibility rules.
+
 ### Changelog
 
 | Version | Date | Changes |
@@ -200,6 +202,8 @@ Common mnemonic patterns (for reference, not prescriptive):
 
 All available keys for the current context MUST be displayed in the footer key strip (§1.4). A key that is not shown in the footer MUST NOT be required to complete a task — though it MAY exist as an accelerator for expert users if the same action is available through a visible path. (CUA §1, Norton Commander §7)
 
+When `?` help is provided, it SHOULD be filtered to the focused pane, active keyboard layer, or current object scope rather than showing a global unfiltered command dump.[^recognition-recall] This keeps help aligned with the current task surface and reduces recall burden in dense multi-pane interfaces.
+
 ### §2.4 Mnemonic Rules
 
 Menu items and labeled controls SHOULD have mnemonic accelerators (underlined letters). Mnemonics:
@@ -229,6 +233,7 @@ Archetypes MAY add additional keyboard layers beyond the CUA base, provided:
 - The current layer MUST be indicated in the status area or footer.
 - Esc MUST always return to the base CUA layer.
 - Layer-specific keys MUST NOT shadow CUA base keys unless the layer is explicitly activated.
+- Prefix layers SHOULD expose available continuations in a lightweight popup, status hint, or other non-blocking surface while the prefix is pending.[^progressive-disclosure]
 
 (monospace-design-tui-research.md §7 six keyboard interaction models)
 
@@ -244,6 +249,29 @@ Example: The File Manager archetype (§11.3) overrides F3 (normally Back/Cancel)
 
 (CUA §1, Norton Commander §7 — domain conventions)
 
+### §2.8 Key Sets
+
+A **key set** is a coherent cluster of bindings that are intended to be used together across related screens. Applications SHOULD define one or more key sets and apply them consistently across screens serving the same task family.[^consistency]
+
+Rules for key sets:
+
+- A key's meaning MUST remain stable across screens that share a key set.
+- Applications MUST NOT remap the same single-letter key to a different domain action on sibling screens within the same key set.
+- If a screen changes to a different key set, the change MUST be visible through the footer key strip, status area, or explicit mode/screen labeling.
+- Tier 1 keys remain in force unless an archetype override (§2.7) applies.
+- Arrow keys MUST remain within one control only (§2.5). Multi-pane or multi-widget switching within a key set MUST use Tab/Shift+Tab, numbered view mnemonics, or another non-arrow binding.
+
+Recommended key sets:
+
+| Key Set | Intended screens | Core bindings used together | Notes |
+|---------|------------------|-----------------------------|-------|
+| Browse/Inspect | Lists, tables, file/resource browsers | Enter=open/inspect, Esc=back, `/`=filter, `n`=next match, `g`/`G`=top/bottom, `y`=copy value, `e`=edit, `d`=delete, `s`=sort | Default object browser set |
+| Monitor/Respond | Live dashboards, alert consoles, event streams | `r`=refresh, `/`=filter stream, Enter=inspect item, `a`=acknowledge/act, `s`=sort, `1`–`9`=switch views, Tab/Shift+Tab=switch focused panel | For operational cockpit screens; panel movement MUST NOT use arrows |
+| Search/Select | Fuzzy finders, pickers, command palettes | printable=text input, Ctrl+N/Ctrl+P or Up/Down=result move, Enter=select, Esc=cancel, Tab=toggle preview or advance focus | Filter-first funnel set |
+| Edit/Transform | Editors, review surfaces, structured text manipulation | Ctrl+S=save, Ctrl+F or `/`=find, Ctrl+G=goto, Esc=leave insert/prefix layer, selection commands remain consistent across editor screens | Pairs well with modal or prefix layers |
+
+Applications MAY define additional domain-specific key sets, but the set MUST be documented and applied consistently across the screens that claim it.
+
 ---
 
 ## §3 Navigation Topology
@@ -255,11 +283,11 @@ Choose the navigation pattern based on the relationship between views:
 | Relationship | Pattern | Implementation |
 |-------------|---------|---------------|
 | Parallel contexts (peer-level views) | Tabs or sidebar items | Region A list or tab bar |
-| Hierarchical drill-down | Screens (push/pop) | New screen replaces content |
+| Hierarchical drill-down | Screens (push/pop) or in-place depth | New screen replaces content, or Region B/C deepens while frame remains stable |
 | Transient confirmation or input | Modal dialog | Overlay with scrim |
 | Contextual detail for selected item | Panel (split or overlay) | Region C or overlay pane |
 
-Applications MUST NOT mix patterns for the same relationship type within a single workflow. (CUA §1, M3 §3 navigation patterns, tui-architect navigation topology)
+Applications MUST NOT mix patterns for the same relationship type within a single workflow. When hierarchical drill-down is implemented in place rather than as full screen replacement, applications MUST preserve a visible back path and stable spatial anchors so users do not lose orientation.[^spatial-memory] (CUA §1, M3 §3 navigation patterns, tui-architect navigation topology)
 
 ### §3.2 Menu Hierarchy
 
@@ -1132,8 +1160,8 @@ For auditing convenience, every section's prescriptive rules are summarized:
 | Section | Rule Count | Key MUST Rules |
 |---------|-----------|---------------|
 | §1 Grid & Layout | 6 | Three-region layout, footer always visible, 80×24 minimum, SIGWINCH handling |
-| §2 Keyboard | 7 | CUA primary, 3-tier key system (F-key + common key duals), case-insensitivity, footer discoverability, key scope rules, composable layers, archetype overrides |
-| §3 Navigation | 5 | Decision tree, 3-level menu max, unavailable items visible, ellipsis convention |
+| §2 Keyboard | 8 | CUA primary, 3-tier key system (F-key + common key duals), case-insensitivity, footer discoverability, key scope rules, composable layers, archetype overrides, key-set consistency |
+| §3 Navigation | 5 | Decision tree, 3-level menu max, unavailable items visible, ellipsis convention, stable back path for in-place drill-down |
 | §4 Components | 4 | Widget selection table, one default button, tab order, entry field fill characters |
 | §5 Color | 6 | 5 semantic roles, 4 status colors, color independence, capability detection |
 | §6 Borders | 6 | 5 elevation levels, active/inactive distinction, shadow rendering, scrim for modals |
@@ -1161,3 +1189,10 @@ For auditing convenience, every section's prescriptive rules are summarized:
 | Monospace TUI | Monospace Design TUI — the design system defined by this standard (package: `mono-tui`) |
 | Navigation model | The structural pattern of movement between screens: sequential, hub-and-spoke, hierarchical, flat, funnel, or queue |
 | Workflow archetype | A task-flow pattern defining the screen sequence, navigation model, and state rules for a multi-screen user task |
+| Key set | A coherent cluster of bindings applied consistently across related screens |
+
+[^cui-aesthetic]: Historical terminal systems and modern TUIs both show that strong visual identity and atmospheric rendering can improve orientation, brand, and perceived quality when semantic state remains legible. See the color-systems and historical-application synthesis in `monospace-design-tui-research.md` §6–§7.
+[^recognition-recall]: Recognition over recall is a long-standing usability principle; filtering help to the active surface reduces memory burden by presenting only currently valid actions. See Nielsen's usability heuristics and the KLM-oriented synthesis in `monospace-design-tui-research.md` §5 and cross-cutting synthesis.
+[^progressive-disclosure]: Progressive disclosure reduces cognitive load by revealing detail when a user signals intent. Prefix continuation popups are a terminal-native version of that pattern. See Apple HIG discussion of progressive disclosure and the modern-editor observations in `dev/ux-research-2026-04-17.md`.
+[^consistency]: Internal consistency across related screens improves transfer of learning and reduces command interference. This is a core theme in CUA, Apple HIG, and other platform design systems synthesized in `monospace-design-tui-research.md`.
+[^spatial-memory]: Stable spatial anchors and visible back paths support spatial memory in dense interfaces. See canonical layout guidance in Material Design and historical panel-based TUI conventions summarized in `monospace-design-tui-research.md` §3 and §7.
