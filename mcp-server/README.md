@@ -67,8 +67,8 @@ Add to your Claude Code MCP settings (`~/.claude/settings.json` or project
 
 | Tool | Description |
 |------|-------------|
-| `list_palettes()` | List all 8 available palettes |
-| `get_palette(name)` | Get palette colors (default, monochrome, commander, os2, turbo, amber, green, airlock) |
+| `list_palettes()` | List all 7 available palettes |
+| `get_palette(name)` | Get palette colors (default, monochrome, os2, turbo, amber, green, airlock) |
 
 ### Components
 
@@ -90,15 +90,20 @@ Add to your Claude Code MCP settings (`~/.claude/settings.json` or project
 ### Direct queries
 
 An agent building a TUI calls individual tools to get specific design data:
-archetype → layout rules → components → palette → keyboard → rendering.
+workflow/archetype → patterns → layout rules → components → palette →
+keyboard → rendering.
 
 ### Design consultation (agent-to-agent)
 
 An agent describes its project and has a multi-turn conversation with the
 design system. The `design_consultation` tool uses **MCP sampling** — the
-server requests an LLM completion from the client with the full Monospace TUI
-standard as context. The calling agent provides the reasoning capability; the
-server provides the design knowledge.
+server requests an LLM completion from the client with the full Mono design
+system as context. The calling agent provides the reasoning capability; the
+server provides the design knowledge. The consultation prompt is
+recommendation-forward and pattern-aware: it expects the agent to choose
+strong directions, ask focused questions only when ambiguity materially
+affects the design, and align the result with Mono patterns rather than
+generic TUI advice.
 
 ```
 Project agent                    mono-tui MCP server

@@ -125,7 +125,7 @@ Generate a structured compliance report in this exact format:
 # Mono-TUI Compliance Report
 
 **Project:** {project name from TUI-DESIGN.md Meta, or directory name}
-**Standard version:** 1.0
+**Standard version:** 0.2.5
 **Audited:** {date}
 **Scope:** {files/directories audited}
 

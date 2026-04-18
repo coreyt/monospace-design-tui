@@ -141,7 +141,7 @@ workflow:
   typography, state, accessibility, motion, archetypes
 - Reference sections: box-drawing, sgr-codes, color-palette, measurements,
   shadows, escape-sequences, color-detection, mixed-borders, sparklines
-- Palettes: default, monochrome, commander, os2, turbo, amber, green, airlock
+- Palettes: default, monochrome, os2, turbo, amber, green, airlock
 - Components: push-button, entry-field, toggle, radio-group, list-box,
   data-table, metric-card, dialog, menu, spin-button, footer
 - Widget data types: boolean, exclusive, free_text, numeric, action, spin_value
@@ -328,22 +328,6 @@ PALETTES = {
             "inactive": {"sgr": "2 (dim)"},
         },
     },
-    "commander": {
-        "name": "Commander (Norton/OS2 PM)",
-        "description": "Classic blue-background file manager theme",
-        "theme": "dark",
-        "roles": {
-            "primary": {"fg": {"index": 15, "hex": "#ffffff"}, "bg": {"index": 19, "hex": "#0000af"}},
-            "secondary": {"fg": {"index": 14, "hex": "#00ffff"}, "bg": {"index": 237, "hex": "#3a3a3a"}},
-            "tertiary": {"fg": {"index": 11, "hex": "#ffff00"}, "bg": {"index": 19, "hex": "#0000af"}},
-            "error": {"fg": {"index": 196, "hex": "#ff0000"}, "bg": {"index": 52, "hex": "#5f0000"}},
-            "neutral": {"fg": {"index": 15, "hex": "#ffffff"}, "bg": {"index": 19, "hex": "#0000af"}},
-        },
-        "special": {
-            "dialog": {"fg": {"index": 232, "hex": "#080808"}, "bg": {"index": 250, "hex": "#bcbcbc"}},
-            "button": {"fg": {"index": 232, "hex": "#080808"}, "bg": {"index": 78, "hex": "#5fd787"}},
-        },
-    },
     "os2": {
         "name": "OS/2 (Presentation Manager)",
         "description": "IBM OS/2 Warp yellow-on-blue theme",
@@ -400,14 +384,14 @@ PALETTES = {
         "description": "Muted dark theme for security/agent proxy interfaces",
         "theme": "dark",
         "roles": {
-            "primary": {"fg": {"index": 71, "hex": "#5faf5f"}, "bg": {"index": 236, "hex": "#303030"}},
+            "primary": {"fg": {"index": 75, "hex": "#5fafff"}, "bg": {"index": 236, "hex": "#303030"}},
             "secondary": {"fg": {"index": 109, "hex": "#87afaf"}, "bg": {"index": 236, "hex": "#303030"}},
             "tertiary": {"fg": {"index": 214, "hex": "#ffaf00"}, "bg": {"index": 236, "hex": "#303030"}},
             "error": {"fg": {"index": 167, "hex": "#d75f5f"}, "bg": {"index": 52, "hex": "#5f0000"}},
             "neutral": {"fg": {"index": 252, "hex": "#d0d0d0"}, "bg": {"index": 235, "hex": "#262626"}},
         },
         "status": {
-            "healthy": {"index": 77, "hex": "#5fd75f"},
+            "healthy": {"index": 117, "hex": "#87d7ff"},
             "error": {"index": 167, "hex": "#d75f5f"},
             "warning": {"index": 214, "hex": "#ffaf00"},
             "inactive": {"index": 245, "hex": "#8a8a8a"},
@@ -433,8 +417,8 @@ def get_palette(name: str) -> dict | str:
     """Get a specific color palette with all semantic role mappings.
 
     Args:
-        name: Palette identifier. One of: default, monochrome, commander,
-              os2, turbo, amber, green, airlock.
+        name: Palette identifier. One of: default, monochrome, os2, turbo,
+              amber, green, airlock.
 
     Returns full palette with foreground/background colors per semantic role,
     status colors, and any special mappings.
@@ -1303,18 +1287,24 @@ Region C context) with column widths
    - Which components to use (data-table, entry-field, toggle, list-box, etc.)
 
 3. **Keyboard map** — Tier 1 globals are always present. Specify Tier 2 \
-and Tier 3 bindings specific to this application.
+and Tier 3 bindings specific to this application, and resolve conflicts \
+clearly.
 
-4. **Palette recommendation** — Which named palette fits the application's \
-domain (default, monochrome, commander, os2, turbo, amber, green, airlock), \
-and why.
+4. **Pattern recommendation** — Which interaction patterns from the Mono \
+pattern library fit this application (focused surface, master-detail, \
+object-local actions, command jump, live drill-down, etc.), and why.
 
-5. **ASCII wireframe** — For the primary screen, draw an ASCII wireframe \
+5. **Palette recommendation** — Which named palette fits the application's \
+domain (default, monochrome, os2, turbo, amber, green, airlock), and why.
+
+6. **ASCII wireframe** — For the primary screen, draw an ASCII wireframe \
 showing the layout with box-drawing characters.
 
-Be specific and prescriptive. Reference standard section numbers (e.g., \
-§1.3 three-region layout, §2.2 key assignments) when making recommendations. \
-Keep proposals concise but complete.
+Be specific and prescriptive. Recommend a direction when the evidence is \
+strong. Ask focused clarifying questions only when ambiguity materially \
+changes the workflow, archetype, or palette choice. Reference standard \
+section numbers and named patterns when making recommendations. Keep \
+proposals concise but complete.
 
 ## Design system reference
 
@@ -1329,6 +1319,9 @@ Keep proposals concise but complete.
 
 ### Keyboard tiers
 {keyboard_summary}
+
+### Pattern library
+{pattern_summary}
 
 ### Available palettes
 {palette_summary}
@@ -1364,6 +1357,16 @@ def _build_system_prompt() -> str:
         "Tier 3 (app-defined): screen mnemonics, must not conflict with Tier 1/2\n"
         "Key scope: single-letter keys suppressed when text input focused"
     )
+    pattern_summary = (
+        "- Footer Command Bar: persistent command discoverability\n"
+        "- Focused Surface: exactly one active interaction target\n"
+        "- Master-Detail: browse and inspect without leaving the screen\n"
+        "- Expand-to-Focus: dense panels can temporarily claim the full screen\n"
+        "- Object-Local Actions: verbs apply to the current selection\n"
+        "- Command Jump: direct navigation to screens or resources\n"
+        "- Selection Grammar: select target first, then act\n"
+        "- Live Drill-Down: overview first, then inspect or intervene"
+    )
     palette_summary = "\n".join(
         f"- **{p['name']}** ({pid}): {p['description']}"
         for pid, p in PALETTES.items()
@@ -1377,6 +1380,7 @@ def _build_system_prompt() -> str:
         ui_archetypes=ui_summary,
         design_tokens=tokens_summary,
         keyboard_summary=keyboard_summary,
+        pattern_summary=pattern_summary,
         palette_summary=palette_summary,
         widget_table=widget_summary,
     )

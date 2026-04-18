@@ -34,10 +34,15 @@ Before any design work, load context in this order:
    - Animation/feedback → §10 Motion & Feedback
    - Full-screen patterns → §11 Archetypes
 
-3. **Rendering Reference** — Read when you need exact character codes, SGR
+3. **Pattern Library** — Read the Monospace TUI Pattern Library before
+   settling the interaction model. Use it to choose focused-surface,
+   master-detail, expand-to-focus, object-local-action, command-jump,
+   selection-grammar, and live-drill-down patterns where they fit.
+
+4. **Rendering Reference** — Read when you need exact character codes, SGR
    sequences, measurements, or color indices for implementation.
 
-4. **Textual Appendix** — Read when the framework is Textual. Contains widget
+5. **Textual Appendix** — Read when the framework is Textual. Contains widget
    mappings, TCSS patterns, and the `ci()` binding helper.
 
 **Override precedence:** When TUI-DESIGN.md contains an override for a rule,
@@ -53,11 +58,20 @@ Determine what the user is building:
 - What is the user's goal? (e.g., "add a settings screen", "build a dashboard")
 - Which archetype (§11) matches? Dashboard, Admin/Config, File Manager, Editor,
   Fuzzy Finder, or a hybrid?
+- Which workflow pattern fits the task flow?
+- Which named interaction patterns from the Pattern Library should structure
+  the screen?
 - Are there active overrides that affect this design?
+- Is there enough information to recommend a direction, or do you need one
+  focused clarification from the user?
 
 ### 2. Architect
 
 Propose the design with reasoning:
+
+Lead with a recommendation when the evidence is strong. If ambiguity
+materially changes the design, ask a focused question rather than listing
+many weak options.
 
 **Layout** — Apply the three-region rule (§1.3). Show an ASCII wireframe using
 the archetype's layout pattern. Specify region widths and what goes in each.
@@ -65,6 +79,10 @@ the archetype's layout pattern. Specify region widths and what goes in each.
 **Navigation** — Apply the decision tree (§3.1). How does this screen relate
 to others? Tabs (parallel), push/pop (drill-down), modal (transient), or
 panel (contextual detail)?
+
+**Patterns** — Apply the Pattern Library explicitly. State which patterns are
+being used and why. A compliant layout without coherent pattern selection is
+not enough.
 
 **Widget Selection** — Apply the widget decision table (§4.1). For each data
 element, choose the correct widget based on data type and option count.
@@ -78,6 +96,10 @@ Justify deviations.
 
 **Color & State** — Apply semantic roles (§5.1) and the state model (§8.1).
 Ensure color independence (§5.3) — every color has a paired text/symbol.
+
+**Visual Tone** — Ensure the result feels intentional and Mono-aligned rather
+than generic. Mono supports aesthetic-first CUIs; do not stop at mechanical
+compliance if the result is bland.
 
 ### 3. Critique
 
@@ -144,18 +166,23 @@ Override/Convention/Decision sections.
 - **Always** check for TUI-DESIGN.md before recommending standard rules.
 - **Always** show an ASCII wireframe before writing code.
 - **Always** include footer key strip in wireframes.
+- **Always** identify the chosen interaction patterns explicitly.
+- **Always** prefer a strong recommendation over an undifferentiated option dump.
+- **Always** ask focused questions when ambiguity materially affects the design.
 - **Always** use `ci()` for letter bindings in Textual code.
 - **Always** use `@work` for I/O in Textual code.
 - **Never** recommend a pattern that contradicts an active WAIVE or OVERRIDE.
 - **Never** bind only F-keys — every F-key must have a common key equivalent.
 - **Never** use color as the sole indicator of any state.
 - **Never** hide disabled controls — dim them instead.
+- **Never** treat the Pattern Library as optional if you are designing an interaction model.
 
 ## Related Documents
 
 | Document | Path | When to Read |
 |----------|------|-------------|
 | Design Standard | `monospace-tui-design-standard.md` | Always — authoritative rules |
+| Pattern Library | `monospace-tui-pattern-library.md` | Always before finalizing interaction patterns |
 | Rendering Reference | `monospace-tui-rendering-reference.md` | Implementation — exact chars, SGR, measurements |
 | Textual Appendix | `monospace-tui-textual-appendix.md` | When framework is Textual |
 | TUI-DESIGN.md | Project root | Always — project overrides and conventions |

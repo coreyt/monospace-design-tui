@@ -1,6 +1,7 @@
 {{ define "main" }}
 <article class="page page-with-nav">
   <header class="page-header">
+    <p class="page-kicker">{{ .CurrentSection.Title }} / Reference Surface</p>
     <h1>{{ .Title }}</h1>
     {{ with .Params.subtitle }}<p class="page-subtitle">{{ . }}</p>{{ end }}
   </header>

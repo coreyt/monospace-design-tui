@@ -1,6 +1,6 @@
 # Monospace Design TUI Rendering Reference
 
-**Version 0.1.2** — Exact characters, SGR codes, and measurements for Monospace TUI (`mono-tui`) implementers.
+**Version 0.2.5** — Exact characters, SGR codes, and measurements for Monospace TUI (`mono-tui`) implementers.
 
 This document is the concrete companion to the [Monospace Design TUI Standard](monospace-tui-design-standard.md). Where the standard says "single-line border," this document specifies the exact Unicode codepoint. Where the standard says "dim," this document gives the SGR escape sequence. Implementers SHOULD keep this open alongside the standard.
 
@@ -8,6 +8,7 @@ This document is the concrete companion to the [Monospace Design TUI Standard](m
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 0.2.5 | 2026-04-18 | Updated named palette set and synced reference publication with the v0.2.5 documentation release. |
 | 0.1.2 | 2026-04-17 | No rendering token changes; version advanced to remain in sync with standard v0.1.2 and pattern-library publication. |
 | 0.1.1 | 2026-03-05 | Added §R10 Workflow Archetype Rendering (step indicators, breadcrumb trails, queue counters, stage indicators, category indicators) |
 | 0.1.0 | — | Initial release |
@@ -364,64 +365,6 @@ SGR rendering:  Title bar ─ BOLD.  Focused row ─ REVERSE.  ◉ OK ─ normal
 ⚠ WARN ─ BOLD.  ✗ DOWN ─ BOLD+REVERSE.  Footer ─ DIM.  All white on black.
 ```
 
-#### Commander
-
-Source: OS/2 Presentation Manager text-mode conventions (attribute byte 0x1F = white on blue), Norton Commander's blue-panel aesthetic (0x1_ attribute range), and Turbo Vision's window frame palette entry (0x17 = white on blue). This is the canonical look of IBM PC and OS/2 text-mode applications from 1987–1995.
-
-| Semantic Role | Foreground (index) | Background (index) | Hex Approximation |
-|--------------|-------------------|-------------------|-------------------|
-| Primary | 15 (bright white) | 19 (dark blue) | fg #ffffff, bg #0000af |
-| Secondary | 14 (bright cyan) | 237 (gray) | fg #00ffff, bg #3a3a3a |
-| Tertiary | 11 (bright yellow) | 19 (dark blue) | fg #ffff00, bg #0000af |
-| Error | 196 (bright red) | 52 (dark red) | fg #ff0000, bg #5f0000 |
-| Neutral fg | 15 (bright white) | — | fg #ffffff |
-| Neutral bg | — | 19 (dark blue) | bg #0000af |
-| Surface | 15 | 17 (navy) | bg #00005f |
-
-Key conventions from the source systems:
-
-- **Panels and windows**: White or cyan text on blue background — the definitive CUA/OS/2 look.
-- **Active selection**: Yellow (bright) on blue, or reverse video — Norton Commander convention for selected files.
-- **Dialogs**: Black on light gray (Turbo Vision 0x70) — dialogs use a visually distinct, lighter surface to establish elevation.
-- **Action bar / menus**: Black on cyan (CUA convention) or white on dark gray.
-- **Input fields**: White on blue (Turbo Vision 0x1F) — matching the standard window background.
-
-Dialog surface override for Commander palette:
-
-| Element | Foreground (index) | Background (index) | Hex Approximation |
-|---------|-------------------|-------------------|-------------------|
-| Dialog surface | 232 (black) | 250 (light gray) | fg #080808, bg #bcbcbc |
-| Dialog border | 232 (black) | 250 (light gray) | fg #080808, bg #bcbcbc |
-| Dialog button | 232 (black) | 78 (green) | fg #080808, bg #5fd787 |
-
-Example — Dashboard rendered in Commander:
-
-```
-┌── Service Monitor ────────────────────────────────────────────────────────────┐
-│ File  View  Help                                          [black on cyan bar] │
-├───────────────────────────────────────────────────────────────────────────────┤
-│                                                      [white on blue surface]  │
-│  CPU: 34%          Services: 12/12          Alerts: 3          Mem: 61%       │
-│                                                                               │
-├───────────────────────────────────────────────────────────────────────────────┤
-│ Service              │ Status   │ Uptime       │ CPU     │ Memory             │
-│──────────────────────│──────────│──────────────│─────────│─────────────────-──│
-│ > api-gateway        │  OK     │ 14d  3h 22m  │   2.1%  │  340MB  [yel/blu]   │
-│   auth-service       │  OK     │ 14d  3h 22m  │   0.8%  │  128MB  [wht/blu]   │
-│   worker-pool        │  WARN   │  0d  1h 45m  │  78.3%  │  1.2GB  [yel/blu]   │
-│   notification-svc   │  DOWN   │  0d  0h 00m  │   0.0%  │    0MB  [red/blu]   │
-│   metrics-collector  │  OK     │ 14d  3h 22m  │   1.4%  │  256MB  [wht/blu]   │
-│                                                                               │
-├───────────────────────────────────────────────────────────────────────────────┤
-│ ?Help  r Refresh  /Filter  q Quit                         5 services [cy/blu] │
-└───────────────────────────────────────────────────────────────────────────────┘
-
-Color rendering:  Surface ─ white (#fff) on blue (#0000af).  Action bar ─
-black on cyan.  Focused row ─ yellow on blue.  ◉ OK ─ cyan on blue.
-⚠ WARN ─ yellow on blue.  ✗ DOWN ─ red on blue.  Footer ─ cyan on blue.
-Borders ─ white on blue.
-```
-
 #### OS/2
 
 Source: OS/2 Presentation Manager text-mode conventions as seen in OS/2 terminal emulators like Softerm. Yellow-green text on CGA blue, with light gray action bars and status lines. The window title bar uses yellow on dark blue. Selections use reverse video. Active windows use double-line borders with brighter attributes; inactive windows use single-line borders with dimmer attributes (§5.5).
@@ -581,11 +524,11 @@ Body text ─ medium green (#00af00).  Focused row ─ REVERSE (black on green).
 
 #### Airlock
 
-Source: The Airlock AI-agent security proxy — a guardrail enforcement layer that inspects, scores, and controls LLM tool-call traffic in real time. The palette uses Material Design–derived signal colors (`#4caf50` healthy, `#f44336` error, `#ff9800` warning) mapped to 256-color indices, paired with a cool neutral surface. The aesthetic communicates operational security: a calm, dark control-room backdrop with high-contrast status signals that demand attention only when something changes state.
+Source: The Airlock AI-agent security proxy — a guardrail enforcement layer that inspects, scores, and controls LLM tool-call traffic in real time. The palette uses a cool operator blue for the primary live state, with warm warning and error signals layered on top of a neutral control-room surface. The aesthetic communicates operational security: stable traffic and active guardrails read as calm blue, while warnings and blocks interrupt that baseline immediately.
 
 | Semantic Role | Foreground (index) | Background (index) | Hex Approximation |
 |--------------|-------------------|-------------------|-------------------|
-| Primary | 71 (green) | 236 (dark gray) | fg #5faf5f, bg #303030 |
+| Primary | 75 (blue) | 236 (dark gray) | fg #5fafff, bg #303030 |
 | Secondary | 109 (muted blue) | 236 (dark gray) | fg #87afaf, bg #303030 |
 | Tertiary | 214 (orange) | 236 (dark gray) | fg #ffaf00, bg #303030 |
 | Error | 167 (red) | 52 (dark red) | fg #d75f5f, bg #5f0000 |
@@ -597,12 +540,12 @@ Status colors:
 
 | Status | Foreground (index) | Paired Symbol |
 |--------|-------------------|---------------|
-| Healthy / Live | 77 (green) | `◉` or `✓` |
+| Healthy / Live | 117 (bright blue) | `◉` or `✓` |
 | Error / Blocked | 167 (red) | `⊘` or `✗` |
 | Warning / Paused | 214 (orange) | `⚠` or `⏸` |
 | Inactive / Shadow | 245 (gray) | `○` or `—` |
 
-Key conventions: Primary is green rather than blue — the healthy state is the dominant visual signal in a security proxy, reinforcing that traffic is flowing and guardrails are active. Tertiary is orange (the warning hue) because the "half-open" and "elevated score" states are the most operationally interesting. The status symbols include `⊘` (block) and `⏸` (paused) to match Airlock's enforcement vocabulary.
+Key conventions: Primary is a steady operator blue rather than a warning-coded hue. The dominant signal says "traffic is live and under control" without reading as success-toast green. Tertiary stays orange because the "half-open" and "elevated score" states are the most operationally interesting. The status symbols include `⊘` (block) and `⏸` (paused) to match Airlock's enforcement vocabulary.
 
 ```
 Example — Dashboard rendered in Airlock:
@@ -616,19 +559,19 @@ Example — Dashboard rendered in Airlock:
 ├───────────────────────────────────────────────────────────────────────────────┤
 │ Service              │ Status   │ Uptime       │ CPU     │ Memory             │
 │──────────────────────│──────────│──────────────│─────────│────────────────────│
-│ > api-gateway        │  OK      │ 14d  3h 22m  │   2.1%  │  340MB  [green bg] │
-│   auth-service       │  OK      │ 14d  3h 22m  │   0.8%  │  128MB  [green]    │
+│ > api-gateway        │  OK      │ 14d  3h 22m  │   2.1%  │  340MB  [blue bg]  │
+│   auth-service       │  OK      │ 14d  3h 22m  │   0.8%  │  128MB  [blue]     │
 │   worker-pool        │  WARN    │  0d  1h 45m  │  78.3%  │  1.2GB  [orange]   │
 │   notification-svc   │  DOWN    │  0d  0h 00m  │   0.0%  │    0MB  [red]      │
-│   metrics-collector  │  OK      │ 14d  3h 22m  │   1.4%  │  256MB  [green]    │
+│   metrics-collector  │  OK      │ 14d  3h 22m  │   1.4%  │  256MB  [blue]     │
 │                                                                               │
 ├───────────────────────────────────────────────────────────────────────────────┤
 │ ? Help  r Refresh  / Filter  q Quit                           5 services      │
 └───────────────────────────────────────────────────────────────────────────────┘
 
-Color rendering:  Dark charcoal background (#1c1c1c).  Title ─ green (#5faf5f).
+Color rendering:  Dark charcoal background (#1c1c1c).  Title ─ blue (#5fafff).
 Body text ─ light gray (#d0d0d0).  Secondary labels ─ muted blue (#87afaf).
-Focused row ─ green on dark gray (#303030).  ✓ OK ─ bright green (#5fd75f).
+Focused row ─ blue on dark gray (#303030).  ✓ OK ─ bright blue (#87d7ff).
 ⚠ WARN ─ orange (#ffaf00).  ✗ DOWN ─ red (#d75f5f).  Borders ─ dim gray
 (#585858).  Footer ─ dim gray.
 ```

@@ -6,7 +6,7 @@
 ┻ ┻┗━┛┛┗┛┗━┛┗━┛┻  ┻ ┻┗━┛┗━┛   ┻ ┗━┛┻
 ```
 
-**Version 0.1.2** — Prescriptive rules for Monospace Design TUI applications.
+**Version 0.2.5** — Prescriptive rules for Monospace Design TUI applications.
 
 **Package:** `mono-tui`
 
@@ -18,6 +18,7 @@ Monospace TUI explicitly supports **aesthetic-first terminal applications** — 
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 0.2.5 | 2026-04-18 | Aligned agent documentation, MCP guidance, project template, and public website surfaces with the current Mono adoption model and Pattern Library. |
 | 0.1.2 | 2026-04-17 | Added pattern-library alignment guidance: aesthetic-first CUI positioning, filtered help, key sets, prefix continuation discoverability, and in-place drill-down guidance. |
 | 0.1.1 | 2026-03-05 | Added §12 Workflow Archetypes (wizard, CRUD, monitor-respond, search-act, drill-down, pipeline, review-approve, configuration) |
 | 0.1.0 | — | Initial release |

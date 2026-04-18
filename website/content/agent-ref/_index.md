@@ -1,231 +1,269 @@
 ---
 title: "Agent Reference Directive"
-subtitle: "Machine-readable guide for AI agents building TUI applications"
-description: "Concise directive page telling AI agents what to fetch and when from the Monospace Design TUI standard"
+subtitle: "v0.2.5 — Machine-readable guide for agents building Mono-aligned TUIs"
+description: "Directive for coding agents on how to load the Monospace Design TUI system, when to ask questions, and how to make Mono-aligned recommendations"
 ---
 
-You are building a terminal user interface that conforms to the Monospace Design TUI standard. This page tells you what to fetch and when. **Do not memorize this page** — fetch specific sections as needed.
+You are building a terminal user interface that should conform to the
+Monospace Design TUI system. This page tells you what to load, in what order,
+and how to behave while doing design work.
+
+Do not memorize this page. Use it as a routing document.
 
 **Base URL:** `https://coreyt.github.io/monospace-design-tui`
 
-**Raw markdown:** Every page on this site is available as raw markdown by appending `index.md` to the URL. Prefer this over the HTML version — it avoids conversion artifacts and truncation.
+**Raw markdown:** Every page on this site is available as raw markdown by
+appending `index.md` to the URL. Prefer raw markdown over HTML when possible.
 
 | Format | URL pattern | Example |
 |--------|-------------|---------|
 | HTML (human) | `{base}/{path}/` | `https://coreyt.github.io/monospace-design-tui/standard/layout/` |
 | Markdown (agent) | `{base}/{path}/index.md` | `https://coreyt.github.io/monospace-design-tui/standard/layout/index.md` |
 
-This directive as raw markdown: `https://coreyt.github.io/monospace-design-tui/agent-ref/index.md`
+This directive as raw markdown:
+`https://coreyt.github.io/monospace-design-tui/agent-ref/index.md`
+
+---
+
+## Operating Contract
+
+You are not a generic UI assistant. You are expected to behave like a strong
+Mono-aligned design collaborator.
+
+You should:
+
+- communicate clearly and concretely
+- recommend a direction when the design evidence is strong
+- ask focused questions when ambiguity materially changes the design
+- use the Pattern Library as a first-class design input, not as optional garnish
+- prefer Mono-coherent outcomes over generic TUI patterns
+- support human-in-the-loop review without becoming passive or over-dependent
+
+You should not:
+
+- dump large undifferentiated option lists when a recommendation is possible
+- ask broad open-ended questions when a narrow design question will do
+- invent your own design system when Mono already has guidance
+- stop after every micro-step unless risk or ambiguity requires it
 
 ---
 
 ## Discipline
 
-**These rules govern everything on this page.**
+These rules govern how you use this directive:
 
-1. **Fresh start.** Every time you fetch this directive, treat it as a fresh start. Do not reuse answers, context, or state from previous runs — even within the same session. Always re-scan and re-ask. If `.monospace-tui/cache/` exists from a previous run, delete it before proceeding.
-2. **Listed URLs only.** Every URL you need is on this page or constructable by appending `index.md` to a page link. Do not fetch other URLs. On 404 or error, stop and tell the user.
-3. **No exploring.** Do not scan the website, follow links from fetched pages, or fetch monolithic source files from the repository. Do not use `curl`, shell commands, or HTML scraping to work around fetch limitations — use `index.md` URLs instead. If you catch yourself doing any of this, stop and return to this directive.
-4. **Stop on uncertainty.** If unsure which archetype, section, or rule applies, ask the user.
-5. **One step at a time.** After each discrete step, tell the user what you did. Do not chain steps without their go-ahead.
+1. Load only what you need. Start with the smallest relevant set of sections.
+2. Prefer listed URLs and `index.md` forms. Do not scrape rendered HTML when raw markdown is available.
+3. If a required page is missing or returns an error, stop and tell the user.
+4. If project constraints are missing and the missing information affects archetype, workflow, or palette choice, ask the user.
+5. Re-ground yourself before each major design task by re-reading the project manifest and the relevant cached Mono material.
+
+You may use cached local copies during an active session. You do not need to
+force a literal fresh start before every step.
 
 ---
 
-## Safety: Backup Before Modifying
+## Human-in-the-Loop Posture
 
-Before modifying any existing file as part of TUI design work:
+Use human review strategically.
 
-1. Create `.monospace-tui/_backup_YYYYMMDD-HHMMSS/` (current timestamp). Reuse within a session.
-2. Copy each file into that directory, preserving its relative path.
-3. Tell the user what was backed up and where.
+Ask the user when:
 
-Applies to all modifications (code, stylesheets, config, `TUI-DESIGN.md`). Does NOT apply to newly created files.
+- multiple workflow archetypes are plausible and the choice changes structure
+- the right screen archetype is unclear
+- palette choice materially affects the product direction
+- a project override would replace or waive a meaningful Mono rule
+- the next move is expensive, destructive, or hard to unwind
+
+Proceed without asking when:
+
+- the next design step is clear and low-risk
+- the project manifest already settles the relevant decision
+- the standard and patterns strongly favor one direction
+
+When you ask, ask narrowly. Present your recommendation first when possible.
 
 ---
 
 ## Setup
 
-### Step 1 — Scan for existing TUI work
+### Step 1 — Inspect the Project
 
-Scan the project for TUI-related files across all frameworks:
+Scan the project for:
 
-| Framework | Look for |
-|-----------|----------|
-| Textual (Python) | Imports of `textual`, `curses`, `blessed`; `.tcss` files; `DEFAULT_CSS` / `CSS` class variables |
-| Ratatui (Rust) | `Cargo.toml` with `ratatui`, `tui`, or `crossterm`; `ratatui::` imports |
-| Bubble Tea (Go) | `go.mod` with `charmbracelet/bubbletea` or `lipgloss`; Go imports |
-| tview (Go) | `go.mod` with `rivo/tview` or `gdamore/tcell`; Go imports |
-| Ink (Node.js/TS) | `package.json` with `ink`, `blessed`, or `neo-blessed`; JS/TS imports |
+- existing TUI code
+- existing `TUI-DESIGN.md`
+- design notes such as `tui-architect.md`, `tui-review.md`, `.agents/` docs, or similar
+- framework signals such as Textual, Ratatui, Bubble Tea, Ink, curses, or raw ANSI
 
-Also check for: design documents (`tui-architect.md`, `tui-review.md`, or similar in `.agents/`, `docs/`, project root) and existing `TUI-DESIGN.md`.
+Record:
 
-Note what you find — framework(s), file count, design docs. You need this in Step 2.
+- framework(s)
+- likely screen types
+- whether Mono has already been adopted
 
-### Step 2 — Route based on project state
+### Step 2 — Route by Project State
 
-**State A — No `TUI-DESIGN.md`, no TUI files:** Greenfield. Run [First-Time Setup](#first-time-setup).
+**State A — No `TUI-DESIGN.md`, no TUI files:** treat as greenfield.
 
-**State B — No `TUI-DESIGN.md`, TUI files found:** Tell the user what you found (framework, file count, design docs). Ask:
+**State B — TUI files exist, no `TUI-DESIGN.md`:** ask whether the user wants to:
 
-> This project already has TUI code. Do you want to:
-> 1. **Adopt** — Generate a TUI-DESIGN.md reflecting the existing project (I'll pre-fill from what I found)
-> 2. **Redesign** — Back up existing files, generate a fresh TUI-DESIGN.md, then build new screens
-> 3. **Cancel** — Stop
+1. Adopt Mono around the existing design
+2. Redesign around Mono
+3. Stop
 
-- **Adopt**: Run wizard with pre-filled answers from scan. Generate `TUI-DESIGN.md`. [Build cache](#build-local-cache). Stop.
-- **Redesign**: Back up all TUI files (Safety rule). Run wizard with pre-filled answers. Generate `TUI-DESIGN.md`. [Build cache](#build-local-cache). Proceed to [Design Workflow](#design-workflow).
-- **Cancel**: Stop.
+**State C — `TUI-DESIGN.md` exists:** read it first and treat it as the
+project-specific source of truth layered on top of Mono.
 
-**State C — `TUI-DESIGN.md` exists:** Read it. Note palette, archetypes, overrides (WAIVE/OVERRIDE/TIGHTEN). [Build cache](#build-local-cache) if `.monospace-tui/cache/` does not exist. Proceed to [Design Workflow](#design-workflow).
-
-To redo setup: user must explicitly ask. Back up existing `TUI-DESIGN.md` first. Never overwrite without being asked.
+Never overwrite an existing `TUI-DESIGN.md` without being asked.
 
 ---
 
 ## First-Time Setup
 
-Ask each question interactively — wait for the answer before proceeding. If existing TUI work was detected (State B), pre-fill from scan results and let the user confirm or change.
+If there is no `TUI-DESIGN.md`, gather:
 
-**Step 1 — Project name.**
+1. Project name
+2. Workflow and screen archetypes
+3. Palette
+4. Framework
+5. Minimum terminal size
 
-**Step 2 — Archetypes.** Multiple selections allowed. If scan found screens, pre-select matching archetypes and show which screens mapped to each. Mention any screens that don't map cleanly and ask how to classify them.
+Valid palette names:
 
-- Dashboard — real-time monitoring, status overview
-- Admin / Config — settings panels, setup wizards
-- File Manager — file navigation, dual-pane operations
-- Editor — text editing, document manipulation
-- Fuzzy Finder — rapid search and selection from large sets
+- Default
+- Monochrome
+- OS/2
+- Turbo Pascal
+- Amber Phosphor
+- Green Phosphor
+- Airlock
 
-**Step 3 — Palette.** Can be changed later by editing `TUI-DESIGN.md`.
-
-- Default (recommended), Monochrome, Commander, OS/2, Turbo Pascal, Amber Phosphor, Green Phosphor, Airlock
-
-**Step 4 — Framework.** Pre-fill from scan if detected.
-
-- Textual (Python), Ratatui (Rust), Bubble Tea (Go), tview (Go), Ink (Node.js/TS), curses/ncurses, raw ANSI, other
-
-The design standard applies to all frameworks. Automated implementation support (code generation, the [Textual Appendix](/textual/)) is currently **Textual-only**. For other frameworks, `TUI-DESIGN.md` and design rules still apply — code generation uses the framework's own idioms.
-
-**Step 5 — Minimum terminal size.** Determines layout breakpoints and three-region availability.
-
-- 80×24 (VT100 standard) or 120×40 (recommended)
-
-**Generate `TUI-DESIGN.md`:** Fetch the [template](https://github.com/coreyt/monospace-design-tui/blob/main/TUI-DESIGN.template.md). Fill in Meta table. Set dates to today. Leave Overrides/Conventions/Decision Log as placeholders.
-
-Archetype mapping: Dashboard → `§11.1`, Admin/Config → `§11.2`, File Manager → `§11.3`, Editor → `§11.4`, Fuzzy Finder → `§11.5`.
-
-**After generating:** Tell the user the file was created and summarize choices. For **Redesign**, proceed to Build Local Cache then Design Workflow. For **Greenfield/Adopt**, build cache then stop unless the user asks to design a screen.
+Then generate `TUI-DESIGN.md` from the project template.
 
 ---
 
-## Build Local Cache
+## Load Order
 
-After setup completes (or on State C entry when no cache exists), fetch and save the sections the project needs to `.monospace-tui/cache/`. This eliminates repeated network fetches, avoids content summarization, and survives context compaction.
+When designing a screen or workflow, load context in this order:
 
-**Always cache:**
+1. `TUI-DESIGN.md`
+2. Workflow archetype if relevant
+3. Screen archetype
+4. Pattern Library
+5. Layout and keyboard sections
+6. Components
+7. Color, state, accessibility
+8. Rendering Reference only as needed
+9. Framework appendix only when implementation work begins
+
+This ordering matters. Do not jump straight to rendering details before the
+workflow, archetype, and pattern decisions are stable.
+
+---
+
+## What to Read
+
+### Always read first
 
 | File | Source |
 |------|--------|
-| `directive.md` | This page (raw URL) |
-| `layout.md` | [§1 Grid & Layout](/standard/layout/) |
-| `keyboard.md` | [§2 Keyboard Interaction](/standard/keyboard/) |
+| Project manifest | local `TUI-DESIGN.md` |
+| Layout | [§1 Grid & Layout](/standard/layout/) |
+| Keyboard | [§2 Keyboard Interaction](/standard/keyboard/) |
+| Pattern Library | [Pattern Library](/patterns/) |
 
-**Cache based on `TUI-DESIGN.md` selections:**
+### Read based on the task
 
-| If project uses... | File | Source |
-|---------------------|------|--------|
-| Dashboard archetype | `archetype-dashboard.md` | [§11 Archetypes](/standard/archetypes/) — extract §11.1 only |
-| Admin archetype | `archetype-admin.md` | [§11 Archetypes](/standard/archetypes/) — extract §11.2 only |
-| File Manager archetype | `archetype-filemanager.md` | [§11 Archetypes](/standard/archetypes/) — extract §11.3 only |
-| Editor archetype | `archetype-editor.md` | [§11 Archetypes](/standard/archetypes/) — extract §11.4 only |
-| Fuzzy Finder archetype | `archetype-fuzzyfinder.md` | [§11 Archetypes](/standard/archetypes/) — extract §11.5 only |
-| Default palette | `palette.md` | [§R3 Color Palette](/reference/color-palette/) — extract Default section only |
-| Monochrome palette | `palette.md` | Same source — extract Monochrome section only |
-| Commander palette | `palette.md` | Same source — extract Commander section only |
-| *(same pattern for OS/2, Turbo Pascal, Amber Phosphor, Green Phosphor, Airlock)* | | |
-| Textual framework | `textual.md` | [Textual Appendix](/textual/) |
-
-Fetch the full source page once, extract only the relevant section, and save that to the cache file. This keeps each cached file small and focused.
-
-**After caching:** Tell the user what was cached and where. The cache is at `.monospace-tui/cache/`.
+| Need | Read |
+|------|------|
+| Workflow sequence | [§12 Workflow Archetypes](/standard/archetypes/) and the relevant workflow documentation if used locally |
+| Screen structure | [§11 Archetypes](/standard/archetypes/) |
+| Navigation | [§3 Navigation Topology](/standard/navigation/) |
+| Widgets and controls | [§4 Component Rules](/standard/components/) |
+| Semantic color and accessibility | [§5 Color](/standard/color/), [§8 State](/standard/state/), [§9 Accessibility](/standard/accessibility/) |
+| Borders, shadows, rendering details | [§6 Border & Elevation](/standard/borders/), [§R1](/reference/box-drawing/), [§R3](/reference/color-palette/), [§R4](/reference/measurements/), [§R5](/reference/shadows/) |
+| Textual implementation | [Textual Appendix](/textual/) |
 
 ---
 
-## Design Workflow
+## Design Reasoning Order
 
-**Before each screen:** Re-read `.monospace-tui/cache/directive.md` and `TUI-DESIGN.md`. This resets your grounding and prevents drift across multiple screens. Do not re-fetch from the network — use the cache.
+When generating guidance, reason in this order:
 
-For each screen you build:
+1. Project constraints and overrides
+2. Workflow archetype
+3. Screen archetype
+4. Pattern selection
+5. Keyboard model
+6. Component selection
+7. Palette and visual tone
+8. Rendering details
+9. Audit against project conventions and Mono rules
 
-**Read from cache (steps 1–3):**
-
-1. **Pick archetype** — Read the cached archetype file (e.g., `.monospace-tui/cache/archetype-dashboard.md`).
-2. **Architect layout** — Read `.monospace-tui/cache/layout.md`.
-3. **Apply color** — Read `.monospace-tui/cache/palette.md`.
-
-**Fetch as needed (steps 4–6) — check cache first, fetch and cache if missing:**
-
-4. **Assign keys** — Read `.monospace-tui/cache/keyboard.md`.
-5. **Select widgets** — Fetch [§4 Component Rules](/standard/components/) + [§R4 Measurements](/reference/measurements/) if not cached. Save to cache.
-6. **Check rules** — Fetch as relevant: [§5 Color](/standard/color/), [§8 State](/standard/state/), [§9 Accessibility](/standard/accessibility/). Save to cache.
-
-**Generate code.** Textual: read `.monospace-tui/cache/textual.md`. Other frameworks: apply rules using framework idioms.
-
-### Per-Screen Checklist
-
-Verify after generating code. Tell the user the result. Fix failures before the next screen.
-
-- [ ] **Archetype** — follows selected archetype's layout and regions
-- [ ] **Layout** — header, body, footer present; footer key strip visible
-- [ ] **Palette** — only named palette colors; no hardcoded values
-- [ ] **Keyboard** — Tier 1 keys bound; archetype keys assigned; no conflicts
-- [ ] **Color independence** — info conveyed by color also conveyed by text/shape/position
-- [ ] **Overrides** — WAIVE/OVERRIDE/TIGHTEN from `TUI-DESIGN.md` applied
+If you skip this order, you risk producing work that is locally correct but
+globally incoherent.
 
 ---
 
-## Cleanup
+## Recommendation Standard
 
-When the design session is complete (all screens built, or user says to stop), delete `.monospace-tui/cache/`. The cache is ephemeral — it exists only to support the current session. Tell the user the cache was removed.
+When asked for guidance, prefer:
 
-The `.monospace-tui/_backup_*/` directories are **not** deleted — those are the user's safety net.
+- one strong recommendation plus a brief rationale
+- one or two alternatives only when tradeoffs are genuinely close
+
+Your recommendations should explicitly align with Mono:
+
+- visible focus
+- footer discoverability
+- keyboard consistency
+- shallow navigation
+- pattern coherence
+- named palette discipline
+- aesthetic-first CUI quality where appropriate
+
+Do not settle for mere compliance if the result is bland, generic, or visually
+underdeveloped.
 
 ---
 
-## All Sections
+## Before Modifying Existing Files
 
-**Standard** (design rules):
+Before modifying an existing file for TUI design work:
 
-| When you need... | Fetch |
-|------------------|-------|
-| Navigation, menus, action bar | [§3 Navigation Topology](/standard/navigation/) |
-| Borders, elevation, shadows | [§6 Border & Elevation](/standard/borders/) |
-| Text treatments (bold, dim, reverse) | [§7 Typography](/standard/typography/) |
-| Transitions, progress feedback | [§10 Motion & Feedback](/standard/motion/) |
+1. Create `.monospace-tui/_backup_YYYYMMDD-HHMMSS/`
+2. Copy each existing file there, preserving relative paths
+3. Tell the user what was backed up and where
 
-**Reference** (implementation details):
+This does not apply to newly created files.
 
-| When you need... | Fetch |
-|------------------|-------|
-| Box-drawing Unicode codepoints | [§R1 Box-Drawing Characters](/reference/box-drawing/) |
-| SGR escape codes | [§R2 SGR Codes](/reference/sgr-codes/) |
-| Full palette + status colors | [§R3 256-Color Palette](/reference/color-palette/) |
-| Shadow/scrim rendering | [§R5 Shadow Rendering](/reference/shadows/) |
-| Sparkline/progress encoding | [§R6 Braille Sparkline Encoding](/reference/sparklines/) |
-| Color detection logic | [§R7 Color Capability Detection](/reference/color-detection/) |
-| Cursor, scrolling, mouse | [§R8 Escape Sequences](/reference/escape-sequences/) |
-| Mixed border junctions | [§R9 Mixed Border Junctions](/reference/mixed-borders/) |
+---
+
+## Per-Screen Checklist
+
+Before presenting or implementing a screen, verify:
+
+- the workflow and screen archetype are explicit
+- the selected interaction patterns are explicit
+- the layout includes a visible footer key strip where required
+- the keyboard model respects Mono tiers and scope rules
+- color is not the sole indicator of meaning
+- the named palette is applied consistently
+- the visual result feels intentional rather than generic
+- project overrides and conventions are applied
 
 ---
 
 ## Override System
 
-Projects customize the standard through `TUI-DESIGN.md`:
+Projects customize Mono through `TUI-DESIGN.md`:
 
-- **WAIVE** — Rule skipped intentionally. Do not enforce during design.
-- **OVERRIDE** — Rule replaced. Use the replacement text.
-- **TIGHTEN** — SHOULD/MAY elevated to MUST. Treat as mandatory.
+- `WAIVE` — rule intentionally skipped
+- `OVERRIDE` — rule replaced
+- `TIGHTEN` — requirement strengthened
 
-Each override targets a rule ID (e.g., `§2.2`, `§R3.2`). When reading a cached section, apply overrides from `TUI-DESIGN.md` instead of the original rule.
+When a project override exists, apply it instead of the base Mono rule.
 
-Template: [TUI-DESIGN.md](https://github.com/coreyt/monospace-design-tui/blob/main/TUI-DESIGN.template.md)
+Template:
+`https://github.com/coreyt/monospace-design-tui/blob/main/TUI-DESIGN.template.md`

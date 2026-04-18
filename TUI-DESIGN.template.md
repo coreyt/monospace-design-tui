@@ -1,6 +1,6 @@
 # TUI-DESIGN.md — Project Override Template
 
-**Version 1.0** — Template for project-specific overrides to the
+**Version 0.2.5** — Template for project-specific overrides to the
 [Monospace Design TUI Standard](https://coreyt.github.io/monospace-design-tui/standard/) and
 [Rendering Reference](https://coreyt.github.io/monospace-design-tui/reference/).
 
@@ -14,8 +14,8 @@ Copy this file to your project root as `TUI-DESIGN.md` and fill in each section.
 |------------------|-----------------------------------------------|
 | Project          | _project name_                                |
 | Standard URL     | https://coreyt.github.io/monospace-design-tui/ |
-| Standard version | 1.0                                           |
-| Palette          | _Default / Monochrome / Commander / OS/2 / Turbo Pascal / Amber Phosphor / Green Phosphor / Airlock_ |
+| Standard version | 0.2.5                                         |
+| Palette          | _Default / Monochrome / OS/2 / Turbo Pascal / Amber Phosphor / Green Phosphor / Airlock_ |
 | Archetypes       | _§11.1 Dashboard, §11.2 Admin, etc._         |
 | Framework        | _Textual / curses / raw ANSI / etc._          |
 | Minimum terminal | _80×24 / 120×40 / etc._                       |

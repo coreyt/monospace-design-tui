@@ -1,6 +1,6 @@
 ---
 title: "Textual Appendix"
-subtitle: "v0.1.2 — Mapping the standard to Python Textual framework"
+subtitle: "v0.2.5 — Mapping the standard to Python Textual framework"
 description: "Widget mapping, TCSS patterns, async rules, and navigation mapping for Textual"
 ---
 

@@ -395,7 +395,7 @@ name=$(gum input --placeholder "Project name")
 archetype=$(gum choose "Dashboard" "Admin" "File Manager" "Editor" "Fuzzy Finder")
 
 # Step 3 — Select palette
-palette=$(gum choose "Default" "Monochrome" "Commander" "OS/2" "Turbo Pascal")
+palette=$(gum choose "Default" "Monochrome" "OS/2" "Turbo Pascal" "Amber Phosphor" "Green Phosphor" "Airlock")
 
 # Step 4 — Confirm
 gum confirm "Create project '$name' with $archetype archetype and $palette palette?" || exit 1

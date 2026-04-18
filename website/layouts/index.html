@@ -1,13 +1,19 @@
 {{ define "main" }}
 <article class="home">
   <header class="home-header">
+    <p class="home-kicker">Mono TUI / Design System / Terminal-native Interface Language</p>
     <pre class="hero-logo" aria-label="Monospace TUI">
 ┏┳┓┏━┓┏┓┓┏━┓┏━┓┏━┓┏━┓┏━┓┏━┓  ┏┳┓┳ ┳┳
 ┃┃┃┃ ┃┃┃┃┃ ┃┗━┓┣━┛┣━┫┃  ┣┫    ┃ ┃ ┃┃
 ┻ ┻┗━┛┛┗┛┗━┛┗━┛┻  ┻ ┻┗━┛┗━┛   ┻ ┗━┛┻</pre>
     <h1 class="sr-only">Monospace Design TUI</h1>
     <p class="home-subtitle">A design language for terminal user interfaces</p>
-    <p class="home-version">v0.1.2</p>
+    <p class="home-version">v0.2.5</p>
+    <div class="hero-signal" aria-hidden="true">
+      <span>system: stable</span>
+      <span>mode: design-reference</span>
+      <span>grid: monospace</span>
+    </div>
   </header>
 
   <div class="home-body">
@@ -19,27 +25,66 @@
 
     <p>So we collected it. We studied seven research vectors — CUA, OS/2, Material Design 3, Apple HIG, the Keystroke-Level Model, modern terminal capabilities, and historical TUI applications — and synthesized them into a single, prescriptive design language. Not guidelines. Not suggestions. Falsifiable, auditable rules that a reviewer can check against an implementation and declare it compliant or in violation.</p>
 
-    <p>The result is Monospace Design TUI: a v0.1.2 design standard for terminal applications that want to look and behave like they belong to the same family.</p>
+    <p>The result is Monospace Design TUI: a v0.2.5 design standard for terminal applications that want to look and behave like they belong to the same family.</p>
 
     <hr>
 
-    <h2>The Documents</h2>
+    <section class="doc-zone" aria-labelledby="documents-heading">
+      <div class="doc-zone-header">
+        <h2 id="documents-heading">The Documents</h2>
+        <p>Spec, patterns, rendering tokens, framework guidance, and operational examples.</p>
+      </div>
 
-    <p><a href="{{ "standard/" | relURL }}">Design Standard</a> — The authoritative specification. Grid and layout, keyboard interaction, navigation topology, components, color, borders, typography, state, accessibility, motion, and archetypes.</p>
+      <div class="doc-grid">
+        <a class="doc-card doc-card-primary" href="{{ "standard/" | relURL }}">
+          <span class="doc-card-label">Core</span>
+          <strong>Design Standard</strong>
+          <span>The authoritative specification for layout, keyboard interaction, navigation, color, borders, typography, state, accessibility, motion, and archetypes.</span>
+        </a>
 
-    <p><a href="{{ "patterns/" | relURL }}">Pattern Library</a> — Reusable interaction patterns distilled from modern TUIs. Footer command bars, focused surfaces, master-detail layouts, expand-to-focus behavior, object-local actions, command jumps, selection grammar, and live drill-down.</p>
+        <a class="doc-card" href="{{ "patterns/" | relURL }}">
+          <span class="doc-card-label">Companion</span>
+          <strong>Pattern Library</strong>
+          <span>Reusable interaction patterns distilled from elite terminal interfaces: command bars, focused surfaces, master-detail, expand-to-focus, selection grammar, and live drill-down.</span>
+        </a>
 
-    <p><a href="{{ "reference/" | relURL }}">Rendering Reference</a> — The concrete companion. Exact Unicode codepoints, SGR escape sequences, component measurements, 256-color palettes, and shadow rendering algorithms.</p>
+        <a class="doc-card" href="{{ "reference/" | relURL }}">
+          <span class="doc-card-label">Tokens</span>
+          <strong>Rendering Reference</strong>
+          <span>Exact Unicode codepoints, SGR sequences, measurements, palette mappings, and rendering algorithms. Includes named palette example plates.</span>
+        </a>
 
-    <p><a href="{{ "textual/" | relURL }}">Textual Appendix</a> — Mapping the standard to the Python Textual framework. Widget selection, TCSS patterns, async rules, responsive breakpoints, and a working dashboard example.</p>
+        <a class="doc-card" href="{{ "textual/" | relURL }}">
+          <span class="doc-card-label">Framework</span>
+          <strong>Textual Appendix</strong>
+          <span>Mapping the standard into Python Textual widgets, TCSS patterns, async rules, breakpoints, and implementation conventions.</span>
+        </a>
 
-    <p><a href="{{ "research/" | relURL }}">Foundational Research</a> — The seven research vectors behind the standard. The full synthesis of legacy TUI and modern HCI research that informed every rule.</p>
+        <a class="doc-card" href="{{ "research/" | relURL }}">
+          <span class="doc-card-label">Source</span>
+          <strong>Foundational Research</strong>
+          <span>The historical and HCI synthesis behind the standard: CUA, OS/2, Material, Apple HIG, KLM, and modern TUI practice.</span>
+        </a>
 
-    <p><a href="{{ "examples/" | relURL }}">Examples</a> — ASCII screenshots showing the design standard in action across all five archetypes.</p>
+        <a class="doc-card" href="{{ "examples/" | relURL }}">
+          <span class="doc-card-label">Preview</span>
+          <strong>Examples</strong>
+          <span>ASCII screenshots showing the design language in action across multiple archetypes and workflows.</span>
+        </a>
 
-    <p><a href="{{ "agents/" | relURL }}">Working with AI Agents</a> — Claude Code skills for designing and auditing TUI applications against the standard.</p>
+        <a class="doc-card" href="{{ "agents/" | relURL }}">
+          <span class="doc-card-label">Workflow</span>
+          <strong>Working with AI Agents</strong>
+          <span>Instructions for adopting the standard with coding agents, from lightweight prompting to full MCP-backed integration.</span>
+        </a>
 
-    <p><a href="{{ "agent-ref/" | relURL }}">Agent Reference Directive</a> — A concise, machine-readable page that tells AI agents what to fetch and when. Point your agent here to adopt the standard with a single URL.</p>
+        <a class="doc-card" href="{{ "agent-ref/" | relURL }}">
+          <span class="doc-card-label">Directive</span>
+          <strong>Agent Reference</strong>
+          <span>A concise machine-readable entry point telling agents what to fetch, when to fetch it, and how to stay aligned.</span>
+        </a>
+      </div>
+    </section>
   </div>
 </article>
 {{ end }}

@@ -1,157 +1,213 @@
 ---
 title: "Working with AI Agents"
-subtitle: "Four tiers of adoption for AI-assisted TUI development"
-description: "How AI coding agents can use the Monospace Design TUI standard — from a one-line snippet to full MCP integration"
+subtitle: "v0.2.5 — A modern adoption model for Mono-aligned coding agents"
+description: "How AI coding agents can use the Monospace Design TUI standard with instruction files, project manifests, MCP, and agent-native accelerators"
 ---
 
-A design standard is only useful if it's applied. Monospace Design TUI was built with the expectation that developers would use AI coding agents as collaborators — and that those agents need structured, machine-readable standards to follow.
+Monospace Design TUI assumes that developers increasingly build with coding
+agents. The goal is not merely to make the standard readable by machines. The
+goal is to help agents behave like strong design collaborators: clear,
+pattern-aware, recommendation-capable, and comfortable working with humans in
+the loop.
 
-There are four tiers of adoption, from lightweight to full integration.
+The tiers below describe the current adoption model.
 
 ---
 
-## Tier 1: CLAUDE.md Snippet
+## What a Mono Agent Should Be
 
-The simplest adoption path. Add two lines to your project's `CLAUDE.md` (or equivalent agent instructions file):
+A Mono-aligned agent should not act like a generic code generator with a style
+guide stapled on afterward.
 
-```
+It should:
+
+- ground itself in the Standard, Rendering Reference, Pattern Library, and project overrides
+- recommend strong directions when the design evidence is clear
+- ask focused questions when archetype, workflow, or visual direction is materially ambiguous
+- explain tradeoffs cleanly without becoming verbose or indecisive
+- work comfortably with human review at the right checkpoints
+- steer toward aesthetic-first, keyboard-first, pattern-coherent TUIs rather than generic dashboards
+
+The intended reasoning order is:
+
+1. Project constraints and overrides
+2. Workflow archetype
+3. Screen archetype
+4. Pattern selection
+5. Keyboard model
+6. Component selection
+7. Palette and visual tone
+8. Rendering details
+9. Audit against the standard and project conventions
+
+---
+
+## Tier 1: Instruction Pointer
+
+The lightest integration is a short project instruction file:
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- another tool-specific instruction or memory file
+
+Recommended snippet:
+
+```md
 When building TUI screens, follow the Monospace Design TUI standard.
-Fetch the agent directive (raw markdown) at:
+Read the agent directive at:
   https://coreyt.github.io/monospace-design-tui/agent-ref/index.md
-Use the "Default" palette (or substitute your chosen palette name).
+Use the project's `TUI-DESIGN.md` if present.
+Default to the "Default" palette unless the project specifies another named palette.
 ```
 
-This gives any AI agent enough context to fetch the [Agent Reference Directive](/agent-ref/), which links to every section of the standard. The agent fetches only the sections it needs for the current task.
+This is enough to tell an agent Mono exists and where to begin.
 
-**Valid palette names:** Default, Monochrome, Commander, OS/2, Turbo Pascal, Amber Phosphor, Green Phosphor, Airlock
-
----
-
-## Tier 2: TUI-DESIGN.md
-
-For projects that need palette customization and rule overrides, create a `TUI-DESIGN.md` in your project root using the [template](https://github.com/coreyt/monospace-design-tui/blob/main/TUI-DESIGN.template.md).
-
-The file declares:
-- Which archetypes your project uses
-- Which palette to apply
-- Any rule overrides (WAIVE, OVERRIDE, TIGHTEN)
-- Project-specific conventions beyond the standard
-
-AI agents read this file before designing screens, applying your project's customizations on top of the base standard. The audit skill checks compliance against both the standard and your overrides.
+**Valid palette names:** Default, Monochrome, OS/2, Turbo Pascal, Amber Phosphor, Green Phosphor, Airlock
 
 ---
 
-## Tier 3: Claude Code Skills
+## Tier 2: Project Manifest
 
-The deepest integration. The Monospace Design TUI project includes two [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skills that give AI agents direct access to the standard.
+For projects that need explicit control, create a `TUI-DESIGN.md` in the
+project root using the [template](https://github.com/coreyt/monospace-design-tui/blob/main/TUI-DESIGN.template.md).
 
-### mono-tui-design
+The manifest declares:
 
-The design skill handles the creative work: planning layouts, selecting widgets, assigning keyboard bindings, and generating implementation code.
+- which archetypes the project uses
+- which palette applies
+- any rule overrides (`WAIVE`, `OVERRIDE`, `TIGHTEN`)
+- project-specific conventions beyond the base standard
 
-**When it activates:** Layout planning, widget selection, wireframe creation, or writing Textual code for terminal interfaces.
-
-**What it does:**
-
-1. **Loads context** — Reads the project's `TUI-DESIGN.md` for overrides and conventions, then loads relevant sections of the design standard.
-2. **Analyzes intent** — Determines which archetype (Dashboard, Admin, File Manager, Editor, Fuzzy Finder) matches the user's goal.
-3. **Architects** — Proposes a design with ASCII wireframes, region layout, widget selection rationale, keyboard bindings across all three tiers, and color/state assignments.
-4. **Self-critiques** — Checks the design against common violations: frozen UI, mouse traps, navigation mazes, invisible focus, missing footer keys, case-sensitivity errors, F-key dependencies.
-5. **Generates code** — Produces framework-specific implementation (Textual TCSS, Python widgets, key bindings with the `ci()` helper).
-
-**Invoke with:** `/mono-tui-design`
-
-### mono-tui-audit
-
-The audit skill handles compliance checking. It reads your TUI code and produces a structured pass/fail report against the full standard.
-
-**When it activates:** After building or modifying TUI screens, when you want to verify compliance.
-
-**What it does:**
-
-1. **Builds the effective ruleset** — Merges the standard's rules with your project's `TUI-DESIGN.md` overrides (WAIVE, OVERRIDE, TIGHTEN).
-2. **Scans code** — Checks statically verifiable rules (key bindings, widget choices, footer presence, color independence, async patterns) and flags rules that require manual verification (contrast ratios, focus visibility, transition timing).
-3. **Detects staleness** — Compares override text against the current standard. If the standard has changed since an override was written, it flags the override for review without invalidating it.
-4. **Produces a structured report** — Every rule gets a status: PASS, FAIL, WAIVED, OVERRIDDEN, TIGHTENED, STALE, MANUAL, or N/A. Violations include the rule text, finding, file location, and a specific fix recommendation.
-
-**Invoke with:** `/mono-tui-audit`
+This is how Mono becomes project-specific rather than generic.
 
 ---
 
-## Tier 4: MCP Server
+## Tier 3: MCP Integration
 
-The most portable integration. The MCP server gives any coding agent — Claude Code, Cursor, Windsurf, or any MCP-compatible client — direct tool access to the full design system from any project, without cloning the repository into that project.
+This is now the preferred serious integration path.
+
+The MCP server gives any compatible coding agent structured access to the
+design system from any project, without cloning the repository into that
+project.
+
+### Why MCP comes before agent-native extensions
+
+- it is cross-agent rather than vendor-specific
+- it exposes structured data instead of relying on long prompt memory
+- it supports direct retrieval of rules, palettes, components, archetypes, and patterns
+- it is the best portable foundation for modern agent workflows
 
 ### What it provides
 
-18 tools organized by category:
+18 tools organized around:
 
-- **Design consultation** — Multi-turn design sessions using MCP sampling. Describe your project and get proposals for workflows, screens, components, keyboard maps, and palettes.
-- **Workflow archetypes** — Task-flow patterns (wizard, crud, monitor-respond, search-act, drill-down, pipeline, review-approve) with screen sequences, navigation models, and state management rules.
-- **UI archetypes** — Screen layout patterns (dashboard, admin, file-manager, editor, fuzzy-finder) with region maps and component assignments.
-- **Standard & reference sections** — Direct access to any section of the design standard and rendering reference.
-- **Color palettes** — All 8 palettes with full color definitions.
-- **Components** — Measurements and specs for all 11 component types, plus widget recommendations by data type.
-- **Keyboard bindings** — All three tiers of key bindings, queryable individually.
+- design consultation
+- workflow archetypes
+- UI archetypes
+- standard and reference sections
+- color palettes
+- components and widget recommendations
+- keyboard bindings
 
-### Installation
-
-1. Clone the repository:
-
-```
-git clone https://github.com/coreyt/monospace-design-tui.git
-```
-
-2. Install the MCP Python SDK:
-
-```
-pip install mcp
-```
-
-3. Add the server to your agent's MCP configuration.
-
-**Claude Code** (`~/.claude/settings.json` or project `.mcp.json`):
-
-```json
-{
-  "mcpServers": {
-    "mono-tui": {
-      "command": "python3",
-      "args": ["/path/to/monospace-design-tui/mcp-server/server.py"]
-    }
-  }
-}
-```
-
-Replace `/path/to/` with the actual path where you cloned the repository.
-
-For other MCP-compatible agents, consult their documentation for MCP server configuration. The server uses the standard MCP stdio transport.
-
-See the full [MCP Server README](https://github.com/coreyt/monospace-design-tui/blob/main/mcp-server/README.md) for the complete tool reference and the design consultation sampling flow.
+The MCP server is the portable backbone of Mono’s agent story.
 
 ---
 
-## How It Fits Together
+## Tier 4: Agent-Native Accelerators
 
-The typical workflow:
+Once MCP and `TUI-DESIGN.md` are in place, agent-native features can improve
+ergonomics and local workflow.
 
-1. **Tier 1:** Add the snippet to your `CLAUDE.md` — agents can immediately start designing compliant TUIs.
-2. **Tier 2:** Create a `TUI-DESIGN.md` when you need to lock in a palette, declare archetypes, or override rules.
-3. **Tier 3:** Clone the repository to get the Claude Code skills for full design/audit integration.
-4. **Tier 4:** Install the MCP server to give any coding agent direct tool access to the design system from any project.
+Examples:
 
-The standard is the source of truth. The [agent directive](/agent-ref/) is how agents discover it. The `TUI-DESIGN.md` is how your project customizes it. The skills are the deepest integration for Claude Code users. The MCP server is the most portable — it works with any MCP-compatible agent without requiring project-level setup.
+- Claude slash commands, skills, hooks, and subagents
+- Codex skills, app workflows, and automations
+- Cursor or Windsurf equivalents
+
+These are not the foundation. They are accelerators on top of the portable
+system.
+
+### Current Mono-native accelerators
+
+The repository currently includes two agent-facing skills:
+
+#### `mono-tui-design`
+
+Use for:
+
+- layout planning
+- widget selection
+- pattern selection
+- wireframe creation
+- implementation guidance
+
+Expected behavior:
+
+- load `TUI-DESIGN.md` first
+- load relevant Standard sections
+- load Rendering Reference only as needed
+- load the Pattern Library as a first-class design input
+- recommend an archetype and pattern set, not just raw rules
+- propose ASCII wireframes before implementation
+
+#### `mono-tui-audit`
+
+Use for:
+
+- compliance review after a screen is built or changed
+- auditing rule conformance and project overrides
+- identifying stale overrides and manual-review gaps
+
+Expected behavior:
+
+- merge the base ruleset with project overrides
+- check code-level violations
+- flag visual/manual checks separately
+- produce high-signal findings and concrete fixes
 
 ---
 
-## Getting the Skills
+## Recommended Workflow
 
-The skills are included in the [Monospace Design TUI repository](https://github.com/coreyt/monospace-design-tui) under `skills/`. To use them with Claude Code, clone the repository and the skills will be available when working within the project directory.
+For most projects:
 
-```
-skills/
-├── mono-tui-design/
-│   └── SKILL.md
-└── mono-tui-audit/
-    └── SKILL.md
-```
+1. Add a Tier 1 instruction pointer.
+2. Create `TUI-DESIGN.md` when palette, archetype, or override decisions matter.
+3. Connect the MCP server for structured retrieval and design consultation.
+4. Add agent-native accelerators if your platform supports them.
+
+In practice:
+
+- Tier 1 tells the agent Mono exists
+- Tier 2 tells the agent how this project specializes Mono
+- Tier 3 gives the agent reliable structured access to Mono
+- Tier 4 makes the workflow faster and more ergonomic
+
+---
+
+## Human in the Loop
+
+Mono expects agents to work well with human review rather than avoiding it.
+
+The right posture is:
+
+- ask when workflow, archetype, or palette direction is materially ambiguous
+- proceed when the next step is clear and low-risk
+- surface tradeoffs before expensive or irreversible design decisions
+- return with recommendations, not vague uncertainty
+
+This is not a one-micro-step-per-approval model, and it is not blind autonomy.
+It is disciplined, recommendation-forward collaboration.
+
+---
+
+## The Contract
+
+The standard is the source of truth. The [agent directive](/agent-ref/) tells
+agents how to load it. `TUI-DESIGN.md` tells agents how a specific project
+customizes it. MCP makes the system portable. Agent-native accelerators make
+the workflow better.
+
+The end goal is simple: an agent that gives excellent, Mono-aligned guidance
+and helps build TUIs that are coherent, legible, keyboard-consistent, and
+visually intentional.

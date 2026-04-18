@@ -1,6 +1,6 @@
 ---
 title: "Monospace TUI Pattern Library"
-subtitle: "Reusable interaction patterns distilled from modern text UIs"
+subtitle: "v0.2.5 — Reusable interaction patterns distilled from modern text UIs"
 description: "Named UX patterns for Monospace TUI applications, with archetype mapping and audit checklists"
 weight: 4
 ---

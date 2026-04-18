@@ -1,6 +1,6 @@
 # Monospace Design TUI Textual Appendix
 
-**Version 0.1.2** — Mapping Monospace Design TUI Standard rules to Python Textual framework.
+**Version 0.2.5** — Mapping Monospace Design TUI Standard rules to Python Textual framework.
 
 **Package:** `mono-tui`
 
@@ -8,6 +8,7 @@
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 0.2.5 | 2026-04-18 | Synced appendix framing and agent-facing expectations with the v0.2.5 Mono documentation set. |
 | 0.1.2 | 2026-04-17 | Synced appendix expectations with standard v0.1.2 keyboard/help/navigation guidance. |
 | 0.1.1 | 2026-03-05 | Added §T8 Workflow Archetype Patterns (wizard, CRUD, monitor-respond, drill-down, configuration, review-approve). Renumbered §T8 Command Palette to §T9. |
 | 0.1.0 | — | Initial release |

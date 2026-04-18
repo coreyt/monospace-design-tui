@@ -4,21 +4,74 @@
 ┻ ┻┗━┛┛┗┛┗━┛┗━┛┻  ┻ ┻┗━┛┗━┛   ┻ ┗━┛┻
 ```
 
-**A design language for terminal user interfaces** — v0.1.2
+**A design language for terminal user interfaces** — v0.2.5
 
 Website: [coreyt.github.io/monospace-design-tui](https://coreyt.github.io/monospace-design-tui/)
 
 ---
 
-As terminal user interfaces grew beyond simple scripts into full applications — dashboards, file managers, configuration wizards — a problem became clear. Every project invented its own conventions. Keyboard shortcuts varied from app to app. Layouts followed no shared logic. Color meant different things in different tools. The experience of using one TUI taught you nothing about using the next.
+Monospace Design TUI is a design standard for terminal applications: dashboards,
+file managers, editors, admin panels, fuzzy finders, and other keyboard-first
+interfaces that run in a text terminal.
 
-This seemed wrong. Graphical interfaces had solved this decades ago. Apple published the Human Interface Guidelines. Google developed Material Design. These standards meant that a user who learned one application could sit down in front of another and already know how it worked. But for terminal interfaces — nothing. No shared vocabulary, no common rules, no design system.
+Text-based interfaces are making a comeback because they are fast, simple,
+portable, scriptable, and well-suited to modern developer workflows. But while
+GUI and web teams have long had design systems and style guides, terminal
+applications largely did not. Every project invented its own conventions.
+Keyboard shortcuts varied from app to app. Layouts followed no shared logic.
+Color meant different things in different tools. The experience of using one
+TUI taught you nothing about using the next.
 
-We suspected the raw material already existed. The history of text-mode computing is rich with thoughtful design: IBM's CUA keyboard model from 1987, the window management conventions of OS/2, Norton Commander's dual-pane paradigm, Borland's Turbo Vision component framework. These weren't ad hoc — they were carefully engineered systems that millions of people used daily. The knowledge was there, scattered across manuals, technical references, and the muscle memory of experienced developers.
+This seemed wrong. Graphical interfaces had solved this decades ago. Apple
+published the Human Interface Guidelines. Google developed Material Design.
+These standards meant that a user who learned one application could sit down in
+front of another and already know how it worked. But for terminal interfaces:
+no shared vocabulary, no common rules, no design system. So I created one.
 
-So we collected it. We studied seven research vectors — CUA, OS/2, Material Design 3, Apple HIG, the Keystroke-Level Model, modern terminal capabilities, and historical TUI applications — and synthesized them into a single, prescriptive design language. Not guidelines. Not suggestions. Falsifiable, auditable rules that a reviewer can check against an implementation and declare it compliant or in violation.
+The raw material already existed. The history of text-mode computing is rich
+with thoughtful design: IBM's CUA keyboard model from 1987, the window
+management conventions of OS/2, Norton Commander's dual-pane paradigm,
+Borland's Turbo Vision component framework, plus lessons from modern tools such
+as Lazygit, k9s, btop, bottom, and Helix.
 
-The result is Monospace Design TUI: a v0.1.2 design standard for terminal applications that want to look and behave like they belong to the same family.
+Monospace Design TUI collects those ideas and turns them into a single
+prescriptive system. Not loose inspiration. Not vague guidelines. Falsifiable,
+auditable rules that a reviewer can check against an implementation and declare
+it compliant or in violation.
+
+The result is Monospace Design TUI: a v0.2.5 design standard for terminal applications that want to look and behave like they belong to the same family.
+
+## Why Use It
+
+Monospace TUI gives terminal applications the same kinds of benefits that GUI
+and web design systems provide:
+
+- shared keyboard conventions across applications
+- clearer layout and navigation patterns
+- stronger focus, state, and feedback rules
+- reusable interaction patterns instead of one-off design choices
+- named palettes and rendering guidance for consistent visual tone
+- a basis for design review, implementation audit, and AI-agent guidance
+
+The goal is not uniformity for its own sake. The goal is making TUIs easier to
+learn, easier to build, easier to review, and better to use.
+
+## Quick Start
+
+If you want to adopt Mono quickly:
+
+1. Read the [Design Standard](monospace-tui-design-standard.md).
+2. Pick a [named palette](monospace-tui-rendering-reference.md) and the
+   relevant [archetype](monospace-tui-design-standard.md).
+3. Create a `TUI-DESIGN.md` from [TUI-DESIGN.template.md](TUI-DESIGN.template.md)
+   if your project needs explicit archetypes, overrides, or conventions.
+
+If you are implementing in Textual, also read the
+[Textual Appendix](monospace-tui-textual-appendix.md).
+
+If you are designing with AI agents, start with
+[Working with AI Agents](website/content/agents/_index.md) and the
+[Agent Reference Directive](website/content/agent-ref/_index.md).
 
 ## The Documents
 
@@ -41,7 +94,7 @@ The result is Monospace Design TUI: a v0.1.2 design standard for terminal applic
 
 **[Examples](website/content/examples/_index.md)** — ASCII screenshots showing the design standard in action across all five archetypes.
 
-**[Working with AI Agents](website/content/agents/_index.md)** — Four tiers of adoption for AI-assisted TUI development, from a one-line snippet to full MCP integration.
+**[Working with AI Agents](website/content/agents/_index.md)** — A modern adoption model for Mono-aligned coding agents, from simple instruction pointers to MCP-backed structured design workflows.
 
 **[MCP Server](mcp-server/)** — Connect AI agents in any project to the design system via MCP. Query design rules, palettes, components, keyboard bindings, and archetypes — 18 tools including interactive design consultation.
 

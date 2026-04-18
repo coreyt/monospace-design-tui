@@ -1,5 +1,7 @@
 # Monospace TUI Pattern Library
 
+**Version 0.2.5** — Reusable interaction patterns for Monospace Design TUI.
+
 This document abstracts recurring interface patterns from modern high-functioning TUIs into reusable patterns for Monospace Design TUI.
 
 Monospace TUI is intentionally compatible with **aesthetic-first CUI design**: interfaces that use the terminal as an expressive visual canvas, not just as a neutral control surface.[^cui-aesthetic] The patterns below assume that visual richness is welcome when it preserves semantic clarity, accessibility, and keyboard fluency.
