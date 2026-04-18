@@ -1,0 +1,33 @@
+kind: navigation
+id: nav-research-ops
+title: Research Ops Navigation
+workspaces:
+  - id: research-base
+    label: Research Base
+  - id: analysis-studio
+    label: Analysis Studio
+  - id: report-builder
+    label: Report Builder
+  - id: runs
+    label: Runs / Activity
+  - id: settings
+    label: Settings
+routes:
+  - id: route-01
+    type: jump
+    from: research-base
+    to: analysis-studio
+    trigger: analyze-this
+  - id: route-02
+    type: jump
+    from: analysis-studio
+    to: report-builder
+    trigger: use-in-report
+  - id: route-03
+    type: jump
+    from: report-builder
+    to: research-base
+    trigger: collect-more
+rules:
+  - stable-root
+  - explicit-cross-workspace-paths

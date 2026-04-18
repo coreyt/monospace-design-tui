@@ -1,0 +1,21 @@
+kind: screen
+id: file-manager-source-select
+title: Source Selection
+purpose: Select input sources for a pipeline or collection run
+regions:
+  - { id: region_a, type: region_a, role: available }
+  - { id: region_b, type: region_b, role: chosen }
+  - { id: footer, type: footer, role: commands }
+components:
+  - { id: available-sources, type: list, region: region_a, purpose: available source types }
+  - { id: selected-sources, type: list, region: region_b, purpose: chosen sources }
+actions:
+  - { id: add-source, label: Add Source, target: available-sources, kind: selection_local }
+focus: { default_target: available-sources, focus_order: [available-sources, selected-sources] }
+transitions:
+  - { id: confirm-sources, type: advance, trigger: continue, target: dashboard-collection-review }
+footer_keys:
+  bindings:
+    - { key: "Tab", label: Switch Pane, scope: screen }
+    - { key: "Space", label: Select, scope: list }
+    - { key: "Enter", label: Continue, scope: screen }

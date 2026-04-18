@@ -1,0 +1,26 @@
+kind: workflow
+id: wf-alert-triage
+title: Alert Triage
+purpose: Monitor active alerts and respond to anomalies
+entry_conditions: [dashboard active]
+exit_conditions: [alert acknowledged or remediated]
+stages:
+  - id: dashboard
+    label: Live Dashboard
+  - id: detail
+    label: Alert Detail
+  - id: action
+    label: Action Dialog
+transitions:
+  - id: tr-01
+    type: push
+    trigger: inspect
+    target: detail
+  - id: tr-02
+    type: modal
+    trigger: act
+    target: action
+checkpoints:
+  - id: cp-01
+    label: approve remediation
+    stage_id: action

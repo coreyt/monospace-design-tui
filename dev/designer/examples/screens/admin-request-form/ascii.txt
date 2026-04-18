@@ -1,0 +1,6 @@
+┌────────────────── New Collection Request ──────────────────┐
+│ request form               │ request summary               │
+│ topic, objective, type     │ normalized selections         │
+├────────────────────────────────────────────────────────────┤
+│ Tab Next Field  Enter Continue  Esc Back                  │
+└────────────────────────────────────────────────────────────┘

@@ -1,0 +1,36 @@
+version: "0.3.0"
+artifact_type: navigation
+id: nav-file-workbench
+title: File Workbench Navigation
+purpose: Navigation for a browse-edit-search terminal workbench
+source:
+  kind: generated
+  inputs: [product-brief]
+status: draft
+workspaces:
+  - id: browser
+    label: Browser
+    purpose: browse files and directories
+  - id: editor
+    label: Editor
+    purpose: edit selected file
+  - id: search
+    label: Search
+    purpose: locate files and commands quickly
+routes:
+  - from: browser
+    to: editor
+    kind: push
+    notes: open selected file
+  - from: browser
+    to: search
+    kind: modal
+    notes: fuzzy jump to file
+  - from: search
+    to: editor
+    kind: jump
+    notes: select result and open
+rules:
+  - Browser is the operational hub
+  - Search is transient and returns to prior context
+  - Editor preserves file context on return

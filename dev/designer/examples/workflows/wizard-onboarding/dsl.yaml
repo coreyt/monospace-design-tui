@@ -1,0 +1,32 @@
+kind: workflow
+id: wf-onboarding
+title: Onboarding Wizard
+purpose: Collect initial setup information for a new user
+entry_conditions: [first run]
+exit_conditions: [workspace created]
+stages:
+  - id: intro
+    label: Introduction
+  - id: profile
+    label: Profile
+  - id: preferences
+    label: Preferences
+  - id: confirm
+    label: Confirmation
+transitions:
+  - id: tr-01
+    type: advance
+    trigger: next
+    target: profile
+  - id: tr-02
+    type: advance
+    trigger: next
+    target: preferences
+  - id: tr-03
+    type: advance
+    trigger: next
+    target: confirm
+checkpoints:
+  - id: cp-01
+    label: approve onboarding choices
+    stage_id: confirm

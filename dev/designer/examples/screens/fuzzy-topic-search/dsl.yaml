@@ -1,0 +1,22 @@
+kind: screen
+id: fuzzy-topic-search
+title: Topic Search
+purpose: Search across topics quickly
+regions:
+  - { id: header, type: header, role: query }
+  - { id: region_b, type: region_b, role: results }
+  - { id: region_c, type: inspector, role: preview }
+  - { id: footer, type: footer, role: commands }
+components:
+  - { id: query-input, type: input, region: header, purpose: topic search }
+  - { id: topic-results, type: list, region: region_b, purpose: ranked topic results }
+  - { id: topic-preview, type: detail, region: region_c, purpose: selected topic preview }
+actions:
+  - { id: open-topic, label: Open Topic, target: topic-results, kind: selection_local }
+focus: { default_target: query-input, focus_order: [query-input, topic-results] }
+transitions:
+  - { id: select-topic, type: jump, trigger: enter, target: file-manager-topic-browser }
+footer_keys:
+  bindings:
+    - { key: "Enter", label: Select, scope: finder }
+    - { key: "Esc", label: Cancel, scope: finder }

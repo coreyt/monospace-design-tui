@@ -1,0 +1,30 @@
+kind: navigation
+id: nav-file-workbench
+title: File Workbench Navigation
+workspaces:
+  - id: browser
+    label: Browser
+  - id: editor
+    label: Editor
+  - id: search
+    label: Search
+routes:
+  - id: route-01
+    type: push
+    from: browser
+    to: editor
+    trigger: open-file
+  - id: route-02
+    type: modal
+    from: browser
+    to: search
+    trigger: search
+  - id: route-03
+    type: jump
+    from: search
+    to: editor
+    trigger: select-result
+rules:
+  - browser-hub
+  - transient-search
+  - preserve-editor-context

@@ -1,0 +1,28 @@
+version: "0.3.0"
+artifact_type: screen
+id: file-manager-source-explorer
+title: Source Explorer
+purpose: Browse sources within a topic
+source: { kind: generated, inputs: [example] }
+status: draft
+workflow_id: wf-topic-explorer
+archetype: file-manager
+patterns: [master-detail]
+entry_conditions: [topic selected]
+regions:
+  - { id: region_a, type: region_a, role: source-list, contents: [source-list] }
+  - { id: region_b, type: region_b, role: preview, contents: [source-preview] }
+  - { id: footer, type: footer, role: commands, contents: [footer-keys] }
+components:
+  - { id: source-list, type: list, region: region_a, purpose: source items }
+  - { id: source-preview, type: detail, region: region_b, purpose: selected source summary }
+actions:
+  - { id: inspect, label: Inspect Source, target: source-list, kind: selection_local }
+focus: { default_target: source-list, focus_order: [source-list, source-preview] }
+transitions:
+  - { id: inspect-source, type: push, trigger: enter, target: editor-item-review }
+footer_keys:
+  - { key: "tab", label: Switch Pane, scope: screen }
+  - { key: "enter", label: Inspect Source, scope: list }
+  - { key: "esc", label: Back, scope: screen }
+notes: []

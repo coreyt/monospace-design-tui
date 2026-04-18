@@ -1,0 +1,6 @@
+Workflow: Alert Triage
+
+- Live Dashboard
+- Alert Detail
+- Action Dialog
+  * checkpoint: approve remediation

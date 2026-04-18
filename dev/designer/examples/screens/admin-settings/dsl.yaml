@@ -1,0 +1,22 @@
+kind: screen
+id: admin-settings
+title: Settings
+purpose: Manage application configuration
+regions:
+  - { id: region_a, type: region_a, role: categories }
+  - { id: region_b, type: region_b, role: form }
+  - { id: footer, type: footer, role: commands }
+components:
+  - { id: category-list, type: list, region: region_a, purpose: settings categories }
+  - { id: settings-form, type: form, region: region_b, purpose: fields for active category }
+actions:
+  - { id: save, label: Save, target: settings-form, kind: workflow }
+focus: { default_target: category-list, focus_order: [category-list, settings-form] }
+transitions:
+  - { id: save-settings, type: return, trigger: save, target: admin-settings }
+footer_keys:
+  bindings:
+    - { key: "Ctrl+S", label: Save, scope: form }
+    - { key: "[", label: Prev Category, scope: screen }
+    - { key: "]", label: Next Category, scope: screen }
+    - { key: "Esc", label: Exit, scope: screen }

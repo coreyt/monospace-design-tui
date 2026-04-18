@@ -1,0 +1,6 @@
+┌────────────────────── Source Explorer ──────────────────────┐
+│ source list                │ source preview                │
+│ > current source           │                               │
+├────────────────────────────────────────────────────────────┤
+│ Tab Switch Pane  Enter Inspect Source  Esc Back           │
+└────────────────────────────────────────────────────────────┘

@@ -1,0 +1,45 @@
+version: "0.3.0"
+artifact_type: workflow
+id: wf-topic-explorer
+title: Topic Explorer
+purpose: Move from research overview to topic detail and source inspection
+source:
+  kind: generated
+  inputs: [research-library-note]
+status: draft
+entry_conditions: [topics exist]
+exit_conditions: [topic or source selected]
+stages:
+  - id: overview
+    label: Overview
+    purpose: top-level summary
+    screen_ids: [scr-overview]
+  - id: topics
+    label: Topic List
+    purpose: browse topics
+    screen_ids: [scr-topics]
+  - id: topic-detail
+    label: Topic Detail
+    purpose: inspect topic evidence
+    screen_ids: [scr-topic-detail]
+  - id: source-detail
+    label: Source Detail
+    purpose: inspect one source
+    screen_ids: [scr-source-detail]
+transitions:
+  - from: overview
+    to: topics
+    trigger: enter
+    kind: push
+  - from: topics
+    to: topic-detail
+    trigger: enter
+    kind: push
+  - from: topic-detail
+    to: source-detail
+    trigger: inspect-source
+    kind: push
+checkpoints: []
+assumptions:
+  - breadcrumb must remain visible
+linked_screens: [scr-overview, scr-topics, scr-topic-detail, scr-source-detail]

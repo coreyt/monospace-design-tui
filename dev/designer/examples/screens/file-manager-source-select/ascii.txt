@@ -1,0 +1,6 @@
+┌────────────────────── Source Selection ─────────────────────┐
+│ available sources           │ selected sources             │
+│ > current source type       │ chosen items                 │
+├────────────────────────────────────────────────────────────┤
+│ Tab Switch Pane  Space Select  Enter Continue             │
+└────────────────────────────────────────────────────────────┘

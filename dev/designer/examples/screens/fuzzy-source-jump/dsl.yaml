@@ -1,0 +1,20 @@
+kind: screen
+id: fuzzy-source-jump
+title: Source Jump
+purpose: Jump directly to a source by title or URL
+regions:
+  - { id: header, type: header, role: query }
+  - { id: region_b, type: region_b, role: results }
+  - { id: footer, type: footer, role: commands }
+components:
+  - { id: query-input, type: input, region: header, purpose: source search }
+  - { id: source-results, type: list, region: region_b, purpose: ranked source matches }
+actions:
+  - { id: inspect-source, label: Inspect Source, target: source-results, kind: selection_local }
+focus: { default_target: query-input, focus_order: [query-input, source-results] }
+transitions:
+  - { id: select-source, type: jump, trigger: enter, target: editor-item-review }
+footer_keys:
+  bindings:
+    - { key: "Enter", label: Select, scope: finder }
+    - { key: "Esc", label: Cancel, scope: finder }

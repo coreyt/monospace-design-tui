@@ -1,0 +1,21 @@
+kind: screen
+id: editor-analysis-workspace
+title: Analysis Workspace
+purpose: Build a structured analysis artifact from evidence
+regions:
+  - { id: region_b, type: region_b, role: document }
+  - { id: region_c, type: inspector, role: evidence }
+  - { id: footer, type: footer, role: commands }
+components:
+  - { id: analysis-buffer, type: text, region: region_b, purpose: working analysis text }
+  - { id: evidence-panel, type: detail, region: region_c, purpose: supporting evidence context }
+actions:
+  - { id: save, label: Save Analysis, target: analysis-buffer, kind: workflow }
+focus: { default_target: analysis-buffer, focus_order: [analysis-buffer, evidence-panel] }
+transitions:
+  - { id: publish-analysis, type: jump, trigger: use-in-report, target: editor-report-draft }
+footer_keys:
+  bindings:
+    - { key: "Ctrl+S", label: Save, scope: editor }
+    - { key: "Ctrl+F", label: Find, scope: editor }
+    - { key: "Esc", label: Leave Mode, scope: editor }

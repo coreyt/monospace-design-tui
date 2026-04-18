@@ -1,0 +1,21 @@
+kind: screen
+id: editor-item-review
+title: Item Review
+purpose: Review a single queued item in depth
+regions:
+  - { id: region_b, type: region_b, role: review-content }
+  - { id: footer, type: footer, role: commands }
+components:
+  - { id: review-buffer, type: text, region: region_b, purpose: item content under review }
+actions:
+  - { id: approve, label: Approve, target: review-buffer, kind: review }
+  - { id: reject, label: Reject, target: review-buffer, kind: review }
+focus: { default_target: review-buffer, focus_order: [review-buffer] }
+transitions:
+  - { id: next-item, type: advance, trigger: next, target: editor-item-review }
+footer_keys:
+  bindings:
+    - { key: "a", label: Approve, scope: review }
+    - { key: "x", label: Reject, scope: review }
+    - { key: "n", label: Next, scope: review }
+    - { key: "Esc", label: Queue, scope: review }

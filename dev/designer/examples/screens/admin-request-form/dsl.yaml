@@ -1,0 +1,21 @@
+kind: screen
+id: admin-request-form
+title: New Collection Request
+purpose: Capture the initial research request
+regions:
+  - { id: region_a, type: region_a, role: form }
+  - { id: region_c, type: inspector, role: summary }
+  - { id: footer, type: footer, role: commands }
+components:
+  - { id: request-form, type: form, region: region_a, purpose: request inputs }
+  - { id: request-summary, type: summary, region: region_c, purpose: normalized request summary }
+actions:
+  - { id: continue, label: Continue, target: request-form, kind: workflow }
+focus: { default_target: request-form, focus_order: [request-form] }
+transitions:
+  - { id: next, type: advance, trigger: continue, target: admin-scope-refinement }
+footer_keys:
+  bindings:
+    - { key: "Tab", label: Next Field, scope: form }
+    - { key: "Enter", label: Continue, scope: form }
+    - { key: "Esc", label: Back, scope: form }

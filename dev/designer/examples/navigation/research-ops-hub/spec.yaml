@@ -1,0 +1,42 @@
+version: "0.3.0"
+artifact_type: navigation
+id: nav-research-ops
+title: Research Ops Navigation
+purpose: Stable root navigation for a multi-workspace research operating system
+source:
+  kind: generated
+  inputs: [product-brief, workflow-notes]
+status: draft
+workspaces:
+  - id: research-base
+    label: Research Base
+    purpose: collect and inspect evidence
+  - id: analysis-studio
+    label: Analysis Studio
+    purpose: reason over evidence
+  - id: report-builder
+    label: Report Builder
+    purpose: compose deliverables
+  - id: runs
+    label: Runs / Activity
+    purpose: inspect execution state
+  - id: settings
+    label: Settings
+    purpose: configure the application
+routes:
+  - from: research-base
+    to: analysis-studio
+    kind: jump
+    notes: analyze selected topic
+  - from: analysis-studio
+    to: report-builder
+    kind: jump
+    notes: use approved artifact in report
+  - from: report-builder
+    to: research-base
+    kind: jump
+    notes: collect more for a weak section
+rules:
+  - Main Menu is the stable root
+  - Esc returns one level back
+  - cross-workspace movement should be explicit and topic-centered

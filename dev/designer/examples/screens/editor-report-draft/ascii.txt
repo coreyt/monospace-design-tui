@@ -1,0 +1,6 @@
+┌──────────────────────── Report Draft ───────────────────────┐
+│ report buffer                  │ outline panel             │
+│ draft content                  │ report structure          │
+├────────────────────────────────────────────────────────────┤
+│ Ctrl+S Save  Ctrl+G Goto  Esc Leave Mode                  │
+└────────────────────────────────────────────────────────────┘

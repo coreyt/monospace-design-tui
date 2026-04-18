@@ -1,0 +1,20 @@
+kind: screen
+id: fuzzy-command-palette
+title: Command Palette
+purpose: Search and run commands quickly
+regions:
+  - { id: header, type: header, role: query }
+  - { id: region_b, type: region_b, role: results }
+  - { id: footer, type: footer, role: commands }
+components:
+  - { id: query-input, type: input, region: header, purpose: command search }
+  - { id: command-results, type: list, region: region_b, purpose: ranked command results }
+actions:
+  - { id: run-command, label: Run Command, target: command-results, kind: selection_local }
+focus: { default_target: query-input, focus_order: [query-input, command-results] }
+transitions:
+  - { id: select-command, type: jump, trigger: enter, target: admin-settings }
+footer_keys:
+  bindings:
+    - { key: "Enter", label: Select, scope: finder }
+    - { key: "Esc", label: Cancel, scope: finder }

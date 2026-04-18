@@ -1,0 +1,29 @@
+version: "0.3.0"
+artifact_type: screen
+id: dashboard-system-monitor
+title: System Monitor
+purpose: Monitor key service and resource status
+source: { kind: generated, inputs: [example] }
+status: draft
+workflow_id: wf-alert-triage
+archetype: dashboard
+patterns: [focused-surface, live-drill-down]
+entry_conditions: [system active]
+regions:
+  - { id: header, type: header, role: metrics, contents: [metric-cards] }
+  - { id: region_b, type: region_b, role: primary-data, contents: [service-table] }
+  - { id: footer, type: footer, role: commands, contents: [footer-keys] }
+components:
+  - { id: metric-cards, type: summary, region: header, purpose: key metrics }
+  - { id: service-table, type: table, region: region_b, purpose: service status list }
+actions:
+  - { id: refresh, label: Refresh, target: service-table, kind: global }
+focus: { default_target: service-table, focus_order: [service-table] }
+transitions:
+  - { id: inspect-service, type: push, trigger: enter, target: dashboard-run-activity }
+footer_keys:
+  - { key: "?", label: Help, scope: screen }
+  - { key: "r", label: Refresh, scope: screen }
+  - { key: "/", label: Filter, scope: screen }
+  - { key: "q", label: Quit, scope: screen }
+notes: []

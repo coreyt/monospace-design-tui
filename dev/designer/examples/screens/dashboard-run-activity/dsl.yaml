@@ -1,0 +1,23 @@
+kind: screen
+id: dashboard-run-activity
+title: Run Activity
+purpose: Observe active and recent jobs
+regions:
+  - { id: header, type: header, role: summary }
+  - { id: region_b, type: region_b, role: queue }
+  - { id: region_c, type: inspector, role: detail }
+  - { id: footer, type: footer, role: commands }
+components:
+  - { id: stats, type: summary, region: header, purpose: run counters }
+  - { id: job-table, type: table, region: region_b, purpose: job list }
+  - { id: job-detail, type: detail, region: region_c, purpose: selected run detail }
+actions:
+  - { id: retry, label: Retry, target: job-table, kind: selection_local }
+focus: { default_target: job-table, focus_order: [job-table, job-detail] }
+transitions:
+  - { id: open-job, type: push, trigger: enter, target: editor-item-review }
+footer_keys:
+  bindings:
+    - { key: "?", label: Help, scope: screen }
+    - { key: "r", label: Refresh, scope: screen }
+    - { key: "q", label: Quit, scope: screen }

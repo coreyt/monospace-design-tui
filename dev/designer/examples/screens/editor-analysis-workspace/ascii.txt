@@ -1,0 +1,6 @@
+┌───────────────────── Analysis Workspace ────────────────────┐
+│ analysis buffer                │ evidence panel            │
+│ working document               │ supporting context        │
+├────────────────────────────────────────────────────────────┤
+│ Ctrl+S Save  Ctrl+F Find  Esc Leave Mode                  │
+└────────────────────────────────────────────────────────────┘

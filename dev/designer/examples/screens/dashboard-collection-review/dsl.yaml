@@ -1,0 +1,22 @@
+kind: screen
+id: dashboard-collection-review
+title: Collection Review
+purpose: Review coverage and post-collection recommendations
+regions:
+  - { id: header, type: header, role: topic-context }
+  - { id: region_b, type: region_b, role: coverage }
+  - { id: region_c, type: inspector, role: recommendations }
+  - { id: footer, type: footer, role: commands }
+components:
+  - { id: topic-summary, type: summary, region: header, purpose: topic context }
+  - { id: coverage-table, type: table, region: region_b, purpose: per-dimension status }
+  - { id: recommendation-panel, type: detail, region: region_c, purpose: next actions }
+actions:
+  - { id: store, label: Store and Finish, target: coverage-table, kind: workflow }
+focus: { default_target: coverage-table, focus_order: [coverage-table, recommendation-panel] }
+transitions:
+  - { id: collect-more, type: jump, trigger: collect-more, target: file-manager-topic-browser }
+footer_keys:
+  bindings:
+    - { key: "?", label: Help, scope: screen }
+    - { key: "q", label: Close, scope: screen }

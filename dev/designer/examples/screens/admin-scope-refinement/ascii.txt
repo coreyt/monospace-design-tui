@@ -1,0 +1,6 @@
+┌────────────────── Scope Refinement Review ──────────────────┐
+│ dimension list │ dimension editor │ topic summary           │
+│ > current dim  │ edit fields      │ request interpretation  │
+├────────────────────────────────────────────────────────────┤
+│ a Approve Scope  d Delete Dimension  Esc Back              │
+└────────────────────────────────────────────────────────────┘

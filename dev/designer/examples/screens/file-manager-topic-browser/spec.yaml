@@ -1,0 +1,28 @@
+version: "0.3.0"
+artifact_type: screen
+id: file-manager-topic-browser
+title: Topic Browser
+purpose: Browse research topics and topic groups
+source: { kind: generated, inputs: [example] }
+status: draft
+workflow_id: wf-topic-explorer
+archetype: file-manager
+patterns: [master-detail, object-local-actions]
+entry_conditions: [topics loaded]
+regions:
+  - { id: region_a, type: region_a, role: topic-list, contents: [topic-list] }
+  - { id: region_b, type: region_b, role: preview, contents: [topic-preview] }
+  - { id: footer, type: footer, role: commands, contents: [footer-keys] }
+components:
+  - { id: topic-list, type: list, region: region_a, purpose: topic items }
+  - { id: topic-preview, type: detail, region: region_b, purpose: selected topic preview }
+actions:
+  - { id: open, label: Open Topic, target: topic-list, kind: selection_local }
+focus: { default_target: topic-list, focus_order: [topic-list, topic-preview] }
+transitions:
+  - { id: open-topic, type: push, trigger: enter, target: file-manager-source-explorer }
+footer_keys:
+  - { key: "tab", label: Switch Pane, scope: screen }
+  - { key: "enter", label: Open Topic, scope: list }
+  - { key: "/", label: Filter, scope: list }
+notes: []

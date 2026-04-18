@@ -1,0 +1,29 @@
+version: "0.3.0"
+artifact_type: screen
+id: dashboard-collection-review
+title: Collection Review
+purpose: Review coverage and post-collection recommendations
+source: { kind: generated, inputs: [example] }
+status: draft
+workflow_id: wf-topic-explorer
+archetype: dashboard
+patterns: [master-detail, object-local-actions]
+entry_conditions: [collection complete]
+regions:
+  - { id: header, type: header, role: topic-context, contents: [topic-summary] }
+  - { id: region_b, type: region_b, role: coverage, contents: [coverage-table] }
+  - { id: region_c, type: inspector, role: recommendations, contents: [recommendation-panel] }
+  - { id: footer, type: footer, role: commands, contents: [footer-keys] }
+components:
+  - { id: topic-summary, type: summary, region: header, purpose: topic context }
+  - { id: coverage-table, type: table, region: region_b, purpose: per-dimension status }
+  - { id: recommendation-panel, type: detail, region: region_c, purpose: next actions }
+actions:
+  - { id: store, label: Store and Finish, target: coverage-table, kind: workflow }
+focus: { default_target: coverage-table, focus_order: [coverage-table, recommendation-panel] }
+transitions:
+  - { id: collect-more, type: jump, trigger: collect-more, target: file-manager-topic-browser }
+footer_keys:
+  - { key: "?", label: Help, scope: screen }
+  - { key: "q", label: Close, scope: screen }
+notes: []

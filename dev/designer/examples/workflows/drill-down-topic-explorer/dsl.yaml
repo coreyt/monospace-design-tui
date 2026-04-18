@@ -1,0 +1,29 @@
+kind: workflow
+id: wf-topic-explorer
+title: Topic Explorer
+purpose: Move from research overview to topic detail and source inspection
+entry_conditions: [topics exist]
+exit_conditions: [topic or source selected]
+stages:
+  - id: overview
+    label: Overview
+  - id: topics
+    label: Topic List
+  - id: topic-detail
+    label: Topic Detail
+  - id: source-detail
+    label: Source Detail
+transitions:
+  - id: tr-01
+    type: push
+    trigger: enter
+    target: topics
+  - id: tr-02
+    type: push
+    trigger: enter
+    target: topic-detail
+  - id: tr-03
+    type: push
+    trigger: inspect-source
+    target: source-detail
+checkpoints: []

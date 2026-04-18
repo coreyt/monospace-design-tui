@@ -1,0 +1,27 @@
+version: "0.3.0"
+artifact_type: screen
+id: fuzzy-source-jump
+title: Source Jump
+purpose: Jump directly to a source by title or URL
+source: { kind: generated, inputs: [example] }
+status: draft
+workflow_id: wf-topic-explorer
+archetype: fuzzy-finder
+patterns: [command-jump]
+entry_conditions: [source search opened]
+regions:
+  - { id: header, type: header, role: query, contents: [query-input] }
+  - { id: region_b, type: region_b, role: results, contents: [source-results] }
+  - { id: footer, type: footer, role: commands, contents: [footer-keys] }
+components:
+  - { id: query-input, type: input, region: header, purpose: source search }
+  - { id: source-results, type: list, region: region_b, purpose: ranked source matches }
+actions:
+  - { id: inspect-source, label: Inspect Source, target: source-results, kind: selection_local }
+focus: { default_target: query-input, focus_order: [query-input, source-results] }
+transitions:
+  - { id: select-source, type: jump, trigger: enter, target: editor-item-review }
+footer_keys:
+  - { key: "enter", label: Select, scope: finder }
+  - { key: "esc", label: Cancel, scope: finder }
+notes: []

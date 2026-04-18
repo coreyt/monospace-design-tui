@@ -1,0 +1,7 @@
+Workflow: Onboarding Wizard
+
+- Introduction
+- Profile
+- Preferences
+- Confirmation
+  * checkpoint: approve onboarding choices

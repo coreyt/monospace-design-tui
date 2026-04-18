@@ -1,0 +1,13 @@
+┌────────────────────────── Research Ops ──────────────────────────┐
+│ [Research Base]                                                 │
+│ [Analysis Studio]                                               │
+│ [Report Builder]                                                │
+│ [Runs / Activity]                                               │
+│ [Settings]                                                      │
+├──────────────────────────────────────────────────────────────────┤
+│ Research Base  -> Analyze This -> Analysis Studio               │
+│ Analysis Studio -> Use In Report -> Report Builder              │
+│ Report Builder -> Collect More -> Research Base                 │
+├──────────────────────────────────────────────────────────────────┤
+│ stable root | explicit topic-centered cross-workspace movement  │
+└──────────────────────────────────────────────────────────────────┘

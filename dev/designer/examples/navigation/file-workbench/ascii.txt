@@ -1,0 +1,11 @@
+┌────────────────────────── File Workbench ────────────────────────┐
+│ [Browser]                                                        │
+│ [Editor]                                                         │
+│ [Search]                                                         │
+├──────────────────────────────────────────────────────────────────┤
+│ Browser -> open file -> Editor                                  │
+│ Browser -> search -> Search (transient)                         │
+│ Search -> select result -> Editor                               │
+├──────────────────────────────────────────────────────────────────┤
+│ browser hub | transient search | preserve editor context        │
+└──────────────────────────────────────────────────────────────────┘

@@ -1,0 +1,21 @@
+kind: screen
+id: file-manager-source-explorer
+title: Source Explorer
+purpose: Browse sources within a topic
+regions:
+  - { id: region_a, type: region_a, role: source-list }
+  - { id: region_b, type: region_b, role: preview }
+  - { id: footer, type: footer, role: commands }
+components:
+  - { id: source-list, type: list, region: region_a, purpose: source items }
+  - { id: source-preview, type: detail, region: region_b, purpose: selected source summary }
+actions:
+  - { id: inspect, label: Inspect Source, target: source-list, kind: selection_local }
+focus: { default_target: source-list, focus_order: [source-list, source-preview] }
+transitions:
+  - { id: inspect-source, type: push, trigger: enter, target: editor-item-review }
+footer_keys:
+  bindings:
+    - { key: "Tab", label: Switch Pane, scope: screen }
+    - { key: "Enter", label: Inspect Source, scope: list }
+    - { key: "Esc", label: Back, scope: screen }
