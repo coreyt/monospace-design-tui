@@ -1,6 +1,6 @@
 ---
 title: "Monospace Design TUI Standard"
-subtitle: "v0.1 — Prescriptive rules for Monospace Design TUI applications"
+subtitle: "v0.1.2 — Prescriptive rules for Monospace Design TUI applications"
 description: "The authoritative design specification for Monospace TUI-compliant terminal applications"
 ---
 **Package:** `mono-tui`

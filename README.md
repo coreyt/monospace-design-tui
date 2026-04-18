@@ -4,7 +4,7 @@
 ┻ ┻┗━┛┛┗┛┗━┛┗━┛┻  ┻ ┻┗━┛┗━┛   ┻ ┗━┛┻
 ```
 
-**A design language for terminal user interfaces** — v0.1
+**A design language for terminal user interfaces** — v0.1.2
 
 Website: [coreyt.github.io/monospace-design-tui](https://coreyt.github.io/monospace-design-tui/)
 
@@ -18,7 +18,7 @@ We suspected the raw material already existed. The history of text-mode computin
 
 So we collected it. We studied seven research vectors — CUA, OS/2, Material Design 3, Apple HIG, the Keystroke-Level Model, modern terminal capabilities, and historical TUI applications — and synthesized them into a single, prescriptive design language. Not guidelines. Not suggestions. Falsifiable, auditable rules that a reviewer can check against an implementation and declare it compliant or in violation.
 
-The result is Monospace Design TUI: a v0.1 design standard for terminal applications that want to look and behave like they belong to the same family.
+The result is Monospace Design TUI: a v0.1.2 design standard for terminal applications that want to look and behave like they belong to the same family.
 
 ## The Documents
 

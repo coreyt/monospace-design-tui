@@ -1,6 +1,6 @@
 # Monospace Design TUI Rendering Reference
 
-**Version 0.1.1** — Exact characters, SGR codes, and measurements for Monospace TUI (`mono-tui`) implementers.
+**Version 0.1.2** — Exact characters, SGR codes, and measurements for Monospace TUI (`mono-tui`) implementers.
 
 This document is the concrete companion to the [Monospace Design TUI Standard](monospace-tui-design-standard.md). Where the standard says "single-line border," this document specifies the exact Unicode codepoint. Where the standard says "dim," this document gives the SGR escape sequence. Implementers SHOULD keep this open alongside the standard.
 
@@ -8,6 +8,7 @@ This document is the concrete companion to the [Monospace Design TUI Standard](m
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 0.1.2 | 2026-04-17 | No rendering token changes; version advanced to remain in sync with standard v0.1.2 and pattern-library publication. |
 | 0.1.1 | 2026-03-05 | Added §R10 Workflow Archetype Rendering (step indicators, breadcrumb trails, queue counters, stage indicators, category indicators) |
 | 0.1.0 | — | Initial release |
 
