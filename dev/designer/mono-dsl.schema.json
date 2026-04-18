@@ -1,0 +1,860 @@
+{
+  "$defs": {
+    "Action": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "target": {
+          "title": "Target",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "global",
+            "selection_local",
+            "workflow",
+            "review"
+          ],
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "target",
+        "kind"
+      ],
+      "title": "Action",
+      "type": "object"
+    },
+    "ArtifactSource": {
+      "properties": {
+        "kind": {
+          "default": "manual",
+          "enum": [
+            "generated",
+            "manual",
+            "imported"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "inputs": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Inputs",
+          "type": "array"
+        }
+      },
+      "title": "ArtifactSource",
+      "type": "object"
+    },
+    "Checkpoint": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "approve",
+                "revise",
+                "continue",
+                "cancel",
+                "collect_more",
+                "publish"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Type"
+        },
+        "stage_id": {
+          "title": "Stage Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "stage_id"
+      ],
+      "title": "Checkpoint",
+      "type": "object"
+    },
+    "Component": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "menu",
+            "list",
+            "table",
+            "form",
+            "summary",
+            "detail",
+            "status",
+            "actions",
+            "progress",
+            "text",
+            "input",
+            "footer_keys"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "region": {
+          "title": "Region",
+          "type": "string"
+        },
+        "purpose": {
+          "title": "Purpose",
+          "type": "string"
+        },
+        "items": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Items"
+        },
+        "fields": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fields"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "region",
+        "purpose"
+      ],
+      "title": "Component",
+      "type": "object"
+    },
+    "FocusModel": {
+      "properties": {
+        "default_target": {
+          "title": "Default Target",
+          "type": "string"
+        },
+        "focus_order": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Focus Order",
+          "type": "array"
+        }
+      },
+      "required": [
+        "default_target",
+        "focus_order"
+      ],
+      "title": "FocusModel",
+      "type": "object"
+    },
+    "FooterKey": {
+      "properties": {
+        "key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "scope": {
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "key",
+        "label",
+        "scope"
+      ],
+      "title": "FooterKey",
+      "type": "object"
+    },
+    "NavigationSpec": {
+      "properties": {
+        "version": {
+          "default": "0.3.0",
+          "title": "Version",
+          "type": "string"
+        },
+        "artifact_type": {
+          "const": "navigation",
+          "default": "navigation",
+          "title": "Artifact Type",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "purpose": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Purpose"
+        },
+        "source": {
+          "$ref": "#/$defs/ArtifactSource"
+        },
+        "status": {
+          "default": "draft",
+          "enum": [
+            "draft",
+            "reviewed",
+            "approved"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "notes": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "workspaces": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Workspace"
+          },
+          "title": "Workspaces",
+          "type": "array"
+        },
+        "routes": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Route"
+          },
+          "title": "Routes",
+          "type": "array"
+        },
+        "rules": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Rules",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "title"
+      ],
+      "title": "NavigationSpec",
+      "type": "object"
+    },
+    "Region": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "header",
+            "region_a",
+            "region_b",
+            "region_c",
+            "footer",
+            "modal",
+            "inspector"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "contents": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Contents"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "role"
+      ],
+      "title": "Region",
+      "type": "object"
+    },
+    "Route": {
+      "properties": {
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Id"
+        },
+        "from": {
+          "title": "From",
+          "type": "string"
+        },
+        "to": {
+          "title": "To",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "push",
+            "pop",
+            "modal",
+            "jump",
+            "switch"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "trigger": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Trigger"
+        },
+        "notes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Notes"
+        }
+      },
+      "required": [
+        "from",
+        "to",
+        "type"
+      ],
+      "title": "Route",
+      "type": "object"
+    },
+    "ScreenSpec": {
+      "properties": {
+        "version": {
+          "default": "0.3.0",
+          "title": "Version",
+          "type": "string"
+        },
+        "artifact_type": {
+          "const": "screen",
+          "default": "screen",
+          "title": "Artifact Type",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "purpose": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Purpose"
+        },
+        "source": {
+          "$ref": "#/$defs/ArtifactSource"
+        },
+        "status": {
+          "default": "draft",
+          "enum": [
+            "draft",
+            "reviewed",
+            "approved"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "notes": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "workflow_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workflow Id"
+        },
+        "archetype": {
+          "enum": [
+            "dashboard",
+            "admin",
+            "file-manager",
+            "editor",
+            "fuzzy-finder",
+            "hybrid"
+          ],
+          "title": "Archetype",
+          "type": "string"
+        },
+        "patterns": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Patterns",
+          "type": "array"
+        },
+        "entry_conditions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Entry Conditions",
+          "type": "array"
+        },
+        "regions": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Region"
+          },
+          "title": "Regions",
+          "type": "array"
+        },
+        "components": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Component"
+          },
+          "title": "Components",
+          "type": "array"
+        },
+        "actions": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Action"
+          },
+          "title": "Actions",
+          "type": "array"
+        },
+        "focus": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FocusModel"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "transitions": {
+          "default": [],
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Transitions",
+          "type": "array"
+        },
+        "footer_keys": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/FooterKey"
+          },
+          "title": "Footer Keys",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "archetype"
+      ],
+      "title": "ScreenSpec",
+      "type": "object"
+    },
+    "WorkflowSpec": {
+      "properties": {
+        "version": {
+          "default": "0.3.0",
+          "title": "Version",
+          "type": "string"
+        },
+        "artifact_type": {
+          "const": "workflow",
+          "default": "workflow",
+          "title": "Artifact Type",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "purpose": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Purpose"
+        },
+        "source": {
+          "$ref": "#/$defs/ArtifactSource"
+        },
+        "status": {
+          "default": "draft",
+          "enum": [
+            "draft",
+            "reviewed",
+            "approved"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "notes": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "entry_conditions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Entry Conditions",
+          "type": "array"
+        },
+        "exit_conditions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Exit Conditions",
+          "type": "array"
+        },
+        "stages": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/WorkflowStage"
+          },
+          "title": "Stages",
+          "type": "array"
+        },
+        "transitions": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/WorkflowTransition"
+          },
+          "title": "Transitions",
+          "type": "array"
+        },
+        "checkpoints": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Checkpoint"
+          },
+          "title": "Checkpoints",
+          "type": "array"
+        },
+        "assumptions": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Assumptions",
+          "type": "array"
+        },
+        "linked_screens": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Linked Screens",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "title"
+      ],
+      "title": "WorkflowSpec",
+      "type": "object"
+    },
+    "WorkflowStage": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "purpose": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Purpose"
+        },
+        "screen_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Screen Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "label"
+      ],
+      "title": "WorkflowStage",
+      "type": "object"
+    },
+    "WorkflowTransition": {
+      "properties": {
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Id"
+        },
+        "from": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "From"
+        },
+        "target": {
+          "title": "Target",
+          "type": "string"
+        },
+        "trigger": {
+          "title": "Trigger",
+          "type": "string"
+        },
+        "type": {
+          "default": "push",
+          "enum": [
+            "advance",
+            "return",
+            "modal",
+            "jump",
+            "push",
+            "pop"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "target",
+        "trigger"
+      ],
+      "title": "WorkflowTransition",
+      "type": "object"
+    },
+    "Workspace": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "purpose": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Purpose"
+        }
+      },
+      "required": [
+        "id",
+        "label"
+      ],
+      "title": "Workspace",
+      "type": "object"
+    }
+  },
+  "anyOf": [
+    {
+      "$ref": "#/$defs/NavigationSpec"
+    },
+    {
+      "$ref": "#/$defs/WorkflowSpec"
+    },
+    {
+      "$ref": "#/$defs/ScreenSpec"
+    }
+  ]
+}
