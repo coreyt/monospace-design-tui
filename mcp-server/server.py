@@ -2005,5 +2005,10 @@ async def design_consultation(
 # Entry point
 # ---------------------------------------------------------------------------
 
-if __name__ == "__main__":
+def main() -> None:
+    """Run the MCP server."""
     mcp.run()
+
+
+if __name__ == "__main__":
+    main()

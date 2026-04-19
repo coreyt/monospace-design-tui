@@ -1,0 +1,71 @@
+name: Publish to PyPI and GitHub Releases
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  pypi-publish:
+    name: Upload Python packages to PyPI
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/mono-mcp-server/
+    permissions:
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+
+      - name: Build mono-designer
+        working-directory: ./mono-designer
+        run: python -m build
+
+      - name: Build mono-mcp-server
+        working-directory: ./mcp-server
+        run: python -m build
+
+      - name: Collect distributions
+        run: |
+          mkdir -p dist
+          cp mono-designer/dist/* dist/
+          cp mcp-server/dist/* dist/
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
+
+  build-go-harness:
+    name: Attach Go verifier to release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "mono-designer-verify/go.mod"
+          cache-dependency-path: "mono-designer-verify/go.sum"
+
+      - name: Build Go binary (Linux/AMD64)
+        working-directory: ./mono-designer-verify
+        run: GOOS=linux GOARCH=amd64 go build -o mono-verify-linux-amd64 .
+
+      - name: Upload binary to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: mono-designer-verify/mono-verify-linux-amd64
