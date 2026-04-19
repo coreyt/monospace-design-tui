@@ -230,6 +230,12 @@
           "title": "Artifact Type",
           "type": "string"
         },
+        "kind": {
+          "const": "navigation",
+          "default": "navigation",
+          "title": "Kind",
+          "type": "string"
+        },
         "id": {
           "title": "Id",
           "type": "string"
@@ -309,6 +315,18 @@
       "required": [
         "id",
         "title"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "kind"
+          ]
+        },
+        {
+          "required": [
+            "artifact_type"
+          ]
+        }
       ],
       "title": "NavigationSpec",
       "type": "object"
@@ -440,6 +458,12 @@
           "const": "screen",
           "default": "screen",
           "title": "Artifact Type",
+          "type": "string"
+        },
+        "kind": {
+          "const": "screen",
+          "default": "screen",
+          "title": "Kind",
           "type": "string"
         },
         "id": {
@@ -578,18 +602,48 @@
           "type": "array"
         },
         "footer_keys": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/FooterKey"
+              },
+              "type": "array"
+            },
+            {
+              "properties": {
+                "bindings": {
+                  "items": {
+                    "$ref": "#/$defs/FooterKey"
+                  },
+                  "title": "Bindings",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "bindings"
+              ],
+              "type": "object"
+            }
+          ],
           "default": [],
-          "items": {
-            "$ref": "#/$defs/FooterKey"
-          },
-          "title": "Footer Keys",
-          "type": "array"
+          "title": "Footer Keys"
         }
       },
       "required": [
         "id",
-        "title",
-        "archetype"
+        "title"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "kind"
+          ]
+        },
+        {
+          "required": [
+            "artifact_type"
+          ]
+        }
       ],
       "title": "ScreenSpec",
       "type": "object"
@@ -605,6 +659,12 @@
           "const": "workflow",
           "default": "workflow",
           "title": "Artifact Type",
+          "type": "string"
+        },
+        "kind": {
+          "const": "workflow",
+          "default": "workflow",
+          "title": "Kind",
           "type": "string"
         },
         "id": {
@@ -718,6 +778,18 @@
       "required": [
         "id",
         "title"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "kind"
+          ]
+        },
+        {
+          "required": [
+            "artifact_type"
+          ]
+        }
       ],
       "title": "WorkflowSpec",
       "type": "object"

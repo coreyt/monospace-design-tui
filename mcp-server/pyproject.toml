@@ -4,10 +4,12 @@ version = "0.3.0"
 description = "MCP Server for Monospace Design TUI"
 requires-python = ">=3.10"
 dependencies = [
+    "mono-designer==0.3.0",
     "mcp>=1.0.0",
     "pydantic>=2.0.0",
-    # In a real environment, this would be a local path dependency
-    # "mono-designer @ file://../mono-designer"
+    "PyYAML>=5.4.1",
+    "jsonpatch>=1.33",
+    "jsonschema>=4.0.0",
 ]
 
 [build-system]

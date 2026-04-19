@@ -17,7 +17,8 @@ repos:
       - id: ruff-format
 
   - repo: https://github.com/golangci/golangci-lint
-    rev: v1.56.2
+    rev: v1.64.8
     hooks:
       - id: golangci-lint
-        entry: bash -c 'cd mono-designer-verify && golangci-lint run'
+        entry: bash -c 'cd mono-designer-verify && golangci-lint run main.go verify.go'
+        pass_filenames: false

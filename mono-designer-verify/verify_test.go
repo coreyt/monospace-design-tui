@@ -7,35 +7,37 @@ import (
 )
 
 func TestPreFlightValidation(t *testing.T) {
-        schemaPath := "../dev/designer/mono-dsl.schema.json"
+	schemaPath := "../dev/designer/mono-dsl.schema.json"
 
-        validYAML := `
+	validYAML := `
 kind: "screen"
 id: "test-screen"
 title: "Test Screen"
+archetype: "dashboard"
 `
-        validFile := "test_valid.yaml"
-        _ = os.WriteFile(validFile, []byte(validYAML), 0644)
-        defer os.Remove(validFile)
+	validFile := "test_valid.yaml"
+	_ = os.WriteFile(validFile, []byte(validYAML), 0644)
+	defer os.Remove(validFile)
 
-        err := ValidateYAML(schemaPath, validFile)
-        if err != nil {
-                t.Fatalf("Expected valid YAML to pass, got: %v", err)
-        }
+	err := ValidateYAML(schemaPath, validFile)
+	if err != nil {
+		t.Fatalf("Expected valid YAML to pass, got: %v", err)
+	}
 
-        invalidYAML := `
+	invalidYAML := `
 kind: "screen"
 id: 123
 title: "Test Screen"
+archetype: "dashboard"
 ` // invalid id type
-        invalidFile := "test_invalid.yaml"
-        _ = os.WriteFile(invalidFile, []byte(invalidYAML), 0644)
-        defer os.Remove(invalidFile)
+	invalidFile := "test_invalid.yaml"
+	_ = os.WriteFile(invalidFile, []byte(invalidYAML), 0644)
+	defer os.Remove(invalidFile)
 
-        err = ValidateYAML(schemaPath, invalidFile)
-        if err == nil {
-                t.Fatalf("Expected invalid YAML to fail")
-        }
+	err = ValidateYAML(schemaPath, invalidFile)
+	if err == nil {
+		t.Fatalf("Expected invalid YAML to fail")
+	}
 }
 
 func TestParseYAML(t *testing.T) {
@@ -116,7 +118,7 @@ func TestParseASCII(t *testing.T) {
 func TestVerifyEngine(t *testing.T) {
 	yamlData := map[string]interface{}{
 		"artifact_type": "screen",
-                "regions": []interface{}{
+		"regions": []interface{}{
 			map[string]interface{}{
 				"id":   "main",
 				"role": "content area",
@@ -162,14 +164,18 @@ func TestVerifyEngine(t *testing.T) {
 		t.Fatalf("Expected verification to pass, got: %v", err)
 	}
 
-	// Make it fail
-	yamlData["actions"] = []interface{}{
-		map[string]interface{}{"label": "Submit"},
-		map[string]interface{}{"label": "MissingAction"},
+	// Make it fail.
+	yamlData["components"] = []interface{}{
+		map[string]interface{}{
+			"id":      "missing_table",
+			"type":    "table",
+			"purpose": "missing rows",
+			"region":  "main",
+		},
 	}
 
 	err = Verify(yamlData, asciiData)
 	if err == nil {
-		t.Fatalf("Expected verification to fail due to missing action")
+		t.Fatalf("Expected verification to fail due to missing component")
 	}
 }

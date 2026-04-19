@@ -8,10 +8,12 @@ terminal user interfaces.
 
 from __future__ import annotations
 
+import json
 import re
+import sys
 import uuid
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 
 from mcp.server.fastmcp import Context, FastMCP
@@ -22,9 +24,29 @@ from mcp.types import SamplingMessage, TextContent
 # ---------------------------------------------------------------------------
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+MONO_DESIGNER_DIR = PROJECT_ROOT / "mono-designer"
+if str(MONO_DESIGNER_DIR) not in sys.path:
+    sys.path.insert(0, str(MONO_DESIGNER_DIR))
+
+from mono_designer.core.linter import Linter, WorkspaceContext  # noqa: E402
+from mono_designer.core.normalization import normalize_artifact  # noqa: E402
+from mono_designer.core.revision import apply_revision  # noqa: E402
+from mono_designer.models.navigation import NavigationSpec  # noqa: E402
+from mono_designer.models.screen import ScreenSpec  # noqa: E402
+from mono_designer.models.workflow import WorkflowSpec  # noqa: E402
+from mono_designer.projectors.ascii_nav import project_nav_ascii  # noqa: E402
+from mono_designer.projectors.ascii_screen import project_screen_ascii  # noqa: E402
+from mono_designer.projectors.ascii_workflow import project_workflow_ascii  # noqa: E402
+from mono_designer.utils.yaml_io import (  # noqa: E402
+    load_artifact_data,
+    load_yaml,
+    save_yaml,
+)
+
 STANDARD_DIR = PROJECT_ROOT / "website" / "content" / "standard"
 REFERENCE_DIR = PROJECT_ROOT / "website" / "content" / "reference"
 TEXTUAL_DIR = PROJECT_ROOT / "website" / "content" / "textual"
+DESIGNER_SCHEMA_PATH = PROJECT_ROOT / "dev" / "designer" / "mono-dsl.schema.json"
 
 CORE_DOCS = {
     "design-standard": PROJECT_ROOT / "monospace-tui-design-standard.md",
@@ -60,6 +82,29 @@ def _read_section_file(directory: Path, name: str) -> str | None:
 def _list_sections(directory: Path) -> list[str]:
     """List available section names in a content directory."""
     return sorted(p.stem for p in directory.glob("*.md") if p.stem != "_index")
+
+
+def _project_artifact(artifact: NavigationSpec | ScreenSpec | WorkflowSpec) -> str:
+    """Project a validated Mono Designer artifact into ASCII."""
+    if isinstance(artifact, ScreenSpec):
+        return project_screen_ascii(artifact)
+    if isinstance(artifact, NavigationSpec):
+        return project_nav_ascii(artifact)
+    if isinstance(artifact, WorkflowSpec):
+        return project_workflow_ascii(artifact)
+    raise ValueError(f"Projection for {artifact.artifact_type} is not implemented.")
+
+
+def _deep_merge(base: dict[str, Any], updates: dict[str, Any]) -> dict[str, Any]:
+    """Recursively merge update dictionaries without mutating the source."""
+    merged = dict(base)
+    for key, value in updates.items():
+        existing = merged.get(key)
+        if isinstance(existing, dict) and isinstance(value, dict):
+            merged[key] = _deep_merge(existing, value)
+        else:
+            merged[key] = value
+    return merged
 
 
 # ---------------------------------------------------------------------------
@@ -151,6 +196,96 @@ workflow:
   indicators
 """,
 )
+
+
+# ---- Designer workflow ----------------------------------------------------
+
+
+@mcp.tool()
+def design_generate(file_path: str, yaml_content: str) -> dict:
+    """Create or overwrite a Mono Designer YAML artifact.
+
+    The YAML is parsed, normalized through the 0.3.0 model layer, written to
+    disk, then projected to ASCII for human review.
+    """
+    path = Path(file_path)
+    data = load_artifact_data(yaml_content)
+    if not isinstance(data, dict):
+        raise ValueError("yaml_content must parse to a YAML mapping/object.")
+
+    artifact = normalize_artifact(data)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    save_yaml(data, path)
+
+    return {
+        "file_path": str(path),
+        "artifact_type": artifact.artifact_type,
+        "id": artifact.id,
+        "ascii": _project_artifact(artifact),
+    }
+
+
+@mcp.tool()
+def design_revise(file_path: str, json_patch: str) -> dict:
+    """Safely revise an existing Mono Designer YAML artifact.
+
+    Accepts either an RFC 6902 JSON Patch array or a JSON object that is
+    recursively deep-merged into the current YAML artifact.
+    """
+    path = Path(file_path)
+    if not path.exists():
+        raise FileNotFoundError(f"Design artifact not found: {path}")
+
+    patch_data = json.loads(json_patch)
+    if isinstance(patch_data, list):
+        artifact = apply_revision(path, patch_data)
+        data = load_yaml(path)
+    elif isinstance(patch_data, dict):
+        data = load_yaml(path)
+        if not isinstance(data, dict):
+            raise ValueError(f"Design artifact must be a YAML mapping/object: {path}")
+        data = _deep_merge(data, patch_data)
+        artifact = normalize_artifact(data)
+        save_yaml(data, path)
+    else:
+        raise ValueError("json_patch must be a JSON object or RFC 6902 array.")
+
+    return {
+        "file_path": str(path),
+        "artifact_type": artifact.artifact_type,
+        "id": artifact.id,
+        "ascii": _project_artifact(artifact),
+    }
+
+
+@mcp.tool()
+def design_lint(directory: str) -> dict:
+    """Run Mono Designer schema, relational, and heuristic lint checks."""
+    path = Path(directory)
+    if not path.exists() or not path.is_dir():
+        raise FileNotFoundError(f"Design workspace directory not found: {path}")
+
+    ctx = WorkspaceContext(path)
+    linter = Linter(schema_path=DESIGNER_SCHEMA_PATH)
+    results = linter.lint_workspace(ctx)
+    issues = [
+        {
+            "file_path": str(result.file_path),
+            "code": result.code,
+            "level": result.level,
+            "message": result.message,
+        }
+        for result in results
+    ]
+    error_count = sum(1 for issue in issues if issue["level"] == "error")
+    warning_count = sum(1 for issue in issues if issue["level"] == "warning")
+    return {
+        "ok": error_count == 0 and warning_count == 0,
+        "error_count": error_count,
+        "warning_count": warning_count,
+        "issues": issues,
+    }
+
 
 # ---- Standard sections ----------------------------------------------------
 
