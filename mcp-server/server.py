@@ -2005,6 +2005,7 @@ async def design_consultation(
 # Entry point
 # ---------------------------------------------------------------------------
 
+
 def main() -> None:
     """Run the MCP server."""
     mcp.run()
