@@ -4,7 +4,7 @@
 ┻ ┻┗━┛┛┗┛┗━┛┗━┛┻  ┻ ┻┗━┛┗━┛   ┻ ┗━┛┻
 ```
 
-**A design language for terminal user interfaces** — v0.2.5
+**A design language and Designer toolset for terminal user interfaces** — v0.3.0
 
 Website: [coreyt.github.io/monospace-design-tui](https://coreyt.github.io/monospace-design-tui/)
 
@@ -39,7 +39,7 @@ prescriptive system. Not loose inspiration. Not vague guidelines. Falsifiable,
 auditable rules that a reviewer can check against an implementation and declare
 it compliant or in violation.
 
-The result is Monospace Design TUI: a v0.2.5 design standard for terminal applications that want to look and behave like they belong to the same family.
+The result is Monospace Design TUI: a design standard and tooling layer for terminal applications that want to look and behave like they belong to the same family.
 
 ## Why Use It
 
@@ -73,6 +73,18 @@ If you are designing with AI agents, start with
 [Working with AI Agents](website/content/agents/_index.md) and the
 [Agent Reference Directive](website/content/agent-ref/_index.md).
 
+If you want structured design artifacts, use the 0.3.0 Designer:
+
+```bash
+pip install -e ./mono-designer
+mono-designer project dev/designer/examples/screens/dashboard-system-monitor/dsl.yaml
+mono-designer lint dev/designer/examples
+```
+
+The Designer adds canonical YAML artifacts, deterministic ASCII wireframes,
+schema and heuristic linting, revision support, an MCP workflow, and an
+independent Go verifier for YAML-to-ASCII example coverage.
+
 ## The Documents
 
 **[Design Standard](monospace-tui-design-standard.md)** — The authoritative specification. Grid and layout, keyboard interaction, navigation topology, components, color, borders, typography, state, accessibility, motion, and archetypes.
@@ -97,6 +109,8 @@ If you are designing with AI agents, start with
 **[Working with AI Agents](website/content/agents/_index.md)** — A modern adoption model for Mono-aligned coding agents, from simple instruction pointers to MCP-backed structured design workflows.
 
 **[MCP Server](mcp-server/)** — Connect AI agents in any project to the design system via MCP. Query design rules, palettes, components, keyboard bindings, and archetypes — 18 tools including interactive design consultation.
+
+**[Designer](dev/designer/README.md)** — The 0.3.0 artifact-driven design system: canonical YAML, ASCII projection, linting, revision, examples, AI-agent skills, and MCP tools (`design_generate`, `design_revise`, `design_lint`).
 
 ## License
 

@@ -2,30 +2,47 @@
 
 ## Overview
 
-The E2E Test Harness is a "Reversed Projection" validator. It reads a projected ASCII wireframe and verifies that the semantic information extracted from it matches the source YAML specification. 
+The E2E Test Harness is a "Reversed Projection" validator. It reads a
+projected ASCII wireframe and verifies that the semantic information extracted
+from it matches the source YAML specification.
 
-Crucially, this harness must act as a **cleanroom verification mechanism**. To ensure true independence and prevent the accidental reuse of the main Python `mono_designer` parsing logic or Pydantic models, the harness will be written in a different language ecosystem: **Node.js (TypeScript)**.
+Crucially, this harness must act as a **cleanroom verification mechanism**. To
+ensure true independence and prevent the accidental reuse of the main Python
+`mono_designer` parsing logic or Pydantic models, the harness is written in a
+different language ecosystem: **Go**.
 
 ## Architecture
 
 The harness operates entirely independent of the main Python tooling.
 
 ### 1. Technology Stack
+
 - **Language**: Go (Golang)
-- **Dependencies**: `gopkg.in/yaml.v3` (for loading source DSLs), `github.com/santhosh-tekuri/jsonschema/v5` (for JSON Schema validation).
-- **Execution**: Compiled to a single static binary (e.g., `mono-verify <yaml_file> <ascii_file>`) or run via `go run main.go`.
+- **Dependencies**: `gopkg.in/yaml.v3` for loading source DSLs and
+  `github.com/santhosh-tekuri/jsonschema/v5` for JSON Schema validation.
+- **Execution**: Compiled to a single static binary or run via `go run main.go`.
 
 ### 2. Pipeline
-1.  **YAML Validation**: Loads the canonical `dev/designer/mono-dsl.schema.json` and runs the incoming YAML against it to guarantee the input is structurally sound.
-2.  **YAML Loader**: Unmarshals the valid YAML into generic Go `map[string]interface{}`. No redundant Go `structs` are needed because the schema already verified the data structure.
-3.  **ASCII State-Machine Parser**: Uses Go's `bufio.Scanner` to read the `.txt` ASCII file line-by-line, transitioning through states (e.g., `READING_TITLE` -> `READING_BODY` -> `READING_FOOTER`) based on structural cues, extracting semantic properties via `regexp`.
-4.  **Comparator**: A strict or subset equality engine that asserts the Go data structures extracted from ASCII cover the data loaded from YAML.
+
+1. **YAML Validation**: Loads the canonical schema and runs the incoming YAML
+   against it to guarantee the input is structurally sound.
+2. **YAML Loader**: Unmarshals the valid YAML into generic Go
+   `map[string]interface{}` values. No redundant Go structs are needed because
+   the schema already verified the data structure.
+3. **ASCII State-Machine Parser**: Uses Go's `bufio.Scanner` to read the
+   `.txt` ASCII file line-by-line, transitioning through states based on
+   structural cues and extracting semantic properties via `regexp`.
+4. **Comparator**: A strict or subset equality engine that asserts the Go data
+   structures extracted from ASCII cover the data loaded from YAML.
 
 ## Detailed Design: Line-by-Line Regex State Machines
 
-Because TUI widths and layouts can shift, the parser explicitly avoids coordinate-based logic. Instead, it relies on line-by-line scanning governed by a state machine that transitions on structural markers (like `├─┤` dividers or blank lines).
+Because TUI widths and layouts can shift, the parser explicitly avoids
+coordinate-based logic. Instead, it relies on line-by-line scanning governed by
+a state machine that transitions on structural markers.
 
-Below are the state machine and regex designs for each of the three core artifact types, using the `dev/designer/examples/` as references.
+Below are the state machine and regex designs for each of the three core
+artifact types, using the `dev/designer/examples/` as references.
 
 ---
 

@@ -1,5 +1,5 @@
 from typing import List, Literal, Optional
-from pydantic import Field, model_validator
+from pydantic import ConfigDict, Field, model_validator
 from .base import BaseArtifact, BaseModel
 
 
@@ -11,6 +11,8 @@ class WorkflowStage(BaseModel):
 
 
 class WorkflowTransition(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     id: Optional[str] = None
     from_stage: Optional[str] = Field(None, alias="from")
     to_stage: str = Field(alias="target")
@@ -26,9 +28,6 @@ class WorkflowTransition(BaseModel):
         if "to" in data and "target" not in data:
             data["target"] = data.pop("to")
         return data
-
-    class Config:
-        populate_by_name = True
 
 
 class Checkpoint(BaseModel):

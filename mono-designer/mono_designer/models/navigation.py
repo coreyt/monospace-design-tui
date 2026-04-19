@@ -1,5 +1,5 @@
 from typing import List, Literal, Optional
-from pydantic import Field
+from pydantic import ConfigDict, Field
 from .base import BaseArtifact, BaseModel
 
 
@@ -10,15 +10,14 @@ class Workspace(BaseModel):
 
 
 class Route(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     id: Optional[str] = None
     from_workspace: str = Field(alias="from")
     to_workspace: str = Field(alias="to")
     kind: Literal["push", "pop", "modal", "jump", "switch"] = Field(alias="type")
     trigger: Optional[str] = None
     notes: Optional[str] = None
-
-    class Config:
-        populate_by_name = True
 
 
 class NavigationSpec(BaseArtifact):

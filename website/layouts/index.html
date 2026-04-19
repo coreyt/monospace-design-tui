@@ -1,17 +1,17 @@
 {{ define "main" }}
 <article class="home">
   <header class="home-header">
-    <p class="home-kicker">Mono TUI / Design System / Terminal-native Interface Language</p>
+    <p class="home-kicker">Mono TUI / Design System / Designer Toolset</p>
     <pre class="hero-logo" aria-label="Monospace TUI">
 ┏┳┓┏━┓┏┓┓┏━┓┏━┓┏━┓┏━┓┏━┓┏━┓  ┏┳┓┳ ┳┳
 ┃┃┃┃ ┃┃┃┃┃ ┃┗━┓┣━┛┣━┫┃  ┣┫    ┃ ┃ ┃┃
 ┻ ┻┗━┛┛┗┛┗━┛┗━┛┻  ┻ ┻┗━┛┗━┛   ┻ ┗━┛┻</pre>
     <h1 class="sr-only">Monospace Design TUI</h1>
-    <p class="home-subtitle">A design language for terminal user interfaces</p>
-    <p class="home-version">v0.2.5</p>
+    <p class="home-subtitle">A design language and artifact workflow for terminal user interfaces</p>
+    <p class="home-version">v0.3.0</p>
     <div class="hero-signal" aria-hidden="true">
       <span>system: stable</span>
-      <span>mode: design-reference</span>
+      <span>mode: design-and-wireframe</span>
       <span>grid: monospace</span>
     </div>
   </header>
@@ -25,14 +25,14 @@
 
     <p>So we collected it. We studied seven research vectors — CUA, OS/2, Material Design 3, Apple HIG, the Keystroke-Level Model, modern terminal capabilities, and historical TUI applications — and synthesized them into a single, prescriptive design language. Not guidelines. Not suggestions. Falsifiable, auditable rules that a reviewer can check against an implementation and declare it compliant or in violation.</p>
 
-    <p>The result is Monospace Design TUI: a v0.2.5 design standard for terminal applications that want to look and behave like they belong to the same family.</p>
+    <p>The result is Monospace Design TUI: a design standard and Designer toolset for terminal applications that want to look and behave like they belong to the same family.</p>
 
     <hr>
 
     <section class="doc-zone" aria-labelledby="documents-heading">
       <div class="doc-zone-header">
         <h2 id="documents-heading">The Documents</h2>
-        <p>Spec, patterns, rendering tokens, framework guidance, and operational examples.</p>
+        <p>Spec, patterns, rendering tokens, Designer artifacts, framework guidance, and operational examples.</p>
       </div>
 
       <div class="doc-grid">
@@ -70,6 +70,12 @@
           <span class="doc-card-label">Preview</span>
           <strong>Examples</strong>
           <span>ASCII screenshots showing the design language in action across multiple archetypes and workflows.</span>
+        </a>
+
+        <a class="doc-card" href="{{ "designer/" | relURL }}">
+          <span class="doc-card-label">Toolset</span>
+          <strong>Designer</strong>
+          <span>Canonical YAML artifacts, deterministic ASCII wireframes, linting, revision, and MCP tools for agent-assisted TUI design.</span>
         </a>
 
         <a class="doc-card" href="{{ "agents/" | relURL }}">

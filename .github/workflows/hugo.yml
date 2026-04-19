@@ -42,7 +42,7 @@ jobs:
           EXPECTED_HUGO_VERSION: ${{ env.HUGO_VERSION }}
           BUILD_BASE_URL: "${{ steps.pages.outputs.base_url }}/"
           TZ: America/Chicago
-        run: ./scripts/build-prefilght.sh
+        run: ./scripts/build-site-preflight.sh
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

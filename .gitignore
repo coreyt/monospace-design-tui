@@ -16,6 +16,6 @@ node_modules/
 Thumbs.db
 mono-designer-verify/mono-verify
 
-# 0.3.0 Distribution Staging (DO NOT COMMIT YET)
+# 0.3.0 distribution draft artifacts
 README_0.3.0.md
 dev/designer/gh-workflows-staged/

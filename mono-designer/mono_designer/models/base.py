@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List, Literal, Optional
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class ArtifactSource(BaseModel):
@@ -9,6 +9,8 @@ class ArtifactSource(BaseModel):
 
 
 class BaseArtifact(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     version: str = "0.3.0"
     artifact_type: str = Field(alias="kind")
     id: str
@@ -26,6 +28,3 @@ class BaseArtifact(BaseModel):
         if "kind" in data and "artifact_type" not in data:
             data["artifact_type"] = data.pop("kind")
         return data
-
-    class Config:
-        populate_by_name = True

@@ -1,4 +1,10 @@
 {
+  "name": "monospace-design-tui",
+  "private": true,
+  "scripts": {
+    "preflight:designer": "bash scripts/build-preflight.sh",
+    "preflight:site": "bash scripts/build-site-preflight.sh"
+  },
   "devDependencies": {
     "markdownlint-cli2": "^0.22.0"
   }
