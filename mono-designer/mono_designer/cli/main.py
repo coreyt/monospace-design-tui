@@ -1,10 +1,16 @@
+import json
+from ..core.revision import apply_revision
 import typer
 from pathlib import Path
 from ..utils.yaml_io import load_yaml
 from ..core.normalization import normalize_artifact
 from ..core.linter import Linter, WorkspaceContext
 from ..projectors.ascii_screen import project_screen_ascii
+from ..projectors.ascii_nav import project_nav_ascii
+from ..projectors.ascii_workflow import project_workflow_ascii
 from ..models.screen import ScreenSpec
+from ..models.navigation import NavigationSpec
+from ..models.workflow import WorkflowSpec
 
 app = typer.Typer(help="Mono Designer Toolset (0.3.0)")
 
@@ -22,6 +28,12 @@ def project(path: Path):
     
     if isinstance(artifact, ScreenSpec):
         output = project_screen_ascii(artifact)
+        typer.echo(output)
+    elif isinstance(artifact, NavigationSpec):
+        output = project_nav_ascii(artifact)
+        typer.echo(output)
+    elif isinstance(artifact, WorkflowSpec):
+        output = project_workflow_ascii(artifact)
         typer.echo(output)
     else:
         typer.echo(f"Projection for {artifact.artifact_type} not yet implemented.", err=True)
@@ -69,5 +81,29 @@ def lint(
     if error_count > 0:
         raise typer.Exit(1)
 
+
+@app.command()
+def revise(path: Path, patch_json: str):
+    """
+    Applies a JSON patch to a YAML artifact, validates it, and saves it.
+    """
+    if not path.exists():
+        typer.echo(f"Error: File not found: {path}", err=True)
+        raise typer.Exit(1)
+        
+    try:
+        updates = json.loads(patch_json)
+    except json.JSONDecodeError as e:
+        typer.echo(f"Error parsing patch_json: {e}", err=True)
+        raise typer.Exit(1)
+        
+    try:
+        artifact = apply_revision(path, updates)
+        typer.echo(f"Successfully revised {artifact.artifact_type} '{artifact.id}' at {path}")
+    except Exception as e:
+        typer.echo(f"Error applying revision: {e}", err=True)
+        raise typer.Exit(1)
+
 if __name__ == "__main__":
     app()
+

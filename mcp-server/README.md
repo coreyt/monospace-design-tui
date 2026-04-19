@@ -25,7 +25,15 @@ Add to your Claude Code MCP settings (`~/.claude/settings.json` or project
 }
 ```
 
-## Available Tools (18)
+## Available Tools (21)
+
+### Designer Workflow (0.3.0)
+
+| Tool | Description |
+|------|-------------|
+| `design_generate(file_path, yaml_content)` | Creates or overwrites a Mono Designer YAML artifact. Automatically runs schema validation and returns the structural ASCII wireframe projection for human review. |
+| `design_revise(file_path, json_patch)` | Safely updates an existing YAML artifact using a JSON deep-merge patch. Validates the merged result before saving and returns the updated ASCII projection. |
+| `design_lint(directory)` | Runs the Level 2 (Relational) and Level 3 (Heuristic) Mono Linter against a workspace directory to verify cross-artifact integrity (e.g., workflow links, focus arrays). |
 
 ### Design Consultation (sampling)
 
