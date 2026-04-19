@@ -51,7 +51,7 @@ A TUI must be fully navigable via the keyboard. The `ScreenSpec` enforces this b
 actions:
   - { id: refresh, label: Refresh, target: service-table, kind: global }
 
-focus: 
+focus:
   default_target: service-table
   focus_order: [service-table]
 

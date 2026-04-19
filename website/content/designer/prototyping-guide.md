@@ -15,7 +15,7 @@ Instead, we progress through four levels of prototyping directly in the terminal
 
 ## Level 0: Static ASCII Wireframes
 
-Level 0 is the immediate output of the Monospace Designer. 
+Level 0 is the immediate output of the Monospace Designer.
 
 A user generates a conceptual YAML `ScreenSpec`, and the `mono-designer project` tool returns a static ASCII projection. This confirms structural placement, footer key existence, and overall focus logic.
 
@@ -43,7 +43,7 @@ class MainScreen(Screen):
         ("enter", "inspect_service", "Inspect"),
         ("q", "quit", "Quit")
     ]
-    
+
     def compose(self) -> ComposeResult:
         yield Header()
         yield Vertical(Placeholder("metric-cards: key metrics"))
