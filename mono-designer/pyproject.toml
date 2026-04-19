@@ -8,6 +8,7 @@ dependencies = [
     "PyYAML>=5.4.1",
     "typer>=0.9.0",
     "rich>=13.0.0",
+    "jsonpatch>=1.33",
     "jsonschema>=4.0.0",
 ]
 

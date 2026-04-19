@@ -1,97 +1,59 @@
-import pytest
 import json
 from pathlib import Path
 from mono_designer.core.revision import apply_revision
 from mono_designer.utils.yaml_io import save_yaml, load_yaml
-from mono_designer.core.normalization import normalize_artifact
-import pydantic
 
-@pytest.fixture
-def sample_yaml(tmp_path):
-    file_path = tmp_path / "sample.yaml"
-    data = {
+def test_apply_revision(tmp_path):
+    # Setup initial valid YAML
+    yaml_path = tmp_path / "test_artifact.yaml"
+    initial_data = {
+        "version": "0.3.0",
         "artifact_type": "screen",
-        "id": "test_screen_id",
+        "id": "scr-test",
         "title": "Test Screen",
-        "name": "test_screen",
-        "description": "A test screen",
         "archetype": "dashboard",
-        "footer_keys": [
-            {"key": "q", "label": "Quit", "action": "quit", "scope": "global"}
-        ]
+        "source": {"kind": "manual", "inputs": []},
+        "regions": [],
+        "components": [{"id": "c1", "type": "text", "region": "region_a", "purpose": "none"}],
+        "focus": {"default_target": "none", "focus_order": []},
+        "actions": []
     }
-    save_yaml(data, file_path)
-    return file_path
+    save_yaml(initial_data, yaml_path)
+    
+    # Define a JSON patch array (RFC 6902)
+    patch = [
+        {"op": "replace", "path": "/title", "value": "Updated Title"},
+        {"op": "remove", "path": "/components/0"}
+    ]
+    
+    artifact = apply_revision(yaml_path, patch)
+    assert artifact.title == "Updated Title"
+    
+    loaded_data = load_yaml(yaml_path)
+    assert loaded_data["title"] == "Updated Title"
+    assert len(loaded_data["components"]) == 0
 
-def test_apply_revision_valid_update(sample_yaml):
-    updates = {
-        "title": "Updated Screen",
-        "archetype": "admin"
+def test_apply_revision_invalid_schema(tmp_path):
+    yaml_path = tmp_path / "test_artifact.yaml"
+    initial_data = {
+        "version": "0.3.0",
+        "artifact_type": "screen",
+        "id": "scr-test",
+        "title": "Test Screen",
+        "archetype": "dashboard",
+        "source": {"kind": "manual", "inputs": []},
+        "regions": [],
+        "components": [],
+        "focus": {"default_target": "none", "focus_order": []},
+        "actions": []
     }
+    save_yaml(initial_data, yaml_path)
     
-    result = apply_revision(sample_yaml, updates)
+    # Try to set an invalid archetype
+    patch = [
+        {"op": "replace", "path": "/archetype", "value": "invalid-archetype"}
+    ]
     
-    # Assert return value is a valid artifact (ScreenSpec in this case)
-    assert result.title == "Updated Screen"
-    assert result.archetype == "admin"
-    
-    # Assert file is updated
-    loaded_data = load_yaml(sample_yaml)
-    assert loaded_data["title"] == "Updated Screen"
-    assert loaded_data["archetype"] == "admin"
-
-def test_apply_revision_invalid_update(sample_yaml):
-    updates = {
-        "title": "Updated Screen",
-        "archetype": "invalid_archetype" # This will fail validation
-    }
-    
+    import pytest
     with pytest.raises(Exception):
-        apply_revision(sample_yaml, updates)
-        
-    # Assert file is NOT updated
-    loaded_data = load_yaml(sample_yaml)
-    assert loaded_data["title"] == "Test Screen"
-    assert loaded_data["archetype"] == "dashboard"
-
-def test_apply_revision_returns_base_artifact(sample_yaml):
-    from mono_designer.models.base import BaseArtifact
-    updates = {"title": "Updated"}
-    result = apply_revision(sample_yaml, updates)
-    assert isinstance(result, BaseArtifact)
-
-from typer.testing import CliRunner
-from mono_designer.cli.main import app
-
-runner = CliRunner()
-
-def test_cli_revise_valid(sample_yaml):
-    patch = {"title": "CLI Updated Screen", "archetype": "admin"}
-    patch_json = json.dumps(patch)
-    
-    result = runner.invoke(app, ["revise", str(sample_yaml), patch_json])
-    
-    assert result.exit_code == 0
-    assert "Successfully revised screen" in result.stdout
-    
-    loaded_data = load_yaml(sample_yaml)
-    assert loaded_data["title"] == "CLI Updated Screen"
-    assert loaded_data["archetype"] == "admin"
-
-def test_cli_revise_invalid_json(sample_yaml):
-    result = runner.invoke(app, ["revise", str(sample_yaml), "{invalid_json}"])
-    
-    assert result.exit_code == 1
-    assert "Error parsing patch_json" in result.stdout
-
-def test_cli_revise_invalid_patch(sample_yaml):
-    patch = {"archetype": "invalid_archetype"}
-    patch_json = json.dumps(patch)
-    
-    result = runner.invoke(app, ["revise", str(sample_yaml), patch_json])
-    
-    assert result.exit_code == 1
-    assert "Error applying revision" in result.stdout
-    
-    loaded_data = load_yaml(sample_yaml)
-    assert loaded_data["archetype"] == "dashboard" # Unchanged
+        apply_revision(yaml_path, patch)

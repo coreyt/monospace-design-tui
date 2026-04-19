@@ -30,7 +30,12 @@ func main() {
 	}
 
 	fmt.Printf("Parsing ASCII: %s\n", asciiFile)
-	asciiData, err := ParseASCII(asciiFile)
+	asciiData, err := ParseASCII(asciiFile, func() string {
+                t := ""
+                if k, ok := yamlData["kind"].(string); ok { t = k }
+                if k, ok := yamlData["artifact_type"].(string); ok { t = k }
+                return t
+        }())
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to parse ASCII: %v\n", err)
 		os.Exit(1)

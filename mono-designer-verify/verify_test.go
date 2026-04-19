@@ -7,37 +7,35 @@ import (
 )
 
 func TestPreFlightValidation(t *testing.T) {
-	// Create a temporary valid YAML
-	validYAML := `
+        schemaPath := "../dev/designer/mono-dsl.schema.json"
+
+        validYAML := `
+kind: "screen"
 id: "test-screen"
 title: "Test Screen"
-archetype: "admin"
-source:
-  kind: "generated"
 `
-	yamlFile := "test_valid.yaml"
-	os.WriteFile(yamlFile, []byte(validYAML), 0644)
-	defer os.Remove(yamlFile)
+        validFile := "test_valid.yaml"
+        os.WriteFile(validFile, []byte(validYAML), 0644)
+        defer os.Remove(validFile)
 
-	schemaPath := "../dev/designer/mono-dsl.schema.json"
+        err := ValidateYAML(schemaPath, validFile)
+        if err != nil {
+                t.Fatalf("Expected valid YAML to pass, got: %v", err)
+        }
 
-	err := ValidateYAML(schemaPath, yamlFile)
-	if err != nil {
-		t.Fatalf("Expected valid YAML to pass, got: %v", err)
-	}
-
-	invalidYAML := `
-id: "test-screen"
+        invalidYAML := `
+kind: "screen"
+id: 123
 title: "Test Screen"
-` // missing archetype and source
-	invalidFile := "test_invalid.yaml"
-	os.WriteFile(invalidFile, []byte(invalidYAML), 0644)
-	defer os.Remove(invalidFile)
+` // invalid id type
+        invalidFile := "test_invalid.yaml"
+        os.WriteFile(invalidFile, []byte(invalidYAML), 0644)
+        defer os.Remove(invalidFile)
 
-	err = ValidateYAML(schemaPath, invalidFile)
-	if err == nil {
-		t.Fatalf("Expected invalid YAML to fail")
-	}
+        err = ValidateYAML(schemaPath, invalidFile)
+        if err == nil {
+                t.Fatalf("Expected invalid YAML to fail")
+        }
 }
 
 func TestParseYAML(t *testing.T) {
@@ -78,7 +76,7 @@ func TestParseASCII(t *testing.T) {
 	os.WriteFile(asciiFile, []byte(asciiContent), 0644)
 	defer os.Remove(asciiFile)
 
-	data, err := ParseASCII(asciiFile)
+	data, err := ParseASCII(asciiFile, "screen")
 	if err != nil {
 		t.Fatalf("Failed to parse ASCII: %v", err)
 	}
@@ -117,7 +115,8 @@ func TestParseASCII(t *testing.T) {
 
 func TestVerifyEngine(t *testing.T) {
 	yamlData := map[string]interface{}{
-		"regions": []interface{}{
+		"artifact_type": "screen",
+                "regions": []interface{}{
 			map[string]interface{}{
 				"id":   "main",
 				"role": "content area",

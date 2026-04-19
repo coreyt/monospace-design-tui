@@ -1,4 +1,5 @@
 import os
+import re
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 import yaml
@@ -21,7 +22,21 @@ class WorkspaceContext:
         self.artifacts: Dict[Path, Dict[str, Any]] = {}
         self.workflows: Dict[str, Path] = {}
         self.screens: Dict[str, Path] = {}
+        self.project_suppressions = set()
         self._load_workspace()
+        self._load_project_overrides()
+
+    def _load_project_overrides(self):
+        tui_design_path = self.directory / "TUI-DESIGN.md"
+        if tui_design_path.exists():
+            try:
+                text = tui_design_path.read_text(encoding="utf-8")
+                # Look for patterns like [WAIVE] H001
+                matches = re.findall(r'\[WAIVE\]\s+([A-Z][0-9]{3})', text)
+                for match in matches:
+                    self.project_suppressions.add(match)
+            except Exception:
+                pass
 
     def _load_workspace(self):
         for root, _, files in os.walk(self.directory):
@@ -55,10 +70,16 @@ class Linter:
             except Exception:
                 pass
 
-    def _is_suppressed(self, artifact: Dict[str, Any], code: str) -> bool:
+    def _is_suppressed(self, artifact: Dict[str, Any], code: str, context: WorkspaceContext = None) -> bool:
+        if context and code in context.project_suppressions:
+            return True
         notes = artifact.get("notes", "")
         if isinstance(notes, str) and f"mono-lint-disable: {code}" in notes:
             return True
+        if isinstance(notes, list):
+            for note in notes:
+                if isinstance(note, str) and f"mono-lint-disable: {code}" in note:
+                    return True
         return False
 
     def lint_workspace(self, context: WorkspaceContext) -> List[LintResult]:
@@ -70,7 +91,7 @@ class Linter:
                 try:
                     jsonschema.validate(instance=artifact, schema=self.schema)
                 except jsonschema.exceptions.ValidationError as e:
-                    if not self._is_suppressed(artifact, "E001"):
+                    if not self._is_suppressed(artifact, "E001", context):
                         results.append(LintResult(
                             file_path=file_path,
                             code="E001",
@@ -84,7 +105,7 @@ class Linter:
                 # W001: CheckWorkflowExists
                 workflow_id = artifact.get('workflow_id')
                 if workflow_id and workflow_id not in context.workflows:
-                    if not self._is_suppressed(artifact, "W001"):
+                    if not self._is_suppressed(artifact, "W001", context):
                         results.append(LintResult(
                             file_path=file_path,
                             code="W001",
@@ -96,7 +117,7 @@ class Linter:
                 actions = artifact.get('actions', [])
                 footer_keys = artifact.get('footer_keys')
                 if actions and not footer_keys:
-                    if not self._is_suppressed(artifact, "H001"):
+                    if not self._is_suppressed(artifact, "H001", context):
                         results.append(LintResult(
                             file_path=file_path,
                             code="H001",
@@ -113,14 +134,14 @@ class Linter:
                 for comp in components:
                     if isinstance(comp, dict) and comp.get('type') in interactive_types:
                         comp_id = comp.get('id')
-                        if not focus_order and not self._is_suppressed(artifact, "H002"):
+                        if not focus_order and not self._is_suppressed(artifact, "H002", context):
                              results.append(LintResult(
                                 file_path=file_path,
                                 code="H002",
                                 message=f"Interactive component '{comp_id}' found but no focus_order defined",
                                 level="warning"
                             ))
-                        elif comp_id not in focus_order and not self._is_suppressed(artifact, "H002"):
+                        elif comp_id not in focus_order and not self._is_suppressed(artifact, "H002", context):
                              results.append(LintResult(
                                 file_path=file_path,
                                 code="H002",
@@ -136,7 +157,7 @@ class Linter:
                         screen_ids = stage.get('screen_ids', [])
                         for s_id in screen_ids:
                             if s_id not in context.screens:
-                                if not self._is_suppressed(artifact, "W002"):
+                                if not self._is_suppressed(artifact, "W002", context):
                                     results.append(LintResult(
                                         file_path=file_path,
                                         code="W002",
