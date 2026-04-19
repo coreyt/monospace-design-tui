@@ -14,3 +14,7 @@ node_modules/
 *.egg-info/
 .DS_Store
 Thumbs.db
+
+# 0.3.0 Distribution Staging (DO NOT COMMIT YET)
+README_0.3.0.md
+dev/designer/gh-workflows-staged/

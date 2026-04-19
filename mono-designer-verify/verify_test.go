@@ -15,7 +15,7 @@ id: "test-screen"
 title: "Test Screen"
 `
         validFile := "test_valid.yaml"
-        os.WriteFile(validFile, []byte(validYAML), 0644)
+        _ = os.WriteFile(validFile, []byte(validYAML), 0644)
         defer os.Remove(validFile)
 
         err := ValidateYAML(schemaPath, validFile)
@@ -29,7 +29,7 @@ id: 123
 title: "Test Screen"
 ` // invalid id type
         invalidFile := "test_invalid.yaml"
-        os.WriteFile(invalidFile, []byte(invalidYAML), 0644)
+        _ = os.WriteFile(invalidFile, []byte(invalidYAML), 0644)
         defer os.Remove(invalidFile)
 
         err = ValidateYAML(schemaPath, invalidFile)
@@ -46,7 +46,7 @@ regions:
     role: "content"
 `
 	yamlFile := "test_parse.yaml"
-	os.WriteFile(yamlFile, []byte(yamlContent), 0644)
+	_ = os.WriteFile(yamlFile, []byte(yamlContent), 0644)
 	defer os.Remove(yamlFile)
 
 	data, err := ParseYAML(yamlFile)
@@ -73,7 +73,7 @@ func TestParseASCII(t *testing.T) {
 └──────────────────────────────────────────────────────────────────────────────┘`
 
 	asciiFile := "test_ascii.txt"
-	os.WriteFile(asciiFile, []byte(asciiContent), 0644)
+	_ = os.WriteFile(asciiFile, []byte(asciiContent), 0644)
 	defer os.Remove(asciiFile)
 
 	data, err := ParseASCII(asciiFile, "screen")

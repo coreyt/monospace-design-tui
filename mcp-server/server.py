@@ -12,10 +12,6 @@ import re
 import uuid
 from pathlib import Path
 from typing import Optional
-import os
-import json
-import subprocess
-from pydantic import BaseModel, Field
 
 
 from mcp.server.fastmcp import Context, FastMCP
@@ -42,6 +38,7 @@ CORE_DOCS = {
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _strip_frontmatter(text: str) -> str:
     """Remove Hugo YAML frontmatter (--- ... ---) from markdown."""
     return re.sub(r"\A---\n.*?---\n+", "", text, count=1, flags=re.DOTALL)
@@ -62,9 +59,7 @@ def _read_section_file(directory: Path, name: str) -> str | None:
 
 def _list_sections(directory: Path) -> list[str]:
     """List available section names in a content directory."""
-    return sorted(
-        p.stem for p in directory.glob("*.md") if p.stem != "_index"
-    )
+    return sorted(p.stem for p in directory.glob("*.md") if p.stem != "_index")
 
 
 # ---------------------------------------------------------------------------
@@ -159,6 +154,7 @@ workflow:
 
 # ---- Standard sections ----------------------------------------------------
 
+
 @mcp.tool()
 def get_standard_section(
     section: str,
@@ -176,6 +172,7 @@ def get_standard_section(
 
 
 # ---- Reference sections ---------------------------------------------------
+
 
 @mcp.tool()
 def get_reference_section(
@@ -195,6 +192,7 @@ def get_reference_section(
 
 # ---- Textual appendix -----------------------------------------------------
 
+
 @mcp.tool()
 def get_textual_guide() -> str:
     """Get the Textual framework mapping guide.
@@ -213,6 +211,7 @@ def get_textual_guide() -> str:
 
 
 # ---- Design tokens --------------------------------------------------------
+
 
 @mcp.tool()
 def get_design_tokens() -> dict:
@@ -272,14 +271,29 @@ def get_design_tokens() -> dict:
             "instant": {"ms": 0, "use": "State toggles, key echo"},
             "fast": {"ms": "50-100", "use": "Button press feedback, cursor movement"},
             "standard": {"ms": "150-300", "use": "Panel transitions, menu open/close"},
-            "slow": {"ms": "300-500", "use": "Screen transitions, progressive disclosure"},
+            "slow": {
+                "ms": "300-500",
+                "use": "Screen transitions, progressive disclosure",
+            },
             "max": "500ms for any UI transition",
         },
         "breakpoints": {
-            "compact": {"cols": "40-79", "layout": "Region A collapses; C hidden/stacked; footer 1 row"},
-            "standard": {"cols": "80-119", "layout": "Region A visible (8-12 cols); C optional; full footer"},
-            "expanded": {"cols": "120-159", "layout": "Full three-region; A at 12-16 cols"},
-            "wide": {"cols": "160+", "layout": "A at full width (up to 20); C expanded"},
+            "compact": {
+                "cols": "40-79",
+                "layout": "Region A collapses; C hidden/stacked; footer 1 row",
+            },
+            "standard": {
+                "cols": "80-119",
+                "layout": "Region A visible (8-12 cols); C optional; full footer",
+            },
+            "expanded": {
+                "cols": "120-159",
+                "layout": "Full three-region; A at 12-16 cols",
+            },
+            "wide": {
+                "cols": "160+",
+                "layout": "A at full width (up to 20); C expanded",
+            },
         },
         "min_dimensions": {
             "minimum_viable": {"cols": 80, "rows": 24, "requirement": "MUST support"},
@@ -302,11 +316,27 @@ PALETTES = {
         "description": "Standard dark theme based on Textual defaults",
         "theme": "dark",
         "roles": {
-            "primary": {"fg": {"index": 75, "hex": "#5fafff"}, "bg": {"index": 17, "hex": "#00005f"}},
-            "secondary": {"fg": {"index": 109, "hex": "#87afaf"}, "bg": {"index": 236, "hex": "#303030"}},
-            "tertiary": {"fg": {"index": 79, "hex": "#5fd7af"}, "bg": {"index": 236, "hex": "#303030"}},
-            "error": {"fg": {"index": 196, "hex": "#ff0000"}, "bg": {"index": 52, "hex": "#5f0000"}},
-            "neutral": {"fg": {"index": 252, "hex": "#d0d0d0"}, "fg_bright": {"index": 231, "hex": "#ffffff"}, "bg": {"index": 235, "hex": "#262626"}},
+            "primary": {
+                "fg": {"index": 75, "hex": "#5fafff"},
+                "bg": {"index": 17, "hex": "#00005f"},
+            },
+            "secondary": {
+                "fg": {"index": 109, "hex": "#87afaf"},
+                "bg": {"index": 236, "hex": "#303030"},
+            },
+            "tertiary": {
+                "fg": {"index": 79, "hex": "#5fd7af"},
+                "bg": {"index": 236, "hex": "#303030"},
+            },
+            "error": {
+                "fg": {"index": 196, "hex": "#ff0000"},
+                "bg": {"index": 52, "hex": "#5f0000"},
+            },
+            "neutral": {
+                "fg": {"index": 252, "hex": "#d0d0d0"},
+                "fg_bright": {"index": 231, "hex": "#ffffff"},
+                "bg": {"index": 235, "hex": "#262626"},
+            },
         },
         "status": {
             "healthy": {"index": 40, "hex": "#00d700"},
@@ -323,7 +353,10 @@ PALETTES = {
             "primary": {"sgr": "1 (bold)", "note": "Bold white on black"},
             "secondary": {"sgr": "none", "note": "Normal white on black"},
             "tertiary": {"sgr": "4 (underline)", "note": "Underlined white on black"},
-            "error": {"sgr": "1;7 (bold+reverse)", "note": "Bold reverse white on black"},
+            "error": {
+                "sgr": "1;7 (bold+reverse)",
+                "note": "Bold reverse white on black",
+            },
             "neutral": {"sgr": "2 (dim)", "note": "Dim white on black"},
         },
         "status": {
@@ -338,11 +371,26 @@ PALETTES = {
         "description": "IBM OS/2 Warp yellow-on-blue theme",
         "theme": "dark",
         "roles": {
-            "primary": {"fg": {"index": 14, "hex": "#ffff00"}, "bg": {"index": 1, "hex": "#0000aa"}},
-            "secondary": {"fg": {"index": 7, "hex": "#c0c0c0"}, "bg": {"index": 1, "hex": "#0000aa"}},
-            "tertiary": {"fg": {"index": 0, "hex": "#000000"}, "bg": {"index": 7, "hex": "#c0c0c0"}},
-            "error": {"fg": {"index": 12, "hex": "#ff5555"}, "bg": {"index": 1, "hex": "#0000aa"}},
-            "neutral": {"fg": {"index": 0, "hex": "#000000"}, "bg": {"index": 7, "hex": "#aaaaaa"}},
+            "primary": {
+                "fg": {"index": 14, "hex": "#ffff00"},
+                "bg": {"index": 1, "hex": "#0000aa"},
+            },
+            "secondary": {
+                "fg": {"index": 7, "hex": "#c0c0c0"},
+                "bg": {"index": 1, "hex": "#0000aa"},
+            },
+            "tertiary": {
+                "fg": {"index": 0, "hex": "#000000"},
+                "bg": {"index": 7, "hex": "#c0c0c0"},
+            },
+            "error": {
+                "fg": {"index": 12, "hex": "#ff5555"},
+                "bg": {"index": 1, "hex": "#0000aa"},
+            },
+            "neutral": {
+                "fg": {"index": 0, "hex": "#000000"},
+                "bg": {"index": 7, "hex": "#aaaaaa"},
+            },
         },
     },
     "turbo": {
@@ -350,11 +398,26 @@ PALETTES = {
         "description": "Classic Borland IDE white-on-blue theme",
         "theme": "dark",
         "roles": {
-            "primary": {"fg": {"index": 15, "hex": "#ffffff"}, "bg": {"index": 1, "hex": "#0000aa"}},
-            "secondary": {"fg": {"index": 7, "hex": "#c0c0c0"}, "bg": {"index": 1, "hex": "#0000aa"}},
-            "tertiary": {"fg": {"index": 0, "hex": "#000000"}, "bg": {"index": 2, "hex": "#00aa00"}},
-            "error": {"fg": {"index": 12, "hex": "#ff5555"}, "bg": {"index": 1, "hex": "#0000aa"}},
-            "neutral": {"fg": {"index": 0, "hex": "#000000"}, "bg": {"index": 7, "hex": "#aaaaaa"}},
+            "primary": {
+                "fg": {"index": 15, "hex": "#ffffff"},
+                "bg": {"index": 1, "hex": "#0000aa"},
+            },
+            "secondary": {
+                "fg": {"index": 7, "hex": "#c0c0c0"},
+                "bg": {"index": 1, "hex": "#0000aa"},
+            },
+            "tertiary": {
+                "fg": {"index": 0, "hex": "#000000"},
+                "bg": {"index": 2, "hex": "#00aa00"},
+            },
+            "error": {
+                "fg": {"index": 12, "hex": "#ff5555"},
+                "bg": {"index": 1, "hex": "#0000aa"},
+            },
+            "neutral": {
+                "fg": {"index": 0, "hex": "#000000"},
+                "bg": {"index": 7, "hex": "#aaaaaa"},
+            },
         },
         "special": {
             "desktop_pattern": "░ (U+2591) in light gray on blue",
@@ -365,11 +428,28 @@ PALETTES = {
         "description": "Single-hue amber CRT theme",
         "theme": "dark",
         "roles": {
-            "primary": {"fg": {"index": 214, "hex": "#ffaf00"}, "bg": {"index": 0, "hex": "#000000"}},
-            "secondary": {"fg": {"index": 172, "hex": "#d78700"}, "bg": {"index": 0, "hex": "#000000"}},
-            "tertiary": {"fg": {"index": 214, "hex": "#ffaf00"}, "bg": {"index": 0, "hex": "#000000"}, "sgr": "4 (underline)"},
-            "error": {"fg": {"index": 214, "hex": "#ffaf00"}, "bg": {"index": 0, "hex": "#000000"}, "sgr": "1;7 (bold+reverse)"},
-            "neutral": {"fg": {"index": 136, "hex": "#af8700"}, "bg": {"index": 0, "hex": "#000000"}},
+            "primary": {
+                "fg": {"index": 214, "hex": "#ffaf00"},
+                "bg": {"index": 0, "hex": "#000000"},
+            },
+            "secondary": {
+                "fg": {"index": 172, "hex": "#d78700"},
+                "bg": {"index": 0, "hex": "#000000"},
+            },
+            "tertiary": {
+                "fg": {"index": 214, "hex": "#ffaf00"},
+                "bg": {"index": 0, "hex": "#000000"},
+                "sgr": "4 (underline)",
+            },
+            "error": {
+                "fg": {"index": 214, "hex": "#ffaf00"},
+                "bg": {"index": 0, "hex": "#000000"},
+                "sgr": "1;7 (bold+reverse)",
+            },
+            "neutral": {
+                "fg": {"index": 136, "hex": "#af8700"},
+                "bg": {"index": 0, "hex": "#000000"},
+            },
         },
     },
     "green": {
@@ -377,11 +457,28 @@ PALETTES = {
         "description": "Single-hue green CRT theme",
         "theme": "dark",
         "roles": {
-            "primary": {"fg": {"index": 82, "hex": "#5fff00"}, "bg": {"index": 0, "hex": "#000000"}},
-            "secondary": {"fg": {"index": 34, "hex": "#00af00"}, "bg": {"index": 0, "hex": "#000000"}},
-            "tertiary": {"fg": {"index": 82, "hex": "#5fff00"}, "bg": {"index": 0, "hex": "#000000"}, "sgr": "4 (underline)"},
-            "error": {"fg": {"index": 82, "hex": "#5fff00"}, "bg": {"index": 0, "hex": "#000000"}, "sgr": "1;7 (bold+reverse)"},
-            "neutral": {"fg": {"index": 28, "hex": "#008700"}, "bg": {"index": 0, "hex": "#000000"}},
+            "primary": {
+                "fg": {"index": 82, "hex": "#5fff00"},
+                "bg": {"index": 0, "hex": "#000000"},
+            },
+            "secondary": {
+                "fg": {"index": 34, "hex": "#00af00"},
+                "bg": {"index": 0, "hex": "#000000"},
+            },
+            "tertiary": {
+                "fg": {"index": 82, "hex": "#5fff00"},
+                "bg": {"index": 0, "hex": "#000000"},
+                "sgr": "4 (underline)",
+            },
+            "error": {
+                "fg": {"index": 82, "hex": "#5fff00"},
+                "bg": {"index": 0, "hex": "#000000"},
+                "sgr": "1;7 (bold+reverse)",
+            },
+            "neutral": {
+                "fg": {"index": 28, "hex": "#008700"},
+                "bg": {"index": 0, "hex": "#000000"},
+            },
         },
     },
     "airlock": {
@@ -389,11 +486,26 @@ PALETTES = {
         "description": "Muted dark theme for security/agent proxy interfaces",
         "theme": "dark",
         "roles": {
-            "primary": {"fg": {"index": 75, "hex": "#5fafff"}, "bg": {"index": 236, "hex": "#303030"}},
-            "secondary": {"fg": {"index": 109, "hex": "#87afaf"}, "bg": {"index": 236, "hex": "#303030"}},
-            "tertiary": {"fg": {"index": 214, "hex": "#ffaf00"}, "bg": {"index": 236, "hex": "#303030"}},
-            "error": {"fg": {"index": 167, "hex": "#d75f5f"}, "bg": {"index": 52, "hex": "#5f0000"}},
-            "neutral": {"fg": {"index": 252, "hex": "#d0d0d0"}, "bg": {"index": 235, "hex": "#262626"}},
+            "primary": {
+                "fg": {"index": 75, "hex": "#5fafff"},
+                "bg": {"index": 236, "hex": "#303030"},
+            },
+            "secondary": {
+                "fg": {"index": 109, "hex": "#87afaf"},
+                "bg": {"index": 236, "hex": "#303030"},
+            },
+            "tertiary": {
+                "fg": {"index": 214, "hex": "#ffaf00"},
+                "bg": {"index": 236, "hex": "#303030"},
+            },
+            "error": {
+                "fg": {"index": 167, "hex": "#d75f5f"},
+                "bg": {"index": 52, "hex": "#5f0000"},
+            },
+            "neutral": {
+                "fg": {"index": 252, "hex": "#d0d0d0"},
+                "bg": {"index": 235, "hex": "#262626"},
+            },
         },
         "status": {
             "healthy": {"index": 117, "hex": "#87d7ff"},
@@ -412,7 +524,12 @@ def list_palettes() -> list[dict]:
     Returns name, description, and theme type for each palette.
     """
     return [
-        {"id": pid, "name": p["name"], "description": p["description"], "theme": p.get("theme", "dark")}
+        {
+            "id": pid,
+            "name": p["name"],
+            "description": p["description"],
+            "theme": p.get("theme", "dark"),
+        }
         for pid, p in PALETTES.items()
     ]
 
@@ -539,10 +656,7 @@ COMPONENTS = {
 @mcp.tool()
 def list_components() -> list[dict]:
     """List all component specifications available in the design system."""
-    return [
-        {"id": cid, "name": c["name"]}
-        for cid, c in COMPONENTS.items()
-    ]
+    return [{"id": cid, "name": c["name"]} for cid, c in COMPONENTS.items()]
 
 
 @mcp.tool()
@@ -566,19 +680,84 @@ KEYBOARD_BINDINGS = {
     "tier1_global": {
         "description": "Mandatory global keys — MUST be bound in every application",
         "bindings": [
-            {"action": "Help", "cua_key": "F1", "common_key": "?", "context": "Context-sensitive"},
-            {"action": "Back/Cancel", "cua_key": "F3", "common_key": "Esc", "context": "Return to previous screen"},
-            {"action": "Refresh", "cua_key": "F5", "common_key": "r", "context": "When no text input focused"},
-            {"action": "Scroll backward", "cua_key": "F7", "common_key": "PageUp", "context": "Scrollable areas"},
-            {"action": "Scroll forward", "cua_key": "F8", "common_key": "PageDown", "context": "Scrollable areas"},
-            {"action": "Activate menu", "cua_key": "F10", "common_key": "Alt", "context": "Toggle action bar focus"},
-            {"action": "Next field", "cua_key": None, "common_key": "Tab", "context": "LTR top-to-bottom order"},
-            {"action": "Previous field", "cua_key": None, "common_key": "Shift+Tab", "context": "Reverse tab order"},
-            {"action": "Confirm/activate", "cua_key": None, "common_key": "Enter", "context": "Submit form, press button"},
-            {"action": "Toggle/select", "cua_key": None, "common_key": "Space", "context": "Toggles, checkboxes, radio"},
-            {"action": "Navigate within control", "cua_key": None, "common_key": "Arrow keys", "context": "Within single control"},
-            {"action": "Quit application", "cua_key": None, "common_key": "q", "context": "When no text input focused"},
-            {"action": "Search/filter", "cua_key": None, "common_key": "/", "context": "Open filter input"},
+            {
+                "action": "Help",
+                "cua_key": "F1",
+                "common_key": "?",
+                "context": "Context-sensitive",
+            },
+            {
+                "action": "Back/Cancel",
+                "cua_key": "F3",
+                "common_key": "Esc",
+                "context": "Return to previous screen",
+            },
+            {
+                "action": "Refresh",
+                "cua_key": "F5",
+                "common_key": "r",
+                "context": "When no text input focused",
+            },
+            {
+                "action": "Scroll backward",
+                "cua_key": "F7",
+                "common_key": "PageUp",
+                "context": "Scrollable areas",
+            },
+            {
+                "action": "Scroll forward",
+                "cua_key": "F8",
+                "common_key": "PageDown",
+                "context": "Scrollable areas",
+            },
+            {
+                "action": "Activate menu",
+                "cua_key": "F10",
+                "common_key": "Alt",
+                "context": "Toggle action bar focus",
+            },
+            {
+                "action": "Next field",
+                "cua_key": None,
+                "common_key": "Tab",
+                "context": "LTR top-to-bottom order",
+            },
+            {
+                "action": "Previous field",
+                "cua_key": None,
+                "common_key": "Shift+Tab",
+                "context": "Reverse tab order",
+            },
+            {
+                "action": "Confirm/activate",
+                "cua_key": None,
+                "common_key": "Enter",
+                "context": "Submit form, press button",
+            },
+            {
+                "action": "Toggle/select",
+                "cua_key": None,
+                "common_key": "Space",
+                "context": "Toggles, checkboxes, radio",
+            },
+            {
+                "action": "Navigate within control",
+                "cua_key": None,
+                "common_key": "Arrow keys",
+                "context": "Within single control",
+            },
+            {
+                "action": "Quit application",
+                "cua_key": None,
+                "common_key": "q",
+                "context": "When no text input focused",
+            },
+            {
+                "action": "Search/filter",
+                "cua_key": None,
+                "common_key": "/",
+                "context": "Open filter input",
+            },
         ],
     },
     "tier1_scrolling": {
@@ -662,8 +841,12 @@ ARCHETYPES = {
         "layout": "Metric header + data table + footer",
         "components": ["Metric cards", "Data table", "Sparklines", "Status indicators"],
         "keyboard": {
-            "?": "Help", "r": "Refresh", "/": "Filter", "s": "Sort",
-            "q": "Quit", "1-9": "Column sort",
+            "?": "Help",
+            "r": "Refresh",
+            "/": "Filter",
+            "s": "Sort",
+            "q": "Quit",
+            "1-9": "Column sort",
         },
     },
     "admin": {
@@ -673,8 +856,10 @@ ARCHETYPES = {
         "layout": "Category sidebar + form body + footer",
         "components": ["Entry fields", "Toggles", "Radio groups", "Buttons"],
         "keyboard": {
-            "Tab/Shift+Tab": "Field navigation", "Esc": "Cancel",
-            "Ctrl+S": "Save", "1-9": "Jump to sidebar item",
+            "Tab/Shift+Tab": "Field navigation",
+            "Esc": "Cancel",
+            "Ctrl+S": "Save",
+            "1-9": "Jump to sidebar item",
             "[ ]": "Tab cycling",
         },
     },
@@ -683,15 +868,29 @@ ARCHETYPES = {
         "section": "§11.3",
         "description": "File system navigation (Norton Commander, ranger)",
         "layout": "Dual-pane file lists + command line + footer",
-        "components": ["File list with columns", "Path breadcrumb", "Selection markers"],
+        "components": [
+            "File list with columns",
+            "Path breadcrumb",
+            "Selection markers",
+        ],
         "keyboard": {
-            "Tab": "Switch panel", "Space": "Select file", "/": "Filter",
-            "y": "Yank", "d": "Delete", "a": "Mkdir", "e": "Edit",
-            "g": "Top", "G": "Bottom",
+            "Tab": "Switch panel",
+            "Space": "Select file",
+            "/": "Filter",
+            "y": "Yank",
+            "d": "Delete",
+            "a": "Mkdir",
+            "e": "Edit",
+            "g": "Top",
+            "G": "Bottom",
         },
         "fkey_overrides": {
-            "F3": "View", "F4": "Edit", "F5": "Copy",
-            "F6": "Move", "F7": "Mkdir", "F8": "Delete",
+            "F3": "View",
+            "F4": "Edit",
+            "F5": "Copy",
+            "F6": "Move",
+            "F7": "Mkdir",
+            "F8": "Delete",
         },
     },
     "editor": {
@@ -699,10 +898,17 @@ ARCHETYPES = {
         "section": "§11.4",
         "description": "Text editing and document manipulation",
         "layout": "Document area + status line + footer",
-        "components": ["Text buffer", "Line numbers", "Status bar", "Syntax highlighting"],
+        "components": [
+            "Text buffer",
+            "Line numbers",
+            "Status bar",
+            "Syntax highlighting",
+        ],
         "keyboard": {
-            "Ctrl+S/F2": "Save", "Ctrl+F or /": "Find",
-            "Ctrl+G": "Goto line", "?/F1": "Help",
+            "Ctrl+S/F2": "Save",
+            "Ctrl+F or /": "Find",
+            "Ctrl+G": "Goto line",
+            "?/F1": "Help",
         },
         "note": "May add modal layers (vi-style normal/insert/command modes)",
     },
@@ -711,11 +917,19 @@ ARCHETYPES = {
         "section": "§11.5",
         "description": "Rapid search and selection (fzf, telescope, command palettes)",
         "layout": "Filter input + results list + optional preview + footer",
-        "components": ["Search input", "Scored result list", "Match highlighting", "Preview pane"],
+        "components": [
+            "Search input",
+            "Scored result list",
+            "Match highlighting",
+            "Preview pane",
+        ],
         "keyboard": {
-            "type": "Type-to-filter", "Ctrl+N/↓": "Next result",
-            "Ctrl+P/↑": "Prev result", "Enter": "Select",
-            "Esc": "Cancel", "Ctrl+D/U": "Half-page scroll",
+            "type": "Type-to-filter",
+            "Ctrl+N/↓": "Next result",
+            "Ctrl+P/↑": "Prev result",
+            "Enter": "Select",
+            "Esc": "Cancel",
+            "Ctrl+D/U": "Half-page scroll",
         },
     },
 }
@@ -740,7 +954,9 @@ def get_archetype(name: str) -> dict | str:
     """
     archetype = ARCHETYPES.get(name)
     if archetype is None:
-        return f"Archetype '{name}' not found. Available: {', '.join(ARCHETYPES.keys())}"
+        return (
+            f"Archetype '{name}' not found. Available: {', '.join(ARCHETYPES.keys())}"
+        )
     return archetype
 
 
@@ -757,10 +973,26 @@ WORKFLOW_ARCHETYPES = {
             "multi-part data entry."
         ),
         "screen_sequence": [
-            {"screen": "Introduction", "ui_archetype": None, "purpose": "Explain what the wizard will do and what is needed"},
-            {"screen": "Step 1..N", "ui_archetype": "admin", "purpose": "Collect input — one concern per step"},
-            {"screen": "Confirmation", "ui_archetype": "admin", "purpose": "Review all choices before committing"},
-            {"screen": "Result", "ui_archetype": "dashboard", "purpose": "Show outcome — success, errors, or next steps"},
+            {
+                "screen": "Introduction",
+                "ui_archetype": None,
+                "purpose": "Explain what the wizard will do and what is needed",
+            },
+            {
+                "screen": "Step 1..N",
+                "ui_archetype": "admin",
+                "purpose": "Collect input — one concern per step",
+            },
+            {
+                "screen": "Confirmation",
+                "ui_archetype": "admin",
+                "purpose": "Review all choices before committing",
+            },
+            {
+                "screen": "Result",
+                "ui_archetype": "dashboard",
+                "purpose": "Show outcome — success, errors, or next steps",
+            },
         ],
         "navigation": {
             "model": "linear",
@@ -797,10 +1029,26 @@ WORKFLOW_ARCHETYPES = {
             "entity collection."
         ),
         "screen_sequence": [
-            {"screen": "List view", "ui_archetype": "dashboard", "purpose": "Browse, search, filter, sort all records"},
-            {"screen": "Detail view", "ui_archetype": "dashboard", "purpose": "Inspect a single record read-only"},
-            {"screen": "Edit form", "ui_archetype": "admin", "purpose": "Create new or modify existing record"},
-            {"screen": "Delete confirmation", "ui_archetype": None, "purpose": "Level 4 modal dialog confirming destructive action"},
+            {
+                "screen": "List view",
+                "ui_archetype": "dashboard",
+                "purpose": "Browse, search, filter, sort all records",
+            },
+            {
+                "screen": "Detail view",
+                "ui_archetype": "dashboard",
+                "purpose": "Inspect a single record read-only",
+            },
+            {
+                "screen": "Edit form",
+                "ui_archetype": "admin",
+                "purpose": "Create new or modify existing record",
+            },
+            {
+                "screen": "Delete confirmation",
+                "ui_archetype": None,
+                "purpose": "Level 4 modal dialog confirming destructive action",
+            },
         ],
         "navigation": {
             "model": "hub-and-spoke",
@@ -839,10 +1087,26 @@ WORKFLOW_ARCHETYPES = {
             "security monitoring, CI/CD pipelines, and service health."
         ),
         "screen_sequence": [
-            {"screen": "Live dashboard", "ui_archetype": "dashboard", "purpose": "Real-time metrics, status indicators, event stream"},
-            {"screen": "Alert detail", "ui_archetype": "dashboard", "purpose": "Drill into a specific alert or anomaly"},
-            {"screen": "Action dialog", "ui_archetype": None, "purpose": "Confirm remediation action (restart, acknowledge, escalate)"},
-            {"screen": "Result", "ui_archetype": "dashboard", "purpose": "Show action outcome, return to dashboard"},
+            {
+                "screen": "Live dashboard",
+                "ui_archetype": "dashboard",
+                "purpose": "Real-time metrics, status indicators, event stream",
+            },
+            {
+                "screen": "Alert detail",
+                "ui_archetype": "dashboard",
+                "purpose": "Drill into a specific alert or anomaly",
+            },
+            {
+                "screen": "Action dialog",
+                "ui_archetype": None,
+                "purpose": "Confirm remediation action (restart, acknowledge, escalate)",
+            },
+            {
+                "screen": "Result",
+                "ui_archetype": "dashboard",
+                "purpose": "Show action outcome, return to dashboard",
+            },
         ],
         "navigation": {
             "model": "hub-and-spoke",
@@ -880,10 +1144,26 @@ WORKFLOW_ARCHETYPES = {
             "issue triage, package management, and any find-then-operate flow."
         ),
         "screen_sequence": [
-            {"screen": "Search input", "ui_archetype": "fuzzy-finder", "purpose": "Type query, see results update in real time"},
-            {"screen": "Results list", "ui_archetype": "fuzzy-finder", "purpose": "Scored/ranked results with match highlighting"},
-            {"screen": "Preview", "ui_archetype": "editor", "purpose": "Inspect selected result in detail"},
-            {"screen": "Action", "ui_archetype": None, "purpose": "Operate on selection (open, copy, delete, assign)"},
+            {
+                "screen": "Search input",
+                "ui_archetype": "fuzzy-finder",
+                "purpose": "Type query, see results update in real time",
+            },
+            {
+                "screen": "Results list",
+                "ui_archetype": "fuzzy-finder",
+                "purpose": "Scored/ranked results with match highlighting",
+            },
+            {
+                "screen": "Preview",
+                "ui_archetype": "editor",
+                "purpose": "Inspect selected result in detail",
+            },
+            {
+                "screen": "Action",
+                "ui_archetype": None,
+                "purpose": "Operate on selection (open, copy, delete, assign)",
+            },
         ],
         "navigation": {
             "model": "funnel",
@@ -920,10 +1200,26 @@ WORKFLOW_ARCHETYPES = {
             "with natural hierarchy."
         ),
         "screen_sequence": [
-            {"screen": "Overview", "ui_archetype": "dashboard", "purpose": "Top-level summary with aggregated metrics"},
-            {"screen": "Category", "ui_archetype": "dashboard", "purpose": "Filtered view of one segment or group"},
-            {"screen": "Item list", "ui_archetype": "file-manager", "purpose": "Individual items within the category"},
-            {"screen": "Item detail", "ui_archetype": "admin", "purpose": "Full detail view of a single item"},
+            {
+                "screen": "Overview",
+                "ui_archetype": "dashboard",
+                "purpose": "Top-level summary with aggregated metrics",
+            },
+            {
+                "screen": "Category",
+                "ui_archetype": "dashboard",
+                "purpose": "Filtered view of one segment or group",
+            },
+            {
+                "screen": "Item list",
+                "ui_archetype": "file-manager",
+                "purpose": "Individual items within the category",
+            },
+            {
+                "screen": "Item detail",
+                "ui_archetype": "admin",
+                "purpose": "Full detail view of a single item",
+            },
         ],
         "navigation": {
             "model": "tree",
@@ -960,11 +1256,31 @@ WORKFLOW_ARCHETYPES = {
             "tools, and build pipelines."
         ),
         "screen_sequence": [
-            {"screen": "Source selection", "ui_archetype": "file-manager", "purpose": "Choose input data (file, URL, database)"},
-            {"screen": "Configuration", "ui_archetype": "admin", "purpose": "Set transformation options, mapping, filters"},
-            {"screen": "Preview", "ui_archetype": "dashboard", "purpose": "Show sample output before committing"},
-            {"screen": "Execution", "ui_archetype": "dashboard", "purpose": "Progress bar, live stats, error log"},
-            {"screen": "Results", "ui_archetype": "dashboard", "purpose": "Summary of completed operation with output location"},
+            {
+                "screen": "Source selection",
+                "ui_archetype": "file-manager",
+                "purpose": "Choose input data (file, URL, database)",
+            },
+            {
+                "screen": "Configuration",
+                "ui_archetype": "admin",
+                "purpose": "Set transformation options, mapping, filters",
+            },
+            {
+                "screen": "Preview",
+                "ui_archetype": "dashboard",
+                "purpose": "Show sample output before committing",
+            },
+            {
+                "screen": "Execution",
+                "ui_archetype": "dashboard",
+                "purpose": "Progress bar, live stats, error log",
+            },
+            {
+                "screen": "Results",
+                "ui_archetype": "dashboard",
+                "purpose": "Summary of completed operation with output location",
+            },
         ],
         "navigation": {
             "model": "linear with preview loop",
@@ -1000,10 +1316,26 @@ WORKFLOW_ARCHETYPES = {
             "quality assurance."
         ),
         "screen_sequence": [
-            {"screen": "Queue", "ui_archetype": "dashboard", "purpose": "List of items pending review with status and priority"},
-            {"screen": "Item review", "ui_archetype": "editor", "purpose": "Full content of the item under review"},
-            {"screen": "Decision", "ui_archetype": None, "purpose": "Approve/reject/defer with optional comment — inline or dialog"},
-            {"screen": "Next item", "ui_archetype": "editor", "purpose": "Auto-advance to next item in queue after decision"},
+            {
+                "screen": "Queue",
+                "ui_archetype": "dashboard",
+                "purpose": "List of items pending review with status and priority",
+            },
+            {
+                "screen": "Item review",
+                "ui_archetype": "editor",
+                "purpose": "Full content of the item under review",
+            },
+            {
+                "screen": "Decision",
+                "ui_archetype": None,
+                "purpose": "Approve/reject/defer with optional comment — inline or dialog",
+            },
+            {
+                "screen": "Next item",
+                "ui_archetype": "editor",
+                "purpose": "Auto-advance to next item in queue after decision",
+            },
         ],
         "navigation": {
             "model": "queue with auto-advance",
@@ -1048,7 +1380,12 @@ def list_workflow_archetypes() -> list[dict]:
     (which describe individual screen layouts).
     """
     return [
-        {"id": wid, "name": w["name"], "pattern": w["pattern"], "description": w["description"]}
+        {
+            "id": wid,
+            "name": w["name"],
+            "pattern": w["pattern"],
+            "description": w["description"],
+        }
         for wid, w in WORKFLOW_ARCHETYPES.items()
     ]
 
@@ -1071,13 +1408,48 @@ def get_workflow_archetype(name: str) -> dict | str:
 # ---- Widget recommendation ------------------------------------------------
 
 WIDGET_TABLE = [
-    {"data_type": "boolean", "count": "2 states", "widget": "Toggle [X]/[ ]", "key": "Space"},
-    {"data_type": "exclusive", "count": "2-5 options", "widget": "Radio group (*)/( )", "key": "Arrow keys"},
-    {"data_type": "exclusive", "count": "6-25 options", "widget": "List box", "key": "Arrow+Enter"},
-    {"data_type": "free_text", "count": "N/A", "widget": "Entry field", "key": "Arrow/Tab"},
-    {"data_type": "numeric", "count": "N/A", "widget": "Entry field + validation", "key": "Arrow/Tab"},
-    {"data_type": "action", "count": "N/A", "widget": "Push button", "key": "Enter/Space"},
-    {"data_type": "spin_value", "count": "<=20 choices", "widget": "Spin button", "key": "Arrow Up/Down"},
+    {
+        "data_type": "boolean",
+        "count": "2 states",
+        "widget": "Toggle [X]/[ ]",
+        "key": "Space",
+    },
+    {
+        "data_type": "exclusive",
+        "count": "2-5 options",
+        "widget": "Radio group (*)/( )",
+        "key": "Arrow keys",
+    },
+    {
+        "data_type": "exclusive",
+        "count": "6-25 options",
+        "widget": "List box",
+        "key": "Arrow+Enter",
+    },
+    {
+        "data_type": "free_text",
+        "count": "N/A",
+        "widget": "Entry field",
+        "key": "Arrow/Tab",
+    },
+    {
+        "data_type": "numeric",
+        "count": "N/A",
+        "widget": "Entry field + validation",
+        "key": "Arrow/Tab",
+    },
+    {
+        "data_type": "action",
+        "count": "N/A",
+        "widget": "Push button",
+        "key": "Enter/Space",
+    },
+    {
+        "data_type": "spin_value",
+        "count": "<=20 choices",
+        "widget": "Spin button",
+        "key": "Arrow Up/Down",
+    },
 ]
 
 
@@ -1102,18 +1474,47 @@ def get_widget_recommendation(
 
 # ---- State model -----------------------------------------------------------
 
+
 @mcp.tool()
 def get_state_model() -> dict:
     """Get the 7-state rendering model with SGR codes and rules."""
     return {
         "states": [
-            {"state": "Enabled", "sgr": "none (Body typography)", "rule": "Default state"},
-            {"state": "Focused", "sgr": "7 (reverse video) OR bracket markers [▸ item ◂]", "rule": "Exactly one element MUST hold focus at all times"},
-            {"state": "Hovered", "sgr": "4 (underline) or highlight bar", "rule": "Mouse-optional"},
-            {"state": "Pressed", "sgr": "Brief reverse flash (<=100ms)", "rule": "Visual feedback; revert to Focused"},
-            {"state": "Selected", "sgr": "7 (reverse) + fill mark ([X] or (*))", "rule": "Multi-select and radio/checkbox"},
-            {"state": "Disabled", "sgr": "2 (dim)", "rule": "Visible but non-interactive; MUST NOT be hidden"},
-            {"state": "Error", "sgr": "31 (red fg) or 41 (red bg)", "rule": "MUST include explanatory text"},
+            {
+                "state": "Enabled",
+                "sgr": "none (Body typography)",
+                "rule": "Default state",
+            },
+            {
+                "state": "Focused",
+                "sgr": "7 (reverse video) OR bracket markers [▸ item ◂]",
+                "rule": "Exactly one element MUST hold focus at all times",
+            },
+            {
+                "state": "Hovered",
+                "sgr": "4 (underline) or highlight bar",
+                "rule": "Mouse-optional",
+            },
+            {
+                "state": "Pressed",
+                "sgr": "Brief reverse flash (<=100ms)",
+                "rule": "Visual feedback; revert to Focused",
+            },
+            {
+                "state": "Selected",
+                "sgr": "7 (reverse) + fill mark ([X] or (*))",
+                "rule": "Multi-select and radio/checkbox",
+            },
+            {
+                "state": "Disabled",
+                "sgr": "2 (dim)",
+                "rule": "Visible but non-interactive; MUST NOT be hidden",
+            },
+            {
+                "state": "Error",
+                "sgr": "31 (red fg) or 41 (red bg)",
+                "rule": "MUST include explanatory text",
+            },
         ],
         "focus_invariant": "Exactly one interactive element MUST hold focus at all times.",
         "color_independence": "Color MUST NOT be the sole indicator of any state.",
@@ -1121,6 +1522,7 @@ def get_state_model() -> dict:
 
 
 # ---- Box-drawing characters ------------------------------------------------
+
 
 @mcp.tool()
 def get_box_drawing(
@@ -1251,6 +1653,7 @@ def get_box_drawing(
 
 # ---- Project template ------------------------------------------------------
 
+
 @mcp.tool()
 def get_project_template() -> str:
     """Get the TUI-DESIGN.template.md file for creating project-specific overrides.
@@ -1373,8 +1776,7 @@ def _build_system_prompt() -> str:
         "- Live Drill-Down: overview first, then inspect or intervene"
     )
     palette_summary = "\n".join(
-        f"- **{p['name']}** ({pid}): {p['description']}"
-        for pid, p in PALETTES.items()
+        f"- **{p['name']}** ({pid}): {p['description']}" for pid, p in PALETTES.items()
     )
     widget_summary = "\n".join(
         f"- {w['data_type']} ({w['count']}): {w['widget']} — {w['key']}"

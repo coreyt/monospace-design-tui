@@ -2,10 +2,12 @@ from typing import List, Literal, Optional
 from pydantic import Field
 from .base import BaseArtifact, BaseModel
 
+
 class Workspace(BaseModel):
     id: str
     label: str
     purpose: Optional[str] = None
+
 
 class Route(BaseModel):
     id: Optional[str] = None
@@ -17,6 +19,7 @@ class Route(BaseModel):
 
     class Config:
         populate_by_name = True
+
 
 class NavigationSpec(BaseArtifact):
     artifact_type: Literal["navigation"] = "navigation"

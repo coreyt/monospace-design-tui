@@ -2,9 +2,11 @@ from datetime import datetime
 from typing import List, Literal, Optional
 from pydantic import BaseModel, Field, model_validator
 
+
 class ArtifactSource(BaseModel):
     kind: Literal["generated", "manual", "imported"] = "manual"
     inputs: List[str] = []
+
 
 class BaseArtifact(BaseModel):
     version: str = "0.3.0"
@@ -18,7 +20,7 @@ class BaseArtifact(BaseModel):
     updated_at: datetime = Field(default_factory=datetime.now)
     notes: List[str] = []
 
-    @model_validator(mode='before')
+    @model_validator(mode="before")
     @classmethod
     def handle_kind_alias(cls, data: dict) -> dict:
         if "kind" in data and "artifact_type" not in data:
